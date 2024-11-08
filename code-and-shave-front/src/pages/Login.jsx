@@ -5,6 +5,8 @@ import { useState } from 'react';
 export const Login = () => {
 
     const [typePassword, setTypePassword] = useState('password');
+    const [emailInput, setEmailInput] = useState('');
+    const [passwordInput, setPasswordInput] = useState('');
 
     const switchTypePassword = (e) => {
         e.preventDefault();
@@ -27,6 +29,8 @@ export const Login = () => {
                             <input type="email"
                             autoComplete='email'
                             placeholder='Digite seu email'
+                            value={emailInput}
+                            onChange={e => setEmailInput(e.target.value)}
                             className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full' />
                         </div>
 
@@ -36,7 +40,9 @@ export const Login = () => {
                                 <input type={typePassword}
                                 placeholder='Digite sua senha'
                                 autoComplete='password'
-                                className='outline-none bg-transparent text-gray-500' />
+                                className='outline-none bg-transparent text-gray-500'
+                                value={passwordInput}
+                                onChange={e => setPasswordInput(e.target.value)} />
                                 <button onClick={e => switchTypePassword(e)}>
                                     {typePassword === 'password' ? <VisibilityIcon sx={{color: '#6B7280'}} /> : <VisibilityOffIcon  sx={{color: '#6B7280'}} />}
                                 </button>
@@ -45,7 +51,8 @@ export const Login = () => {
 
                         <div>
                             <input type="submit" value="Login"
-                            className='bg-blue-500 text-white px-7 py-2 rounded-md cursor-pointer' />
+                            className='bg-blue-500 text-white px-7 py-2 rounded-md cursor-pointer'
+                            onClick={e => e.preventDefault()} />
                         </div>
 
                         <div className='flex flex-col gap-1'>
