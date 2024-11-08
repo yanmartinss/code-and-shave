@@ -8,11 +8,7 @@ export const Login = () => {
 
     const switchTypePassword = (e) => {
         e.preventDefault();
-        if (typePassword === 'password') {
-            setTypePassword('text');
-        } else {
-            setTypePassword('password');
-        }
+        setTypePassword(typePassword === 'password' ? 'text' : 'password');
     }
 
     return (
