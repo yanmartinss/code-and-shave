@@ -3,7 +3,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 
-export const CadastroCliente = () => {
+export const CadastroBarbearia = () => {
     const [typePassword, setTypePassword] = useState('password');
     const [typeConfirmPassword, setConfirmTypePassword] = useState('password');
 
@@ -91,9 +91,9 @@ export const CadastroCliente = () => {
                 <div className='p-3 flex flex-col justify-center items-center text-center md:w-[60%] lg:w-[55%]'>
                     <h2 className='text-2xl font-bold mb-1 md:text-2xl lg:text-3xl'>Code & Shave 💈</h2>
                     <p className='text-gray-600 mb-1 max-w-[300px] text-sm md:text-base'>Sistema de agendamento fácil e rápido para barbearias e clientes.</p>
-                    <h1 className='font-bold text-lg md:text-xl lg:text-2xl mt-2'>Cadastro - Cliente</h1>
+                    <h1 className='font-bold text-lg md:text-xl lg:text-2xl mt-2'>Cadastro - Barbearia</h1>
 
-                    <div className='overflow-y-auto py-2'>
+                    <div className='overflow-y-auto'>
                         <form className='mt-4 flex flex-col justify-center gap-3' onSubmit={handleSubmit}>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Email</label>
@@ -105,17 +105,72 @@ export const CadastroCliente = () => {
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
                             <div className='flex flex-col'>
-                                <label className='text-left text-gray-500 text-sm'>Nome e Sobrenome</label>
+                                <label className='text-left text-gray-500 text-sm'>Nome da Barbearia</label>
                                 <input type="text"
-                                placeholder='Digite seu nome e sobrenome'
+                                placeholder='Digite seu nome'
                                 value={nameInput}
                                 onChange={e => setNameInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
                             <div className='flex flex-col'>
+                                <label className='text-left text-gray-500 text-sm'>Descrição da barbearia (opcional)</label>
+                                <textarea
+                                rows={2.5}
+                                placeholder='Breve Descrição'
+                                // value={nameInput}
+                                // onChange={e => setNameInput(e.target.value)}
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm'></textarea>
+                            </div>
+                            <div className='flex flex-col'>
+                                <label className='text-left text-gray-500 text-sm'>CEP</label>
+                                <input type="text"
+                                placeholder='Digite seu CEP'
+                                // value={nameInput}
+                                // onChange={e => setNameInput(e.target.value)}
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                            </div>
+                            <div className='flex flex-col'>
+                                <label className='text-left text-gray-500 text-sm'>Rua</label>
+                                <input type="text"
+                                placeholder='Digite sua rua'
+                                // value={nameInput}
+                                // onChange={e => setNameInput(e.target.value)}
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                            </div>
+                            <div className='flex flex-col'>
+                                <label className='text-left text-gray-500 text-sm'>Número</label>
+                                <input type="text"
+                                placeholder='Digite o número'
+                                // value={nameInput}
+                                // onChange={e => setNameInput(e.target.value)}
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                            </div>
+                            <div className='flex flex-col'>
+                                <label className='text-left text-gray-500 text-sm'>Bairro</label>
+                                <input type="text"
+                                placeholder='Digite seu bairro'
+                                // value={nameInput}
+                                // onChange={e => setNameInput(e.target.value)}
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                            </div>
+                            <div className='flex items-start justify-between gap-3'>
+                                <div className='flex flex-col w-[40px]'>
+                                    <label className='text-left text-gray-500 text-sm'>UF</label>
+                                    <select className='shadow-lg'>
+                                        {/* AQUI VAI A API QUE PEGA OS ESTADOS */}
+                                    </select>
+                                </div>
+                                <div className='flex flex-col flex-1'>
+                                    <label className='text-left text-gray-500 text-sm'>Cidade</label>
+                                    <select className='shadow-lg'>
+                                        {/* AQUI VAI A API QUE DE ACORDO COM OS ESTADOS MOSTRA A CIDADE */}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Telefone</label>
                                 <input type="text"
-                                placeholder='Digite seu número'
+                                placeholder='Digite seu telefone'
                                 value={phoneInput}
                                 onChange={e => setPhoneInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
@@ -151,7 +206,7 @@ export const CadastroCliente = () => {
                                     autoComplete='new-password'
                                     value={confirmPasswordInput}
                                     onChange={e => setConfirmPasswordInput(e.target.value)}
-                                    className='outline-none bg-transparent text-gray-500 flex-grow text-sms' />
+                                    className='outline-none bg-transparent text-gray-500 flex-grow text-sm' />
                                     <button onClick={e => switchTypePassword(e, typeConfirmPassword, setConfirmTypePassword)}>
                                         {typeConfirmPassword === 'password' ?
                                         <VisibilityIcon sx={{color: '#6B7280'}} />
