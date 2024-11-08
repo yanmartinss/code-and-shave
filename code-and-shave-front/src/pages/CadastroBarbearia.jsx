@@ -91,7 +91,7 @@ export const CadastroBarbearia = () => {
                 <div className='p-3 flex flex-col justify-center items-center text-center md:w-[60%] lg:w-[55%]'>
                     <h2 className='text-2xl font-bold mb-1 md:text-2xl lg:text-3xl'>Code & Shave 💈</h2>
                     <p className='text-gray-600 mb-1 max-w-[300px] text-sm md:text-base'>Sistema de agendamento fácil e rápido para barbearias e clientes.</p>
-                    <h1 className='font-bold text-lg md:text-xl lg:text-2xl mt-2'>Cadastro - Barbearia</h1>
+                    <h1 className='font-bold text-lg md:text-xl lg:text-2xl mt-2 mb-2'>Cadastro - Barbearia</h1>
 
                     <div className='overflow-y-auto'>
                         <form className='mt-4 flex flex-col justify-center gap-3' onSubmit={handleSubmit}>
