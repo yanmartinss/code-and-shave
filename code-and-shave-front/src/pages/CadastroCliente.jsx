@@ -14,33 +14,29 @@ export const CadastroCliente = () => {
     const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
     const [phoneInput, setPhoneInput] = useState('');
 
-    const [modalError, setModalError] = useState('');  // Estado para armazenar o erro atual
-    const [isModalOpen, setModalOpen] = useState(false); // Controle do modal
+    const [modalError, setModalError] = useState('');
+    const [isModalOpen, setModalOpen] = useState(false);
 
-    // Verifica se o email está em um formato válido
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
-    };
+    }
 
-    // Verifica se a senha atende aos critérios de segurança
     const validatePassword = (password) => {
         return (
             password.length >= 8 &&
-            /[A-Z]/.test(password) &&         // Pelo menos uma letra maiúscula
-            /[a-z]/.test(password) &&         // Pelo menos uma letra minúscula
-            /[0-9]/.test(password) &&         // Pelo menos um número
-            /[^A-Za-z0-9]/.test(password)     // Pelo menos um caractere especial
+            /[A-Z]/.test(password) &&
+            /[a-z]/.test(password) &&
+            /[0-9]/.test(password) &&
+            /[^A-Za-z0-9]/.test(password) 
         );
-    };
+    }
 
-    // Função para alternar a visibilidade da senha
     const switchTypePassword = (e, item, set) => {
         e.preventDefault();
         set(item === 'password' ? 'text' : 'password');
-    };
+    }
 
-    // Função para validar todos os campos e definir o erro no modal
     const validateForm = () => {
         if (!validateEmail(emailInput)) {
             setModalError("Por favor, insira um email válido.");
@@ -77,16 +73,15 @@ export const CadastroCliente = () => {
         }
 
         return true;
-    };
+    }
 
-    // Função chamada ao enviar o formulário
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
             alert("Cadastro realizado com sucesso!");
             // Aqui você pode adicionar o código para enviar os dados para o backend
         }
-    };
+    }
 
     return (
         <div className='bg-[#24211c] min-h-screen w-screen flex justify-center items-center p-3 bg-gradient-to-b from-black/90 to-black/40'>

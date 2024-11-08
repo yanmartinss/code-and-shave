@@ -8,15 +8,14 @@ export const Login = () => {
     const [typePassword, setTypePassword] = useState('password');
     const [emailInput, setEmailInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
-    const [error, setError] = useState(''); // Estado para armazenar erros
-    const [openModal, setOpenModal] = useState(false); // Estado para controlar o modal
+    const [error, setError] = useState('');
+    const [openModal, setOpenModal] = useState(false); 
 
     const switchTypePassword = (e) => {
         e.preventDefault();
         setTypePassword(typePassword === 'password' ? 'text' : 'password');
     }
 
-    // Função para lidar com o envio do formulário
     const handleLogin = async (e) => {
         e.preventDefault();
         
@@ -49,13 +48,12 @@ export const Login = () => {
             setError("Erro na conexão com o servidor. Tente novamente mais tarde.");
             setOpenModal(true);
         }
-    };
+    }
 
-    // Função para fechar o modal
     const handleClose = () => {
         setOpenModal(false);
-        setError(''); // Limpa o erro ao fechar o modal
-    };
+        setError('');
+    }
 
     return (
         <div className='bg-[#24211c] min-h-screen w-screen flex justify-center items-center p-3 bg-gradient-to-b from-black/90 to-black/40'>
@@ -106,7 +104,6 @@ export const Login = () => {
                 </div>
             </div>
 
-            {/* Modal de erro */}
             <Dialog
                 open={openModal}
                 onClose={handleClose}
