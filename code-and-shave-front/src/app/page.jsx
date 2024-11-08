@@ -5,7 +5,9 @@ import { Login } from "@/pages/Login";
 
 const Page = () => {
   return (
-    <CadastroCliente />
+    <div className="overflow-x-hidden">
+      <Login />
+    </div>
   );
 }
 
