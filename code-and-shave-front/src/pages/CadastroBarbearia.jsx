@@ -1,21 +1,37 @@
+import { useEffect, useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { fetchCEPData } from './api/fetchCEPData';
 
 export const CadastroBarbearia = () => {
     const [typePassword, setTypePassword] = useState('password');
     const [typeConfirmPassword, setConfirmTypePassword] = useState('password');
-
     const [emailInput, setEmailInput] = useState('');
     const [nameInput, setNameInput] = useState('');
+    const [cepInput, setCepInput] = useState('');
+    const [streetInput, setStreetInput] = useState('');
+    const [bairroInput, setBairroInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
     const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
     const [phoneInput, setPhoneInput] = useState('');
     const [profilePhoto, setProfilePhoto] = useState(null);
-
     const [modalError, setModalError] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
+    const [cepData, setCepData] = useState(null);
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            const cepFormatado = cepInput.replace('-', '');
+            if (cepFormatado.length === 8) {
+                setCepData(fetchCEPData(cepFormatado));
+            }
+        }, 500);
+
+        return () => clearTimeout(timeoutId);
+    }, [cepInput]);
+
+    console.log(cepData);
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -74,12 +90,11 @@ export const CadastroBarbearia = () => {
 
         return true;
     }
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
             alert("Cadastro realizado com sucesso!");
-            // Aqui você pode adicionar o código para enviar os dados para o backend
+            // dados pro back
         }
     }
 
@@ -104,6 +119,7 @@ export const CadastroBarbearia = () => {
                                 placeholder='Digite seu email'
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
+
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Nome da Barbearia</label>
                                 <input type="text"
@@ -112,6 +128,7 @@ export const CadastroBarbearia = () => {
                                 onChange={e => setNameInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
+
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Descrição da barbearia (opcional)</label>
                                 <textarea
@@ -121,30 +138,34 @@ export const CadastroBarbearia = () => {
                                 // onChange={e => setNameInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm'></textarea>
                             </div>
+
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>CEP</label>
-                                <input type="text"
+                                <input type="number"
                                 placeholder='Digite seu CEP'
-                                // value={nameInput}
-                                // onChange={e => setNameInput(e.target.value)}
+                                value={cepInput}
+                                onChange={e => setCepInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
-                            <div className='flex flex-col'>
-                                <label className='text-left text-gray-500 text-sm'>Rua</label>
-                                <input type="text"
-                                placeholder='Digite sua rua'
-                                // value={nameInput}
-                                // onChange={e => setNameInput(e.target.value)}
-                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+
+                            <div className='flex justify-between items-start'>
+                                <div className='flex flex-col flex-1'>
+                                    <label className='text-left text-gray-500 text-sm'>Rua</label>
+                                    <input type="text"
+                                    placeholder='Digite sua rua'
+                                    value={cepData}
+                                    // onChange={e => setStreetInput(e.target.value)}
+                                    className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
+                                </div>
+                                <div className='flex flex-col w-[75px]'>
+                                    <label className='text-left text-gray-500 text-sm'>Número</label>
+                                    <input type="number"
+                                    value={bairroInput}
+                                    onChange={e => setBairroInput(e.target.value)}
+                                    className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
+                                </div>
                             </div>
-                            <div className='flex flex-col'>
-                                <label className='text-left text-gray-500 text-sm'>Número</label>
-                                <input type="text"
-                                placeholder='Digite o número'
-                                // value={nameInput}
-                                // onChange={e => setNameInput(e.target.value)}
-                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
-                            </div>
+
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Bairro</label>
                                 <input type="text"
@@ -153,28 +174,32 @@ export const CadastroBarbearia = () => {
                                 // onChange={e => setNameInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
+
                             <div className='flex items-start justify-between gap-3'>
                                 <div className='flex flex-col w-[40px]'>
                                     <label className='text-left text-gray-500 text-sm'>UF</label>
-                                    <select className='shadow-lg'>
+                                    <select className='shadow-lg outline-none'>
+                                        {/* <option value="CE" selected>CE</option> */}
                                         {/* AQUI VAI A API QUE PEGA OS ESTADOS */}
                                     </select>
                                 </div>
                                 <div className='flex flex-col flex-1'>
                                     <label className='text-left text-gray-500 text-sm'>Cidade</label>
-                                    <select className='shadow-lg'>
+                                    <select className='shadow-lg outline-none'>
                                         {/* AQUI VAI A API QUE DE ACORDO COM OS ESTADOS MOSTRA A CIDADE */}
                                     </select>
                                 </div>
                             </div>
+
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Telefone</label>
-                                <input type="text"
+                                <input type="number"
                                 placeholder='Digite seu telefone'
                                 value={phoneInput}
                                 onChange={e => setPhoneInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
+
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Foto de Perfil (opcional)</label>
                                 <input type="file"
@@ -182,6 +207,7 @@ export const CadastroBarbearia = () => {
                                 onChange={e => setProfilePhoto(e.target.files[0])}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
+
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm rounded-md'>Senha</label>
                                 <div className='shadow-lg p-2 w-full flex items-center'>
@@ -198,6 +224,7 @@ export const CadastroBarbearia = () => {
                                     </button>
                                 </div>
                             </div>
+
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm rounded-md'>Confirmar Senha</label>
                                 <div className='shadow-lg p-2 w-full flex items-center'>
@@ -214,6 +241,7 @@ export const CadastroBarbearia = () => {
                                     </button>
                                 </div>
                             </div>
+
                             <div>
                                 <input type="submit" value="Cadastrar"
                                 className='bg-black text-white px-7 py-2 rounded-md cursor-pointer' />
