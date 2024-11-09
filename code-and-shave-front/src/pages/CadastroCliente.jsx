@@ -38,42 +38,23 @@ export const CadastroCliente = () => {
     }
 
     const validateForm = () => {
-        if (!validateEmail(emailInput)) {
-            setModalError("Por favor, insira um email válido.");
+        const validations = [
+            { valid: validateEmail(emailInput), message: "Por favor, insira um email válido." },
+            { valid: nameInput.trim() !== '', message: "Nome não pode estar vazio." },
+            { valid: phoneInput.trim() !== '', message: "Telefone não pode estar vazio." },
+            { valid: /^\d{10,11}$/.test(phoneInput), message: "Telefone deve conter 10 ou 11 dígitos." },
+            { valid: validatePassword(passwordInput), message: "A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais." },
+            { valid: passwordInput === confirmPasswordInput, message: "As senhas não coincidem." }
+        ];
+    
+        const invalid = validations.find(v => !v.valid);
+        if (invalid) {
+            setModalError(invalid.message);
             setModalOpen(true);
             return false;
         }
-
-        if (nameInput.trim() === '') {
-            setModalError("Nome não pode estar vazio.");
-            setModalOpen(true);
-            return false;
-        }
-
-        if (phoneInput.trim() === '') {
-            setModalError("Telefone não pode estar vazio.");
-            setModalOpen(true);
-            return false;
-        } else if (!/^\d{10,11}$/.test(phoneInput)) {
-            setModalError("Telefone deve conter 10 ou 11 dígitos.");
-            setModalOpen(true);
-            return false;
-        }
-
-        if (!validatePassword(passwordInput)) {
-            setModalError("A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais.");
-            setModalOpen(true);
-            return false;
-        }
-
-        if (passwordInput !== confirmPasswordInput) {
-            setModalError("As senhas não coincidem.");
-            setModalOpen(true);
-            return false;
-        }
-
         return true;
-    }
+    }    
 
     const handleSubmit = (e) => {
         e.preventDefault();

@@ -24,14 +24,13 @@ export const CadastroBarbearia = () => {
         const timeoutId = setTimeout(() => {
             const cepFormatado = cepInput.replace('-', '');
             if (cepFormatado.length === 8) {
-                setCepData(fetchCEPData(cepFormatado));
+                fetchCEPData(cepFormatado).then((data) => setCepData(data));
             }
         }, 500);
-
+    
         return () => clearTimeout(timeoutId);
     }, [cepInput]);
-
-    console.log(cepData);
+    
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -54,42 +53,26 @@ export const CadastroBarbearia = () => {
     }
 
     const validateForm = () => {
-        if (!validateEmail(emailInput)) {
-            setModalError("Por favor, insira um email válido.");
-            setModalOpen(true);
-            return false;
+        const validations = [
+            { condition: !validateEmail(emailInput), message: "Por favor, insira um email válido." },
+            { condition: nameInput.trim() === '', message: "Nome não pode estar vazio." },
+            { condition: phoneInput.trim() === '', message: "Telefone não pode estar vazio." },
+            { condition: !/^\d{10,11}$/.test(phoneInput), message: "Telefone deve conter 10 ou 11 dígitos." },
+            { condition: !validatePassword(passwordInput), message: "A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais." },
+            { condition: passwordInput !== confirmPasswordInput, message: "As senhas não coincidem." }
+        ];
+    
+        for (const { condition, message } of validations) {
+            if (condition) {
+                setModalError(message);
+                setModalOpen(true);
+                return false;
+            }
         }
-
-        if (nameInput.trim() === '') {
-            setModalError("Nome não pode estar vazio.");
-            setModalOpen(true);
-            return false;
-        }
-
-        if (phoneInput.trim() === '') {
-            setModalError("Telefone não pode estar vazio.");
-            setModalOpen(true);
-            return false;
-        } else if (!/^\d{10,11}$/.test(phoneInput)) {
-            setModalError("Telefone deve conter 10 ou 11 dígitos.");
-            setModalOpen(true);
-            return false;
-        }
-
-        if (!validatePassword(passwordInput)) {
-            setModalError("A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais.");
-            setModalOpen(true);
-            return false;
-        }
-
-        if (passwordInput !== confirmPasswordInput) {
-            setModalError("As senhas não coincidem.");
-            setModalOpen(true);
-            return false;
-        }
-
+    
         return true;
-    }
+    }    
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
@@ -123,7 +106,7 @@ export const CadastroBarbearia = () => {
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Nome da Barbearia</label>
                                 <input type="text"
-                                placeholder='Digite seu nome'
+                                placeholder='Digite o nome da barbearia'
                                 value={nameInput}
                                 onChange={e => setNameInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
@@ -132,7 +115,7 @@ export const CadastroBarbearia = () => {
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Descrição da barbearia (opcional)</label>
                                 <textarea
-                                rows={2.5}
+                                rows={3}
                                 placeholder='Breve Descrição'
                                 // value={nameInput}
                                 // onChange={e => setNameInput(e.target.value)}
@@ -153,7 +136,7 @@ export const CadastroBarbearia = () => {
                                     <label className='text-left text-gray-500 text-sm'>Rua</label>
                                     <input type="text"
                                     placeholder='Digite sua rua'
-                                    value={cepData}
+                                    value={cepData?.logradouro || ''}
                                     // onChange={e => setStreetInput(e.target.value)}
                                     className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
                                 </div>
