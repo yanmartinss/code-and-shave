@@ -1,11 +1,8 @@
-import { Form } from "@/components/Form";
-import { IndexLayout } from "@/layouts/IndexLayout";
-import { CadastroBarbearia } from "@/pages/CadastroBarbearia";
-import { CadastroCliente } from "@/pages/CadastroCliente";
-import { Login } from "@/pages/Login";
 import { Route, Router, Routes } from "react-router-dom";
+import { Form } from "./components/Form";
+import { Login } from "./pages/Login";
 
-const Page = () => {
+const App = () => {
   return (
     <Router>
       <Routes>
@@ -17,4 +14,4 @@ const Page = () => {
   );
 }
 
-export default Page;
+export default App;
