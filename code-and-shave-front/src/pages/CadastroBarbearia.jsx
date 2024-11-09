@@ -11,6 +11,7 @@ export const CadastroBarbearia = () => {
     const [nameInput, setNameInput] = useState('');
     const [cepInput, setCepInput] = useState('');
     const [streetInput, setStreetInput] = useState('');
+    const [numInput, setNumInput] = useState('');
     const [bairroInput, setBairroInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
     const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
@@ -24,12 +25,19 @@ export const CadastroBarbearia = () => {
         const timeoutId = setTimeout(() => {
             const cepFormatado = cepInput.replace('-', '');
             if (cepFormatado.length === 8) {
-                fetchCEPData(cepFormatado).then((data) => setCepData(data));
+                fetchCEPData(cepFormatado).then((data) => {
+                    if (data) {
+                        setStreetInput(data.logradouro || '');
+                        setBairroInput(data.bairro || '');
+                    }
+                });
             }
         }, 500);
-    
+
         return () => clearTimeout(timeoutId);
     }, [cepInput]);
+
+    console.log(cepData);
     
 
     const validateEmail = (email) => {
@@ -136,15 +144,15 @@ export const CadastroBarbearia = () => {
                                     <label className='text-left text-gray-500 text-sm'>Rua</label>
                                     <input type="text"
                                     placeholder='Digite sua rua'
-                                    value={cepData?.logradouro || ''}
-                                    // onChange={e => setStreetInput(e.target.value)}
+                                    value={streetInput}
+                                    onChange={e => setStreetInput(e.target.value)}
                                     className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
                                 </div>
                                 <div className='flex flex-col w-[75px]'>
                                     <label className='text-left text-gray-500 text-sm'>Número</label>
                                     <input type="number"
-                                    value={bairroInput}
-                                    onChange={e => setBairroInput(e.target.value)}
+                                    value={numInput}
+                                    onChange={e => setNumInput(e.target.value)}
                                     className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
                                 </div>
                             </div>
@@ -153,8 +161,8 @@ export const CadastroBarbearia = () => {
                                 <label className='text-left text-gray-500 text-sm'>Bairro</label>
                                 <input type="text"
                                 placeholder='Digite seu bairro'
-                                // value={nameInput}
-                                // onChange={e => setNameInput(e.target.value)}
+                                value={bairroInput}
+                                onChange={e => setBairroInput(e.target.value)}
                                 className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
 
