@@ -5,8 +5,11 @@ import { CadastroCliente } from "@/pages/CadastroCliente";
 import { Login } from "@/pages/Login";
 
 const Page = () => {
+
+  const navigate = useNavigate();
+
   return (
-    <div className="overflow-x-hidden">
+    <div>
       <Login />
     </div>
   );

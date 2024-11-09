@@ -19,7 +19,6 @@ export const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         
-        // Validação simples no frontend (opcional)
         if (!emailInput || !passwordInput) {
             setError("Por favor, preencha todos os campos.");
             setOpenModal(true);
