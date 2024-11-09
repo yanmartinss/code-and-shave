@@ -7,7 +7,7 @@ import { Login } from "@/pages/Login";
 const Page = () => {
   return (
     <div className="overflow-x-hidden">
-      <CadastroBarbearia />
+      <Login />
     </div>
   );
 }
