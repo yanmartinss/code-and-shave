@@ -1,24 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { CadastroBarbearia } from './pages/LoginFormularios/CadastroBarbearia';
+import { CadastroCliente } from './pages/LoginFormularios/CadastroCliente';
+import { LoginFormulario } from './pages/LoginFormularios/LoginFormulario';
+import { Form } from './components/Form';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route element={<Form />}>
+          <Route path="/" element={<LoginFormulario />} />
+          <Route path="/cadastro-barbearia" element={<CadastroBarbearia />} />
+          <Route path="/cadastro-cliente" element={<CadastroCliente />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
