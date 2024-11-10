@@ -22,13 +22,20 @@ export const LoginFormulario = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        
+    
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailInput)) {
+            setError("Por favor, insira um email válido.");
+            setOpenModal(true);
+            return;
+        }
+    
         if (!emailInput || !passwordInput) {
             setError("Por favor, preencha todos os campos.");
             setOpenModal(true);
             return;
         }
-
+    
         try {
             const response = await fetch('https://seu-backend.com/api/login', {
                 method: 'POST',
@@ -37,12 +44,12 @@ export const LoginFormulario = () => {
                 },
                 body: JSON.stringify({ email: emailInput, password: passwordInput })
             });
-
+    
             const data = await response.json();
-
+    
             if (response.ok) {
                 alert("Login realizado com sucesso!");
-                // Redirecionar ou exibir mensagem de sucesso, caso o login seja bem-sucedido
+                // armazenar o token
             } else {
                 setError(data.message || "Erro ao realizar o login.");
                 setOpenModal(true);
@@ -51,7 +58,7 @@ export const LoginFormulario = () => {
             setError("Erro na conexão com o servidor. Tente novamente mais tarde.");
             setOpenModal(true);
         }
-    }
+    }    
 
     const handleClose = () => {
         setOpenModal(false);
@@ -71,7 +78,7 @@ export const LoginFormulario = () => {
                     <form className='mt-5 flex flex-col justify-center gap-3' onSubmit={handleLogin}>
                         <div className='flex flex-col'>
                             <label className='text-left text-gray-500 text-sm'>Email</label>
-                            <input type="email"
+                            <input type="text"
                             autoComplete='email'
                             placeholder='Digite seu email'
                             value={emailInput}

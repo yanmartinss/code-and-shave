@@ -68,20 +68,43 @@ export const CadastroCliente = () => {
         setPhoneInput(valor);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
             const telefoneParaEnvio = phoneInput.replace(/\D/g, '');
-            const dadosParaEnvio = {
-                email: emailInput,
-                nome: nameInput,
-                telefone: telefoneParaEnvio,
-                // senha: passwordInput
-            }
-            console.log('Dados enviados para o backend:', dadosParaEnvio);
-        }
-    }
+            
+            const formData = new FormData();
+            formData.append('email', emailInput);
+            formData.append('nome', nameInput);
+            formData.append('telefone', telefoneParaEnvio);
+            if (profilePhoto) formData.append('fotoPerfil', profilePhoto);
+            formData.append('senha', passwordInput);
 
+            console.log('Dados enviados para o backend:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
+    
+            // try {
+            //     const response = await fetch('https://sua-api.com/endpoint-de-cadastro', {
+            //         method: 'POST',
+            //         body: formData
+            //     });
+    
+            //     if (!response.ok) {
+            //         throw new Error('Erro no cadastro. Tente novamente.');
+            //     }
+    
+            //     const data = await response.json();
+            //     console.log('Cadastro realizado com sucesso:', data);
+            // } catch (error) {
+            //     console.error('Erro ao enviar os dados:', error);
+            //     setModalError('Erro no envio dos dados. Tente novamente.');
+            //     setModalOpen(true);
+            // }
+        }
+    }     
+    
     return (
         <div className="bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40">
             <div className="bg-white w-screen h-auto md:h-[580px] rounded-md overflow-hidden shadow-sm md:w-[95vw] flex flex-col md:flex-row lg:flex-row-reverse justify-start lg:w-[900px] transition-all">
@@ -148,11 +171,11 @@ export const CadastroCliente = () => {
                                         className='outline-none bg-transparent text-gray-500 flex-grow text-sm' 
                                     />
                                     <button onClick={e => switchTypePassword(e, typePassword, setTypePassword)}>
-                                        {typePassword === 'password' ? (
+                                        {typePassword === 'password' ? 
                                             <VisibilityIcon sx={{color: '#6B7280'}} />
-                                        ) : (
+                                        : 
                                             <VisibilityOffIcon sx={{color: '#6B7280'}} />
-                                        )}
+                                        }
                                     </button>
                                 </div>
                             </div>
@@ -169,11 +192,11 @@ export const CadastroCliente = () => {
                                         className='outline-none bg-transparent text-gray-500 flex-grow text-sm' 
                                     />
                                     <button onClick={e => switchTypePassword(e, typeConfirmPassword, setConfirmTypePassword)}>
-                                        {typeConfirmPassword === 'password' ? (
+                                        {typeConfirmPassword === 'password' ? 
                                             <VisibilityIcon sx={{color: '#6B7280'}} />
-                                        ) : (
+                                        : 
                                             <VisibilityOffIcon sx={{color: '#6B7280'}} />
-                                        )}
+                                        }
                                     </button>
                                 </div>
                             </div>
@@ -188,7 +211,7 @@ export const CadastroCliente = () => {
                         </form>
 
                         <div className='flex flex-col gap-1 mt-2'>
-                            <p className='text-gray-500 underline cursor-pointer' onClick={() => navigate('/')}>Já tem Cadastro?</p>
+                            <p className='text-gray-500 underline cursor-pointer ' onClick={() => navigate('/')}>Já tem Cadastro?</p>
                         </div>
                     </div>
                 </div>

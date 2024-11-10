@@ -11,7 +11,6 @@ export const CadastroBarbearia = () => {
 
     const navigate = useNavigate();
 
-    // Estados para inputs e campos
     const [typePassword, setTypePassword] = useState('password');
     const [typeConfirmPassword, setConfirmTypePassword] = useState('password');
     const [emailInput, setEmailInput] = useState('');
@@ -29,6 +28,7 @@ export const CadastroBarbearia = () => {
     const [ufSelect, setUfSelect] = useState({ index: null, sigla: '' });
     const [cidadesEstado, setCidadesEstado] = useState(null);
     const [citySelect, setCitySelect] = useState('');
+    const [descInput, setDescInput] = useState('');
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -131,18 +131,50 @@ export const CadastroBarbearia = () => {
         setPhoneInput(valor);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
             const telefoneParaEnvio = phoneInput.replace(/\D/g, '');
             const cepParaEnvio = cepInput.replace(/\D/g, '');
-            const dadosParaEnvio = {
-                cep: cepParaEnvio,
-                telefone: telefoneParaEnvio
-            };
-            console.log('Dados enviados para o backend:', dadosParaEnvio);
+    
+            const formData = new FormData();
+            formData.append('email', emailInput);
+            formData.append('nome', nameInput);
+            if (descInput && descInput.trim()) formData.append('descricao', descInput);
+            formData.append('cep', cepParaEnvio);
+            formData.append('endereco', streetInput);
+            formData.append('numero', numInput);
+            formData.append('bairro', bairroInput);
+            formData.append('uf', ufSelect.sigla);
+            formData.append('cidade', citySelect);
+            formData.append('telefone', telefoneParaEnvio);
+            if (profilePhoto) formData.append('fotoPerfil', profilePhoto);
+            formData.append('senha', passwordInput);
+    
+            console.log('Dados enviados para o backend:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
+    
+            // try {
+            //     const response = await fetch('https://sua-api.com/endpoint-de-cadastro', {
+            //         method: 'POST',
+            //         body: formData
+            //     });
+    
+            //     if (!response.ok) {
+            //         throw new Error('Erro no cadastro. Tente novamente.');
+            //     }
+    
+            //     const data = await response.json();
+            //     console.log('Cadastro realizado com sucesso:', data);
+            // } catch (error) {
+            //     console.error('Erro ao enviar os dados:', error);
+            //     setModalError('Erro no envio dos dados. Tente novamente.');
+            //     setModalOpen(true);
+            // }
         }
-    }
+    }      
 
     return (
         <div className='bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40'>
@@ -156,33 +188,63 @@ export const CadastroBarbearia = () => {
                         <form className='mt-4 flex flex-col justify-center gap-3 md:w-[361px]' onSubmit={handleSubmit}>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Email</label>
-                                <input type="text" autoComplete='email' value={emailInput} onChange={e => setEmailInput(e.target.value)} placeholder='Digite seu email' className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                                <input type="text" 
+                                autoComplete='email' 
+                                value={emailInput} 
+                                onChange={e => setEmailInput(e.target.value)} 
+                                placeholder='Digite seu email' 
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Nome da Barbearia</label>
-                                <input type="text" placeholder='Digite o nome da barbearia' value={nameInput} onChange={e => setNameInput(e.target.value)} className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                                <input type="text" 
+                                placeholder='Digite o nome da barbearia' 
+                                value={nameInput} 
+                                onChange={e => setNameInput(e.target.value)} 
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Descrição da barbearia (opcional)</label>
-                                <textarea rows={3} placeholder='Breve Descrição' className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm'></textarea>
+                                <textarea
+                                rows={3}
+                                placeholder='Breve Descrição'
+                                value={descInput}
+                                onChange={(e) => setDescInput(e.target.value)}
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm'>
+                                </textarea>
                             </div>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>CEP (<a className='underline' href="https://buscacepinter.correios.com.br/app/endereco/index.php" target='_blank'>não sabe?</a>)</label>
-                                <input type="text" placeholder='Digite seu CEP' value={cepInput} onChange={handleCepChange} className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                                <input type="text" 
+                                placeholder='Digite seu CEP' 
+                                value={cepInput} 
+                                onChange={handleCepChange} 
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
                             <div className='flex justify-between items-start'>
                                 <div className='flex flex-col flex-1'>
                                     <label className='text-left text-gray-500 text-sm'>Endereço</label>
-                                    <input type="text" placeholder='Digite seu endereço' value={streetInput} onChange={e => setStreetInput(e.target.value)} className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
+                                    <input type="text" 
+                                    placeholder='Digite seu endereço' 
+                                    value={streetInput} 
+                                    onChange={e => setStreetInput(e.target.value)} 
+                                    className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
                                 </div>
                                 <div className='flex flex-col w-[75px]'>
                                     <label className='text-left text-gray-500 text-sm'>Número</label>
-                                    <input type="number" value={numInput} onChange={e => setNumInput(e.target.value)} className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
+                                    <input type="number" 
+                                    value={numInput} 
+                                    onChange={e => setNumInput(e.target.value)} 
+                                    className='outline-none shadow-lg rounded-md p-2 text-gray-500 text-sm' />
                                 </div>
                             </div>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Bairro</label>
-                                <input type="text" placeholder='Digite seu bairro' value={bairroInput} onChange={e => setBairroInput(e.target.value)} className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                                <input type="text" 
+                                placeholder='Digite seu bairro' 
+                                value={bairroInput} 
+                                onChange={e => setBairroInput(e.target.value)} 
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
                             <div className='flex flex-col md:flex-row items-start justify-between gap-3'>
                                 <div className='flex flex-col w-[50px]'>
@@ -206,18 +268,28 @@ export const CadastroBarbearia = () => {
                             </div>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Telefone</label>
-                                <input type="text" placeholder='Digite seu telefone' value={phoneInput} onChange={handlePhoneChange} className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                                <input type="text" 
+                                placeholder='Digite seu telefone' 
+                                value={phoneInput} 
+                                onChange={handlePhoneChange} 
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm'>Foto de Perfil (opcional)</label>
-                                <input type="file" accept="image/*" onChange={e => setProfilePhoto(e.target.files[0])} className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
+                                <input type="file" 
+                                accept="image/*" 
+                                onChange={e => setProfilePhoto(e.target.files[0])} 
+                                className='outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm' />
                             </div>
                             <div className='flex flex-col'>
                                 <label className='text-left text-gray-500 text-sm rounded-md'>Senha</label>
                                 <div className='shadow-lg p-2 w-full flex items-center'>
                                     <input type={typePassword} placeholder='Digite sua senha' autoComplete='new-password' value={passwordInput} onChange={e => setPasswordInput(e.target.value)} className='outline-none bg-transparent text-gray-500 flex-grow text-sm' />
                                     <button onClick={e => switchTypePassword(e, typePassword, setTypePassword)}>
-                                        {typePassword === 'password' ? <VisibilityIcon sx={{color: '#6B7280'}} /> : <VisibilityOffIcon sx={{color: '#6B7280'}} />}
+                                        {typePassword === 'password' ? 
+                                        <VisibilityIcon sx={{color: '#6B7280'}} /> 
+                                        : 
+                                        <VisibilityOffIcon sx={{color: '#6B7280'}} />}
                                     </button>
                                 </div>
                             </div>
@@ -226,12 +298,17 @@ export const CadastroBarbearia = () => {
                                 <div className='shadow-lg p-2 w-full flex items-center'>
                                     <input type={typeConfirmPassword} placeholder='Confirme sua senha' autoComplete='new-password' value={confirmPasswordInput} onChange={e => setConfirmPasswordInput(e.target.value)} className='outline-none bg-transparent text-gray-500 flex-grow text-sm' />
                                     <button onClick={e => switchTypePassword(e, typeConfirmPassword, setConfirmTypePassword)}>
-                                        {typeConfirmPassword === 'password' ? <VisibilityIcon sx={{color: '#6B7280'}} /> : <VisibilityOffIcon sx={{color: '#6B7280'}} />}
+                                        {typeConfirmPassword === 'password' ? 
+                                        <VisibilityIcon sx={{color: '#6B7280'}} /> 
+                                        : 
+                                        <VisibilityOffIcon sx={{color: '#6B7280'}} />}
                                     </button>
                                 </div>
                             </div>
                             <div>
-                                <input type="submit" value="Cadastrar" className='bg-black text-white px-7 py-2 rounded-md cursor-pointer' />
+                                <input type="submit" 
+                                value="Cadastrar" 
+                                className='bg-black text-white px-7 py-2 rounded-md cursor-pointer' />
                             </div>
                         </form>
                         <div className='flex flex-col gap-1 mt-2'>
