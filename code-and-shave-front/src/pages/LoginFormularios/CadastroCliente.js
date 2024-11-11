@@ -201,13 +201,7 @@ export const CadastroCliente = () => {
                                 </div>
                             </div>
 
-                            <div>
-                                <input 
-                                    type="submit" 
-                                    value="Cadastrar"
-                                    className='bg-black text-white px-7 py-2 rounded-md cursor-pointer' 
-                                />
-                            </div>
+                            <ConfirmButton label="Cadastrar"/>  
                         </form>
 
                         <div className='flex flex-col gap-1 mt-2'>
