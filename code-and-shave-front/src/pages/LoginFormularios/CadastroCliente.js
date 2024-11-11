@@ -4,6 +4,9 @@ import { useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmButton } from '../../components/buttons/ConfirmButton';
+import { validateEmail, validatePassword } from '../../utils/validation';
+import { ErrorModal } from '../../components/modals/ErrorModal';
 
 export const CadastroCliente = () => {
 
@@ -21,20 +24,16 @@ export const CadastroCliente = () => {
 
     const [modalError, setModalError] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
-
-    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-    const validatePassword = (password) => (
-        password.length >= 8 &&
-        /[A-Z]/.test(password) &&
-        /[a-z]/.test(password) &&
-        /[0-9]/.test(password) &&
-        /[^A-Za-z0-9]/.test(password)
-    );
+    const [errorMessage, setErrorMessage] = useState('');
 
     const switchTypePassword = (e, item, set) => {
         e.preventDefault();
         set(item === 'password' ? 'text' : 'password');
+    }
+    
+    const closeModal = () => {
+        setModalOpen(false);
+        setModalError('');
     }
 
     const validateForm = () => {
@@ -211,17 +210,8 @@ export const CadastroCliente = () => {
                 </div>
             </div>
 
-            <Dialog open={isModalOpen} onClose={() => setModalOpen(false)}>
-                <DialogTitle>Erro de Validação</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>{modalError}</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setModalOpen(false)} sx={{color: 'black'}}>
-                        Fechar
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError} />
+
             </div>
     );
 }

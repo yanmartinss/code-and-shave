@@ -4,8 +4,11 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useEffect, useState } from 'react';
 import { estados } from '../../assets/data/estados';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
-import { allCities, fetchCEPData } from '../api/dataAPI';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmButton } from '../../components/buttons/ConfirmButton';
+import { allCities, fetchCEPData } from '../../services/api/dataAPI';
+import { validateEmail, validatePassword } from '../../utils/validation';
+import { ErrorModal } from '../../components/modals/ErrorModal';
 
 export const CadastroBarbearia = () => {
 
@@ -63,15 +66,10 @@ export const CadastroBarbearia = () => {
         }
     }, [ufSelect]);
 
-    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    
-    const validatePassword = (password) => (
-        password.length >= 8 &&
-        /[A-Z]/.test(password) &&
-        /[a-z]/.test(password) &&
-        /[0-9]/.test(password) &&
-        /[^A-Za-z0-9]/.test(password)
-    );
+    const closeModal = () => {
+        setModalOpen(false);
+        setModalError('');
+    }
 
     const switchTypePassword = (e, item, set) => {
         e.preventDefault();
@@ -307,7 +305,7 @@ export const CadastroBarbearia = () => {
                             </div>
 
                             <ConfirmButton label="Cadastrar"/>
-                            
+
                         </form>
                         <div className='flex flex-col gap-1 mt-2'>
                             <p className='text-gray-500 underline cursor-pointer' onClick={() => navigate('/')}>Já tem Cadastro?</p>
@@ -315,15 +313,7 @@ export const CadastroBarbearia = () => {
                     </div>
                 </div>
             </div>
-            <Dialog open={isModalOpen} onClose={() => setModalOpen(false)}>
-                <DialogTitle>Erro de Validação</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>{modalError}</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setModalOpen(false)} sx={{color: 'black'}}>Fechar</Button>
-                </DialogActions>
-            </Dialog>
+            <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError} />
         </div>
     );
 }
