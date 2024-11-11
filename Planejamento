@@ -1,69 +1,74 @@
 Sistema de Agendamento de Barbearia
 
 Usuários do sistema:
--Cliente
--Barbearia
--Admin do sistema
+- Cliente
+- Barbearia
+- Admin do sistema
 
 Funcionalidades:
 
 Cliente:
--Cadastro e login de clientes
--Pesquisa e seleção de barbearias
--Visualização de barbeiros disponíveis por barbearia
--Escolha de horário para agendamento
--Favoritar barbearias para acesso rápido
--Visualização dos agendamentos realizados
--Cancelamento de agendamento (se necessário)
--Área de notificações:
---Receber notificações automáticas quando o horário agendado estiver próximo
---Visualizar histórico de notificações de agendamentos
+- Cadastro e login de clientes
+- Pesquisa e seleção de barbearias
+- Visualização de barbeiros disponíveis por barbearia
+- Escolha de horário para agendamento
+- Favoritar barbearias para acesso rápido
+- Visualização dos agendamentos realizados
+- Cancelamento de agendamento (se necessário)
+- Área de notificações:
+-- Receber notificações automáticas quando o horário agendado estiver próximo
+-- Visualizar histórico de notificações de agendamentos
 
 Barbearia:
--Cadastro e login da barbearia
--Cadastro de barbeiros com detalhes (nome, especialidades, etc.)
--Gestão dos horários de trabalho dos barbeiros
--Visualização dos agendamentos dos clientes com detalhes (cliente, horário, barbeiro)
--Possibilidade de editar ou cancelar agendamentos
--Opção de gerenciamento do perfil da barbearia (endereço, telefone, CNPJ, etc.)
--Área de notificações:
---Receber notificações quando um horário agendado estiver próximo, para se prepararem
---Visualizar histórico de notificações de agendamentos
+- Cadastro e login da barbearia
+- Cadastro de barbeiros com detalhes (nome, especialidades, etc.)
+- Gestão dos horários de trabalho dos barbeiros
+- Visualização dos agendamentos dos clientes com detalhes (cliente, horário, barbeiro)
+- Possibilidade de editar ou cancelar agendamentos
+- Opção de gerenciamento do perfil da barbearia (endereço, telefone, CNPJ, etc.)
+- Área de notificações:
+-- Receber notificações quando um horário agendado estiver próximo, para se prepararem
+-- Visualizar histórico de notificações de agendamentos
 
 Admin do Sistema:
--Gestão de estabelecimentos cadastrados
--Monitoramento de agendamentos
--Controle e manutenção das funcionalidades do sistema   
--Gerenciamento de planos e pagamentos (caso seja SaaS com cobrança)
+- Gestão de estabelecimentos cadastrados
+- Monitoramento de agendamentos
+- Controle e manutenção das funcionalidades do sistema   
+- Gerenciamento de planos e pagamentos (caso seja SaaS com cobrança)
 
--Funcionalidades adicionais (caso deseje adicionar no futuro):
--Sistema de avaliação de barbeiros e barbearias
--Histórico de visitas e serviços realizados pelo cliente
--Gerenciamento de promoções e descontos
+- Funcionalidades adicionais (caso deseje adicionar no futuro):
+- Sistema de avaliação de barbeiros e barbearias
+- Histórico de visitas e serviços realizados pelo cliente
+- Gerenciamento de promoções e descontos
 
 -------------------------------------------------------------------------------------------------------------------
 
 Telas:
 
 Barbearia:
--Login/Cadastro (para novos estabelecimentos e acesso de estabelecimentos existentes)
--Gestão de Barbeiros (cadastro, edição e remoção de barbeiros)
--Gestão de Horários (configuração de horários de atendimento dos barbeiros)
--Lista de Agendamentos (visualização e gestão dos agendamentos realizados por clientes)
--Notificações (exibe as notificações de horários de atendimento próximos)
--Perfil da Barbearia (edição de informações sobre a barbearia, como endereço e CNPJ)
+- Login/Cadastro (para novos estabelecimentos e acesso de estabelecimentos existentes)
+- Gestão de Barbeiros (cadastro, edição e remoção de barbeiros)
+- Gestão de Horários (configuração de horários de atendimento dos barbeiros)
+- Lista de Agendamentos (visualização e gestão dos agendamentos realizados por clientes)
+- Notificações (exibe as notificações de horários de atendimento próximos)
+- Perfil da Barbearia (edição de informações sobre a barbearia, como endereço e CNPJ)
 
 Cliente:
--Home (lista de barbearias disponíveis)
--Página da Barbearia (detalhes da barbearia, lista de barbeiros e horários disponíveis)
--Login/Cadastro (para novos clientes e acesso de clientes existentes)
--Escolha de Barbeiro e Horário (seleção do barbeiro e horário disponível)
--Agendamentos (lista dos agendamentos futuros e passados)
--Favoritos (lista de barbearias favoritados)
--Notificações (exibe as notificações sobre agendamentos próximos)
--Perfil do Cliente (edição de informações pessoais)
+- Home (lista de barbearias disponíveis)
+- Página da Barbearia (detalhes da barbearia, lista de barbeiros e horários disponíveis)
+- Login/Cadastro (para novos clientes e acesso de clientes existentes)
+- Escolha de Barbeiro e Horário (seleção do barbeiro e horário disponível)
+- Agendamentos (lista dos agendamentos futuros e passados)
+- Favoritos (lista de barbearias favoritados)
+- Notificações (exibe as notificações sobre agendamentos próximos)
+- Perfil do Cliente (edição de informações pessoais)
 
 Admin do Sistema:
--Painel de Controle (monitoramento de barbearias e clientes cadastrados)
--Lista de Estabelecimentos (gestão de barbearias cadastradas)
--Lista de Agendamentos (visualização de todos os agendamentos realizados no sistema)
+- Painel de Controle (monitoramento de barbearias e clientes cadastrados)
+- Lista de Estabelecimentos (gestão de barbearias cadastradas)
+- Lista de Agendamentos (visualização de todos os agendamentos realizados no sistema)
+
+Definir as tecnologias:
+- ReactJS(front) e Java(back)
+- MySQL(db)
+- TailwindCSS(estilização)
