@@ -4,6 +4,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmButton } from '../../components/buttons/ConfirmButton';
 
 export const LoginFormulario = () => {
 
@@ -66,12 +67,12 @@ export const LoginFormulario = () => {
     }
 
     return (
-        <div className='bg-[#24211c] min-h-screen w-screen flex justify-center items-center p-3 bg-gradient-to-b from-black/90 to-black/40'>
-            <div className='bg-white w-[390px] h-[580px] rounded-md overflow-hidden shadow-sm md:w-[95vw] flex flex-col md:flex-row lg:flex-row-reverse justify-start lg:w-[900px] transition-all'>
+        <div className='bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40'>
+            <div className='bg-white w-screen h-screen md:h-[580px] rounded-md overflow-hidden shadow-sm md:w-[95vw] flex flex-col md:flex-row lg:flex-row-reverse justify-start lg:w-[900px] transition-all'>
                 <div style={{backgroundImage: `url(${photoImage})`}} className='h-[230px] bg-cover flex justify-center items-center md:w-[40%] md:h-[100%] bg-center lg:w-[45%]'></div>
                 
                 <div className='p-3 flex flex-col justify-center items-center text-center md:w-[60%] lg:w-[55%]'>
-                    <h2 className='text-2xl font-bold mb-1 md:text-2xl lg:text-3xl'>Code & Shave 💈</h2>
+                    <h2 className='text-2xl font-bold mb-1 mt-9 md:text-2xl lg:text-3xl'>Code & Shave 💈</h2>
                     <p className='text-gray-600 mb-1 max-w-[300px] text-sm md:text-base'>Sistema de agendamento fácil e rápido para barbearias e clientes.</p>
                     <h1 className='font-bold text-lg md:text-xl lg:text-2xl mt-3'>Acesse sua conta</h1>
 
@@ -101,10 +102,7 @@ export const LoginFormulario = () => {
                             </div>
                         </div>
 
-                        <div>
-                            <input type="submit" value="Login"
-                            className='bg-black text-white px-7 py-2 rounded-md cursor-pointer' />
-                        </div>
+                        <ConfirmButton label="Login"/>
 
                         <div className='flex flex-col gap-1'>
                             <p className='text-gray-500 underline cursor-pointer' onClick={() => navigate('/cadastro-cliente')}>Cadastrar-se como cliente</p>
@@ -113,10 +111,8 @@ export const LoginFormulario = () => {
                     </form>
                 </div>
             </div>
-            <Dialog
-                open={openModal}
-                onClose={handleClose}
-            >
+
+            <Dialog open={openModal} onClose={handleClose}>
                 <DialogTitle>Erro</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
