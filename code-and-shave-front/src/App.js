@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { CadastroBarbearia } from './pages/LoginFormularios/CadastroBarbearia';
 import { CadastroCliente } from './pages/LoginFormularios/CadastroCliente';
 import { LoginFormulario } from './pages/LoginFormularios/LoginFormulario';
-import { Form } from './components/Form';
+import { Form } from './components/container/Form';
 
 function App() {
   return (

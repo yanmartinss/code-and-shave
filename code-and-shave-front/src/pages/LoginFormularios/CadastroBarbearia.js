@@ -3,15 +3,13 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useEffect, useState } from 'react';
 import { estados } from '../../assets/data/estados';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmButton } from '../../components/buttons/ConfirmButton';
 import { allCities, fetchCEPData } from '../../services/api/dataAPI';
-import { validateEmail, validatePassword } from '../../utils/validation';
+import { formatCEP, formatPhone, validateEmail, validatePassword } from '../../utils/functions';
 import { ErrorModal } from '../../components/modals/ErrorModal';
 
 export const CadastroBarbearia = () => {
-
     const navigate = useNavigate();
 
     const [typePassword, setTypePassword] = useState('password');
@@ -26,12 +24,12 @@ export const CadastroBarbearia = () => {
     const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
     const [phoneInput, setPhoneInput] = useState('');
     const [profilePhoto, setProfilePhoto] = useState(null);
-    const [modalError, setModalError] = useState('');
-    const [isModalOpen, setModalOpen] = useState(false);
     const [ufSelect, setUfSelect] = useState({ index: null, sigla: '' });
     const [cidadesEstado, setCidadesEstado] = useState(null);
     const [citySelect, setCitySelect] = useState('');
     const [descInput, setDescInput] = useState('');
+    const [modalError, setModalError] = useState('');
+    const [isModalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -76,6 +74,17 @@ export const CadastroBarbearia = () => {
         set(item === 'password' ? 'text' : 'password');
     }
 
+    const handleUF = (e) => {
+        const selectedSigla = e.target.value;
+        setUfSelect({
+            index: estados.findIndex(estado => estado.sigla === selectedSigla),
+            sigla: selectedSigla
+        });
+    }
+
+    const handleCepChange = (e) => setCepInput(formatCEP(e.target.value));
+    const handlePhoneChange = (e) => setPhoneInput(formatPhone(e.target.value));
+
     const validateForm = () => {
         const validations = [
             { condition: !validateEmail(emailInput), message: "Por favor, insira um email válido." },
@@ -101,40 +110,12 @@ export const CadastroBarbearia = () => {
         return true;
     }
 
-    const handleUF = (e) => {
-        const selectedSigla = e.target.value;
-        setUfSelect({
-            index: estados.findIndex(estado => estado.sigla === selectedSigla),
-            sigla: selectedSigla
-        });
-    }
-
-    const handleCepChange = (e) => {
-        let valor = e.target.value.replace(/\D/g, '');
-        if (valor.length > 5) {
-            valor = valor.slice(0, 5) + '-' + valor.slice(5);
-        }
-        setCepInput(valor);
-    }
-
-    const handlePhoneChange = (e) => {
-        let valor = e.target.value.replace(/\D/g, '');
-        if (valor.length > 10) {
-            valor = valor.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-        } else if (valor.length > 6) {
-            valor = valor.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
-        } else if (valor.length > 2) {
-            valor = valor.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
-        }
-        setPhoneInput(valor);
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
             const telefoneParaEnvio = phoneInput.replace(/\D/g, '');
             const cepParaEnvio = cepInput.replace(/\D/g, '');
-    
+
             const formData = new FormData();
             formData.append('email', emailInput);
             formData.append('nome', nameInput);
@@ -148,22 +129,20 @@ export const CadastroBarbearia = () => {
             formData.append('telefone', telefoneParaEnvio);
             if (profilePhoto) formData.append('fotoPerfil', profilePhoto);
             formData.append('senha', passwordInput);
-    
+
             console.log('Dados enviados para o backend:');
             for (let [key, value] of formData.entries()) {
                 console.log(`${key}:`, value);
             }
-    
+
             // try {
             //     const response = await fetch('https://sua-api.com/endpoint-de-cadastro', {
             //         method: 'POST',
             //         body: formData
             //     });
-    
             //     if (!response.ok) {
             //         throw new Error('Erro no cadastro. Tente novamente.');
             //     }
-    
             //     const data = await response.json();
             //     console.log('Cadastro realizado com sucesso:', data);
             // } catch (error) {
@@ -172,7 +151,7 @@ export const CadastroBarbearia = () => {
             //     setModalOpen(true);
             // }
         }
-    }      
+    }  
 
     return (
         <div className='bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40'>
