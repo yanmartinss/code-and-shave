@@ -18,6 +18,7 @@ export const CadastroCliente = () => {
     const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
     const [phoneInput, setPhoneInput] = useState('');
     const [profilePhoto, setProfilePhoto] = useState(null);
+    const [tipo, setTipo] = useState('cliente');
 
     const [modalError, setModalError] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
@@ -64,6 +65,7 @@ export const CadastroCliente = () => {
             formData.append('telefone', formattedPhone);
             if (profilePhoto) formData.append('fotoPerfil', profilePhoto);
             formData.append('senha', passwordInput);
+            formData.append('tipo', tipo);
 
             console.log('Dados enviados para o backend:');
             for (let [key, value] of formData.entries()) {

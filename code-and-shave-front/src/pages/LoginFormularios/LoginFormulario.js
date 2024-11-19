@@ -6,6 +6,7 @@ import { ErrorModal } from '../../components/modals/ErrorModal';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import photoImage from '../../assets/images/photo-login.jpg';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const LoginFormulario = () => {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ export const LoginFormulario = () => {
     const [passwordInput, setPasswordInput] = useState('');
     const [modalError, setModalError] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
+    const {setUsuarioLogado} = useAuth();
 
     const closeModal = () => {
         setModalOpen(false);
@@ -28,39 +30,41 @@ export const LoginFormulario = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
+    
         if (!validateEmail(emailInput)) {
-            setModalError("Por favor, insira um email válido.");
-            setModalOpen(true);
-            return;
+          setModalError("Por favor, insira um email válido.");
+          setModalOpen(true);
+          return;
         }
-
+    
         if (!emailInput || !passwordInput) {
-            setModalError("Por favor, preencha todos os campos.");
-            setModalOpen(true);
-            return;
+          setModalError("Por favor, preencha todos os campos.");
+          setModalOpen(true);
+          return;
         }
-
+    
         try {
-            const response = await fetch('https://seu-backend.com/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: emailInput, password: passwordInput })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert("Login realizado com sucesso!");
-            } else {
+          const response = await fetch("https://seu-backend.com/api/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: emailInput, password: passwordInput }),
+          });
+    
+          const data = await response.json();
+    
+          if (response.ok) {
+            setUsuarioLogado(data.usuario);
+            localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario));
+          } else {
                 setModalError(data.message || "Usuário ou senha inválido.");
                 setModalOpen(true);
             }
         } catch (error) {
-            setModalError("Erro na conexão com o servidor. Tente novamente mais tarde.");
-            setModalOpen(true);
+        //   setModalError("Erro na conexão com o servidor. Tente novamente mais tarde.");
+        //   setModalOpen(true);
+          navigate('/home-cliente'); // COMENTAR DEPOIS E DESCOMENTAR O DE CIMA
         }
     }
 
@@ -111,7 +115,7 @@ export const LoginFormulario = () => {
 
                         <div className='flex flex-col gap-1'>
                             <p className='text-gray-500 underline cursor-pointer' onClick={() => navigate('/cadastro-cliente')}>Cadastrar-se como cliente</p>
-                            <p className='text-gray-500 underline cursor-pointer' onClick={() => navigate('cadastro-barbearia')}>Cadastrar-se como barbearia</p>
+                            <p className='text-gray-500 underline cursor-pointer' onClick={() => navigate('/cadastro-barbearia')}>Cadastrar-se como barbearia</p>
                         </div>
                     </form>
                 </div>

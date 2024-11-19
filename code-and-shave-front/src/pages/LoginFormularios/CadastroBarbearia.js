@@ -30,6 +30,7 @@ export const CadastroBarbearia = () => {
     const [descInput, setDescInput] = useState('');
     const [modalError, setModalError] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
+    const [tipo, setTipo] = useState('barbearia');
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -129,6 +130,7 @@ export const CadastroBarbearia = () => {
             formData.append('telefone', telefoneParaEnvio);
             if (profilePhoto) formData.append('fotoPerfil', profilePhoto);
             formData.append('senha', passwordInput);
+            formData.append('tipo', tipo);
 
             console.log('Dados enviados para o backend:');
             for (let [key, value] of formData.entries()) {
