@@ -7,6 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import photoImage from '../../assets/images/photo-login.jpg';
 import { useAuth } from '../../contexts/AuthContext';
+import axios from 'axios';
 
 export const LoginFormulario = () => {
     const navigate = useNavigate();
@@ -32,39 +33,46 @@ export const LoginFormulario = () => {
         e.preventDefault();
     
         if (!validateEmail(emailInput)) {
-          setModalError("Por favor, insira um email válido.");
-          setModalOpen(true);
-          return;
+            setModalError("Por favor, insira um email válido.");
+            setModalOpen(true);
+            return;
         }
     
         if (!emailInput || !passwordInput) {
-          setModalError("Por favor, preencha todos os campos.");
-          setModalOpen(true);
-          return;
+            setModalError("Por favor, preencha todos os campos.");
+            setModalOpen(true);
+            return;
         }
     
         try {
-          const response = await fetch("https://seu-backend.com/api/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: emailInput, password: passwordInput }),
-          });
+            const response = await axios.post("https://seu-backend.com/api/login", {
+                email: emailInput,
+                password: passwordInput,
+            });
     
-          const data = await response.json();
+            const data = response.data; 
     
-          if (response.ok) {
-            setUsuarioLogado(data.usuario);
-            localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario));
-          } else {
-                setModalError(data.message || "Usuário ou senha inválido.");
-                setModalOpen(true);
+            if (response.status === 200) {
+                setUsuarioLogado(data.usuario);
+                localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario));
+    
+                if (data.usuario.tipo === "cliente") {
+                    navigate("/home-cliente");
+                } else if (data.usuario.tipo === "barbearia") {
+                    navigate("/home-barbearia");
+                } else if (data.usuario.tipo === "admin") {
+                    navigate("/admin");
+                }
             }
         } catch (error) {
-        //   setModalError("Erro na conexão com o servidor. Tente novamente mais tarde.");
-        //   setModalOpen(true);
-          navigate('/home-cliente'); // COMENTAR DEPOIS E DESCOMENTAR O DE CIMA
+            if (error.response) {
+                setModalError(error.response.data.message || "Usuário ou senha inválidos.");
+            } else if (error.request) {
+                setModalError("Erro na conexão com o servidor. Tente novamente mais tarde.");
+            } else {
+                setModalError("Ocorreu um erro. Tente novamente.");
+            }
+            setModalOpen(true);
         }
     }
 

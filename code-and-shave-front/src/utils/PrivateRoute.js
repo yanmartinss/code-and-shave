@@ -2,13 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext"
 
 export const ClienteRoute = ({children}) => {
-    const {usuarioLogado} = useAuth();
-    const navigate = useNavigate();
+    // const {usuarioLogado} = useAuth();
+    // const navigate = useNavigate();
 
-    if (!usuarioLogado) return navigate("/");
-    usuarioLogado.tipo = 'cliente';
+    // if (!usuarioLogado) return navigate("/");
+    // usuarioLogado.tipo = 'cliente';
 
-    if (usuarioLogado.tipo === "cliente") return navigate("/home-cliente");
+    // if (usuarioLogado.tipo === "cliente") return navigate("/home-cliente");
 
     return children;
 }
