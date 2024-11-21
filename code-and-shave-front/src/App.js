@@ -5,10 +5,10 @@ import { CadastroCliente } from './pages/LoginFormularios/CadastroCliente';
 import { LoginFormulario } from './pages/LoginFormularios/LoginFormulario';
 import { Form } from './components/container/Form';
 import { AuthProvider } from './contexts/AuthContext';
-import { Principal } from './components/container/Principal';
 import { HomeCliente } from './pages/TelasCliente/HomeCliente';
 import { ClienteRoute, BarbeariaRoute } from './utils/PrivateRoute';
 import { HomeBarbearia } from './pages/TelasBarberia/HomeBarbearia';
+import MiniDrawer from './components/container/MiniDrawer';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
             <Route path="/cadastro-barbearia" element={<CadastroBarbearia />} />
             <Route path="/cadastro-cliente" element={<CadastroCliente />} />
           </Route>
-          <Route element={<Principal />}>
+          <Route element={<MiniDrawer />}>
             <Route path="/home-cliente" element={<ClienteRoute><HomeCliente /></ClienteRoute>} />
             <Route path="/home-barbearia" element={<BarbeariaRoute><HomeBarbearia /></BarbeariaRoute>} />
           </Route>
