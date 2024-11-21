@@ -8,7 +8,7 @@ export const ClienteRoute = ({children}) => {
     // if (!usuarioLogado) return navigate("/");
     // usuarioLogado.tipo = 'cliente';
 
-    // if (usuarioLogado.tipo === "cliente") return navigate("/home-cliente");
+    // if (usuarioLogado.tipo !== "cliente") return navigate("/home-barbearia");
 
     return children;
 }
@@ -21,7 +21,7 @@ export const BarbeariaRoute = ({children}) => {
     usuarioLogado.tipo = 'barbearia';
 
 
-    if (usuarioLogado.tipo === "barbearia") return navigate("/home-barbearia");
+    if (usuarioLogado.tipo !== "barbearia") return navigate("/home-cliente");
 
     return children;
 }
