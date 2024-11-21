@@ -117,7 +117,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
             </Link>
 
-            <Link to={'/vendas'}>
+            <Link to={'/agendamentos-cliente'}>
             <ListItemButton>
               <ListItemIcon>
                 <BookIcon sx={{color: '#e0dfdf'}}/>
@@ -126,7 +126,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
             </Link>
 
-            <Link to={'/tarefas'}>
+            <Link to={'/favoritos'}>
             <ListItemButton>
               <ListItemIcon>
                 <FavoriteIcon sx={{color: '#e0dfdf'}}/>
@@ -135,7 +135,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
             </Link>
 
-            <Link to={'/tarefas'}>
+            <Link to={'/notificacoes-cliente'}>
             <ListItemButton>
               <ListItemIcon>
                 <NotificationsIcon sx={{color: '#e0dfdf'}}/>
@@ -186,7 +186,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
             </Link>
 
-            <Link to={'/vendas'}>
+            <Link to={'/agendamentos-cliente'}>
             <ListItemButton>
               <ListItemIcon>
                 <BookIcon sx={{color: '#e0dfdf'}}/>
@@ -195,7 +195,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
             </Link>
 
-            <Link to={'/tarefas'}>
+            <Link to={'/favoritos'}>
             <ListItemButton>
               <ListItemIcon>
                 <FavoriteIcon sx={{color: '#e0dfdf'}} />
@@ -204,7 +204,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
             </Link>
 
-            <Link to={'/tarefas'}>
+            <Link to={'/notificacoes-cliente'}>
             <ListItemButton>
               <ListItemIcon>
                 <NotificationsIcon sx={{color: '#e0dfdf'}} />
