@@ -35,9 +35,9 @@ export const SlideShow = ({ slides }) => {
       <div className="absolute bottom-0 py-4 flex justify-center gap-3 w-full">
         {slides.map((item, i) => (
           <div 
-            onClick={() => { setCurrent(i) }}
+            onClick={() => setCurrent(i)}
             key={"circle" + i}
-            className={`rounded-full w-2 h-2 cursor-pointer ${i === current ? "bg-blue-700" : "bg-white"}`}
+            className={`rounded-full w-2 h-2 cursor-pointer z-10 ${i === current ? "bg-blue-700" : "bg-white"}`}
           ></div>
         ))}
       </div>
