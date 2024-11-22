@@ -80,8 +80,8 @@ function ResponsiveDrawer(props) {
             </Typography>
           </div>
           <Typography variant="h6" noWrap component="div" sx={{fontSize: '14px', paddingRight: '10px'}}>
-            {/* FOTO DE PERFIL SE TIVER */}
             {/* {userLogged} */}
+            {/* FOTO DE PERFIL SE TIVER */}
             Yan
           </Typography>
         </Toolbar>
