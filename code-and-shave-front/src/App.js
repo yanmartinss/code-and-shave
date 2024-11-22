@@ -9,6 +9,9 @@ import { HomeCliente } from './pages/TelasCliente/HomeCliente';
 import { ClienteRoute, BarbeariaRoute } from './utils/PrivateRoute';
 import { HomeBarbearia } from './pages/TelasBarberia/HomeBarbearia';
 import MiniDrawer from './components/container/MiniDrawer';
+import { AgendamentoCliente } from './pages/TelasCliente/AgendamentoCliente';
+import { Favoritos } from './pages/TelasCliente/Favoritos';
+import { Notificacoes } from './pages/TelasCliente/Notificacoes';
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
           <Route element={<MiniDrawer />}>
             <Route path="/home-cliente" element={<ClienteRoute><HomeCliente /></ClienteRoute>} />
             <Route path="/home-barbearia" element={<BarbeariaRoute><HomeBarbearia /></BarbeariaRoute>} />
+            <Route path="/agendamentos-cliente" element={<AgendamentoCliente />}/>
+            <Route path='/favoritos' element={<Favoritos />}/>
+            <Route path='/notificacoes-cliente' element={<Notificacoes />}/>
           </Route>
         </Routes>
       </Router>
