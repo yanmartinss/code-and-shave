@@ -1,6 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
-import { SlideShow } from '../../components/modals/SlideShow';
 
 export const HomeCliente = () => {
 
@@ -27,10 +26,6 @@ export const HomeCliente = () => {
                         onChange={e => setBarberInput(e.target.value)} />
                         <button><SearchIcon sx={{color: '#e0dfdf'}} /></button>
                     </div>
-                </div>
-
-                <div className='w-[99%] m-auto'>
-                    <SlideShow slides={slides}/>
                 </div>
             </div>
         </div>
