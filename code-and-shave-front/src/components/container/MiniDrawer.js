@@ -49,7 +49,7 @@ function ResponsiveDrawer(props) {
   const {userLogged} = useAuth();
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex'}}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -75,11 +75,11 @@ function ResponsiveDrawer(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
+            {/* <Typography variant="h6" noWrap component="div">
               Cliente
-            </Typography>
+            </Typography> */}
           </div>
-          <Typography variant="h6" noWrap component="div" sx={{fontSize: '14px', paddingRight: '10px'}}>
+          <Typography variant="h6" noWrap component="div" sx={{fontSize: '18px', paddingRight: '10px', textTransform: 'uppercase'}}>
             {/* {userLogged} */}
             {/* FOTO DE PERFIL SE TIVER */}
             Yan
@@ -117,9 +117,19 @@ function ResponsiveDrawer(props) {
             alignItems: 'center',
             paddingRight: 2,
           }}
-        ><button onClick={handleDrawerClose}>
+        >
+          <button onClick={handleDrawerClose}>
           <CloseIcon sx={{color: '#e0dfdf'}} />
         </button></Toolbar>
+        <Toolbar sx={{
+          display: 'flex',
+           justifyContent: 'flex-start',
+            alignItems: 'center',
+             marginBottom: '25px'
+            }}><p className='text-xl'>Code & Shave 💈</p></Toolbar>
+          <Divider sx={{backgroundImage: 'linear-gradient(260deg, rgba(0,0,0,1) 0%, rgba(17,17,17,1) 100%)',
+            height: '5px'
+          }} />
           <List>
             <Link to={'/home-cliente'}>
             <ListItemButton>
@@ -157,6 +167,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
             </Link>
           </List>
+          <Toolbar sx={{marginTop: '-20px'}} />
         <Divider sx={{backgroundImage: 'linear-gradient(260deg, rgba(0,0,0,1) 0%, rgba(17,17,17,1) 100%)',
           height: '5px'
         }} />
@@ -184,11 +195,16 @@ function ResponsiveDrawer(props) {
             <Toolbar
           sx={{
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-start',
             alignItems: 'center',
-            paddingRight: 2,
+            paddingRight: 2
           }}
-        ></Toolbar>
+        >
+          <p className='text-xl'>Code & Shave 💈</p>
+        </Toolbar>
+        <Divider sx={{backgroundImage: 'linear-gradient(260deg, rgba(0,0,0,1) 0%, rgba(17,17,17,1) 100%)',
+          height: '5px'
+        }} />
           <List>
             <Link to={'/home-cliente'}>
             <ListItemButton>
@@ -226,6 +242,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
             </Link>
           </List>
+        <Toolbar sx={{marginTop: '-20px'}} />
         <Divider sx={{backgroundImage: 'linear-gradient(260deg, rgba(0,0,0,1) 0%, rgba(17,17,17,1) 100%)',
           height: '5px'
         }}/>
