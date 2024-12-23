@@ -1,27 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext"
 
 export const ClienteRoute = ({children}) => {
-    // const {usuarioLogado} = useAuth();
-    // const navigate = useNavigate();
+    const { usuarioLogado } = useAuth();
 
-    // if (!usuarioLogado) return navigate("/");
-    // usuarioLogado.tipo = 'cliente';
-
-    // if (usuarioLogado.tipo !== "cliente") return navigate("/home-barbearia");
+    // Verifica se o usuário está logado e é do tipo 'cliente'
+    if (!usuarioLogado || usuarioLogado.tipo !== "cliente") {
+        return <Navigate to="/" replace />;
+    }
 
     return children;
 }
 
 export const BarbeariaRoute = ({children}) => {
-    const {usuarioLogado} = useAuth();
-    const navigate = useNavigate();
+    const { usuarioLogado } = useAuth();
 
-    if (!usuarioLogado) return navigate("/");
-    usuarioLogado.tipo = 'barbearia';
-
-
-    if (usuarioLogado.tipo !== "barbearia") return navigate("/home-cliente");
+    if (!usuarioLogado || usuarioLogado.tipo !== "barbearia") {
+        return <Navigate to="/" replace />;
+    }
 
     return children;
 }
