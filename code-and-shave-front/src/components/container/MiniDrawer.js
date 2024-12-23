@@ -21,9 +21,15 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { useAuth } from '../../contexts/AuthContext';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import { useAuth } from '../../contexts/AuthContext';
 
 const drawerWidth = 240;
 
@@ -32,8 +38,9 @@ function ResponsiveDrawer(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
+    const [logoutModalOpen, setLogoutModalOpen] = React.useState(false);
 
-    const { usuarioLogado, logout } = useAuth(); // Obtém o tipo de usuário do AuthContext
+    const { usuarioLogado, logout } = useAuth();
 
     const handleDrawerClose = () => {
         setIsClosing(true);
@@ -52,30 +59,30 @@ function ResponsiveDrawer(props) {
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
-    const handleLogout = () => {
+    const confirmLogout = () => {
         logout();
+        setLogoutModalOpen(false);
         navigate('/');
     };
 
-    // Define os itens do Drawer com base no tipo de usuário
     const menuItems = () => {
         switch (usuarioLogado?.tipo) {
             case 'cliente':
                 return [
-                    { text: 'Home', icon: <HomeIcon sx={{ color: '#e0dfdf' }} />, path: '/home-cliente' },
+                    { text: 'Início', icon: <HomeIcon sx={{ color: '#e0dfdf' }} />, path: '/home-cliente' },
                     { text: 'Agendamentos', icon: <BookIcon sx={{ color: '#e0dfdf' }} />, path: '/agendamentos-cliente' },
                     { text: 'Notificações', icon: <NotificationsIcon sx={{ color: '#e0dfdf' }} />, path: '/notificacoes-cliente' },
                 ];
             case 'barbearia':
                 return [
-                    { text: 'Home', icon: <HomeIcon sx={{ color: '#e0dfdf' }} />, path: '/home-barbearia' },
+                    { text: 'Início', icon: <HomeIcon sx={{ color: '#e0dfdf' }} />, path: '/home-barbearia' },
                     { text: 'Agendamentos', icon: <BookIcon sx={{ color: '#e0dfdf' }} />, path: '/agendamentos-barbearia' },
-                    { text: 'Gestão', icon: <ManageAccountsIcon sx={{ color: '#e0dfdf' }} />, path: '/gestao-barbearia' },
                     { text: 'Clientes', icon: <AppRegistrationIcon sx={{ color: '#e0dfdf' }} />, path: '/clientes-cadastrados' },
+                    { text: 'Gestão', icon: <ManageAccountsIcon sx={{ color: '#e0dfdf' }} />, path: '/gestao-barbearia' },
                 ];
             case 'barbeiro':
                 return [
-                    { text: 'Home', icon: <HomeIcon sx={{ color: '#e0dfdf' }} />, path: '/home-barbeiro' },
+                    { text: 'Início', icon: <HomeIcon sx={{ color: '#e0dfdf' }} />, path: '/home-barbeiro' },
                     { text: 'Agendamentos', icon: <BookIcon sx={{ color: '#e0dfdf' }} />, path: '/agendamentos-barbeiro' },
                     { text: 'Favoritos', icon: <FavoriteIcon sx={{ color: '#e0dfdf' }} />, path: '/favoritos-barbeiro' },
                 ];
@@ -120,7 +127,6 @@ function ResponsiveDrawer(props) {
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
                 aria-label="mailbox folders"
             >
-                {/* Drawer para Mobile */}
                 <Drawer
                     container={container}
                     variant="temporary"
@@ -140,7 +146,7 @@ function ResponsiveDrawer(props) {
                         },
                     }}
                 >
-                    <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Toolbar>
                         <button onClick={handleDrawerClose}>
                             <CloseIcon sx={{ color: '#e0dfdf' }} />
                         </button>
@@ -154,8 +160,8 @@ function ResponsiveDrawer(props) {
                                 </ListItemButton>
                             </Link>
                         ))}
-                        <Divider sx={{backgroundImage: 'linear-gradient(260deg, rgba(0,0,0,1) 0%, rgba(17,17,17,1) 100%)', height: '5px'}}/>
-                        <ListItemButton onClick={handleLogout}>
+                        <Divider />
+                        <ListItemButton onClick={() => setLogoutModalOpen(true)}>
                             <ListItemIcon>
                                 <ExitToAppIcon sx={{ color: '#e0dfdf' }} />
                             </ListItemIcon>
@@ -163,8 +169,6 @@ function ResponsiveDrawer(props) {
                         </ListItemButton>
                     </List>
                 </Drawer>
-
-                {/* Drawer para Desktop */}
                 <Drawer
                     variant="permanent"
                     sx={{
@@ -192,8 +196,8 @@ function ResponsiveDrawer(props) {
                                 </ListItemButton>
                             </Link>
                         ))}
-                        <Divider sx={{backgroundImage: 'linear-gradient(260deg, rgba(0,0,0,1) 0%, rgba(17,17,17,1) 100%)', height: '5px'}}/>
-                        <ListItemButton onClick={handleLogout}>
+                        <Divider />
+                        <ListItemButton onClick={() => setLogoutModalOpen(true)}>
                             <ListItemIcon>
                                 <ExitToAppIcon sx={{ color: '#e0dfdf' }} />
                             </ListItemIcon>
@@ -213,6 +217,20 @@ function ResponsiveDrawer(props) {
             >
                 <Outlet />
             </Box>
+            <Dialog open={logoutModalOpen} onClose={() => setLogoutModalOpen(false)}>
+                <DialogTitle>Confirmação de Logout</DialogTitle>
+                <DialogContent>
+                    <Typography>Tem certeza que deseja sair?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={confirmLogout} color="secondary">
+                        Sair
+                    </Button>
+                    <Button onClick={() => setLogoutModalOpen(false)} color="primary">
+                        Cancelar
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }

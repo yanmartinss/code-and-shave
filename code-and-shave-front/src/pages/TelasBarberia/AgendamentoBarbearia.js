@@ -33,10 +33,10 @@ export const AgendamentoBarbearia = () => {
     }
 
     const handleDateClick = (info) => {
-        const date = info.dateStr; // ISO format: YYYY-MM-DD
+        const date = info.dateStr;
         console.log("Data clicada (original):", date);
 
-        setSelectedDate(date); // Salve a data no formato ISO
+        setSelectedDate(date);
         const eventsForDate = agendamentos.filter(
             (agendamento) => agendamento.data === date
         );
@@ -45,7 +45,7 @@ export const AgendamentoBarbearia = () => {
 
     const formatDate = (dateString) => {
         const [year, month, day] = dateString.split('-');
-        return `${day}/${month}/${year}`; // Formato DD/MM/YYYY
+        return `${day}/${month}/${year}`; 
     }      
 
 

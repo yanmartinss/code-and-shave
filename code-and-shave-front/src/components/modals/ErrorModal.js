@@ -1,13 +1,13 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 
-export const ErrorModal = ({ open, onClose, message }) => {
+export const ErrorModal = ({ open, onClose, title, message }) => {
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Erro</DialogTitle>
+            <DialogTitle>{title || 'Erro'}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    {message || 'Ocorreu um erro.'} {/* Exibe a mensagem de erro passada ou uma mensagem padrão */}
+                    {message || 'Ocorreu um erro.'}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
