@@ -7,24 +7,20 @@ import slide4 from '../../assets/images/slide4.jpg';
 
 export const HomeCliente = () => {
   const slides = [slide1, slide2, slide3, slide4];
-  const [username] = useState('Yan'); // Nome do cliente
+  const [username] = useState('Yan'); 
 
   return (
     <div className="flex flex-col items-center bg-[#f9fafb] min-h-screen">
-      {/* Slideshow */}
       <Slideshow slides={slides} />
 
-      {/* Bem-vindo de volta */}
       <div className="w-full max-w-screen-md mt-8 px-4 text-center">
         <h1 className="text-2xl font-bold text-[#111827]">Bem-vindo de volta, {username}!</h1>
         <p className="text-gray-600 mt-2">Estamos felizes em te ver novamente. Explore suas opções e aproveite nossos serviços!</p>
       </div>
 
-      {/* Agendamentos Recentes */}
       <div className="w-full max-w-screen-md mt-12 px-4">
         <h3 className="text-xl font-semibold text-[#111827] mb-6">Seus Agendamentos Recentes</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* Exemplo de cartões */}
           <div className="p-4 bg-white shadow-md rounded-lg">
             <h4 className="font-bold text-[#111827]">Corte com Barbeiro X</h4>
             <p className="text-gray-600">Data: 28/11/2024</p>
@@ -38,11 +34,9 @@ export const HomeCliente = () => {
         </div>
       </div>
 
-      {/* Barbeiros em Destaque */}
       <div className="w-full max-w-screen-md mt-12 px-4">
         <h3 className="text-xl font-semibold text-[#111827] mb-6">Barbeiros em Destaque</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Exemplo de cartões */}
           <div className="p-4 bg-white shadow-md rounded-lg text-center">
             <h4 className="font-bold text-[#111827]">João</h4>
             <p className="text-gray-600">Especialista em cortes clássicos</p>
@@ -58,11 +52,9 @@ export const HomeCliente = () => {
         </div>
       </div>
 
-      {/* Promoções e Novidades */}
       <div className="w-full max-w-screen-md mt-12 px-4">
         <h3 className="text-xl font-semibold text-[#111827] mb-6">Promoções e Novidades</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* Exemplo de promoções */}
           <div className="p-4 bg-white shadow-md rounded-lg">
             <h4 className="font-bold text-[#111827]">20% de desconto em cortes</h4>
             <p className="text-gray-600">Válido até 30/11/2024</p>
