@@ -80,103 +80,103 @@ export const LoginFormulario = () => {
 
     // MOCK PARA TIPO CLIENTE
 
-    // const handleLogin = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!validateEmail(emailInput)) {
-    //         setModalError("Por favor, insira um email válido.");
-    //         setModalOpen(true);
-    //         return;
-    //     }
-
-    //     if (!emailInput || !passwordInput) {
-    //         setModalError("Por favor, preencha todos os campos.");
-    //         setModalOpen(true);
-    //         return;
-    //     }
-
-    //     try {
-    //         // Simulando login
-    //         const mockResponse = {
-    //             status: 200,
-    //             data: {
-    //                 usuario: {
-    //                     email: emailInput,
-    //                     tipo: "cliente",
-    //                     nome: "Usuário Cliente",
-    //                 },
-    //             },
-    //         };
-
-    //         const data = mockResponse.data;
-
-    //         if (mockResponse.status === 200) {
-    //             setUsuarioLogado(data.usuario);
-    //             localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario));
-
-    //             if (data.usuario.tipo === "cliente") {
-    //                 navigate("/home-cliente");
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error("Erro durante o login:", error);
-    //         setModalError("Ocorreu um erro durante o login. Tente novamente.");
-    //         setModalOpen(true);
-    //     }
-    // }
-
-    // MOCK PARA TIPO BARBEARIA
-
     const handleLogin = async (e) => {
         e.preventDefault();
-    
+
         if (!validateEmail(emailInput)) {
             setModalError("Por favor, insira um email válido.");
             setModalOpen(true);
             return;
         }
-    
+
         if (!emailInput || !passwordInput) {
             setModalError("Por favor, preencha todos os campos.");
             setModalOpen(true);
             return;
         }
-    
+
         try {
-            // Simulando uma resposta do backend (Mock)
+            // Simulando login
             const mockResponse = {
                 status: 200,
                 data: {
                     usuario: {
                         email: emailInput,
-                        tipo: "barbearia", // Tipo fixado como barbearia
-                        nome: "Barbearia Modelo", // Nome fictício para teste
+                        tipo: "cliente",
+                        nome: "Usuário Cliente",
                     },
                 },
             };
-    
+
             const data = mockResponse.data;
-    
+
             if (mockResponse.status === 200) {
-                console.log("Login bem-sucedido:", data.usuario);
-    
-                setUsuarioLogado(data.usuario); // Salva o usuário no contexto
-                localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario)); // Armazena no localStorage
-    
+                setUsuarioLogado(data.usuario);
+                localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario));
+
                 if (data.usuario.tipo === "cliente") {
                     navigate("/home-cliente");
-                } else if (data.usuario.tipo === "barbearia") {
-                    navigate("/home-barbearia"); // Redireciona para a página da barbearia
-                } else if (data.usuario.tipo === "barbeiro") {
-                    navigate("/home-barbeiro");
                 }
             }
         } catch (error) {
-            console.error("Erro durante o login simulado:", error);
+            console.error("Erro durante o login:", error);
             setModalError("Ocorreu um erro durante o login. Tente novamente.");
             setModalOpen(true);
         }
-    } 
+    }
+
+    // MOCK PARA TIPO BARBEARIA
+
+    // const handleLogin = async (e) => {
+    //     e.preventDefault();
+    
+    //     if (!validateEmail(emailInput)) {
+    //         setModalError("Por favor, insira um email válido.");
+    //         setModalOpen(true);
+    //         return;
+    //     }
+    
+    //     if (!emailInput || !passwordInput) {
+    //         setModalError("Por favor, preencha todos os campos.");
+    //         setModalOpen(true);
+    //         return;
+    //     }
+    
+    //     try {
+    //         // Simulando uma resposta do backend (Mock)
+    //         const mockResponse = {
+    //             status: 200,
+    //             data: {
+    //                 usuario: {
+    //                     email: emailInput,
+    //                     tipo: "barbearia", // Tipo fixado como barbearia
+    //                     nome: "Barbearia Modelo", // Nome fictício para teste
+    //                 },
+    //             },
+    //         };
+    
+    //         const data = mockResponse.data;
+    
+    //         if (mockResponse.status === 200) {
+    //             console.log("Login bem-sucedido:", data.usuario);
+    
+    //             setUsuarioLogado(data.usuario); // Salva o usuário no contexto
+    //             localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario)); // Armazena no localStorage
+    
+    //             if (data.usuario.tipo === "cliente") {
+    //                 navigate("/home-cliente");
+    //             } else if (data.usuario.tipo === "barbearia") {
+    //                 navigate("/home-barbearia"); // Redireciona para a página da barbearia
+    //             } else if (data.usuario.tipo === "barbeiro") {
+    //                 navigate("/home-barbeiro");
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error("Erro durante o login simulado:", error);
+    //         setModalError("Ocorreu um erro durante o login. Tente novamente.");
+    //         setModalOpen(true);
+    //     }
+    // } 
 
     return (
         <div className="bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40">

@@ -18,23 +18,23 @@ export const GestaoBarbearia = () => {
         {
             title: 'Cadastrar/Editar Barbeiros',
             description: 'Gerencie a equipe de barbeiros, adicione novos profissionais ou edite os dados existentes.',
-            action: () => navigate('/barbeiros-barbearia'),
+            action: () => navigate('/editar-barbeiros'),
         },
         {
             title: 'Gerenciar Agendamentos',
             description: 'Visualize e organize os agendamentos dos clientes para um atendimento eficiente.',
             action: () => navigate('/agendamentos-barbearia'),
         },
-        {
-            title: 'Gerenciar Horários de Funcionamento',
-            description: 'Configure os horários de abertura e fechamento da barbearia para cada dia da semana.',
-            action: () => navigate('/horarios-funcionamento'),
-        },
-        {
-            title: 'Relatórios',
-            description: 'Acompanhe o desempenho da barbearia com relatórios de faturamento e atendimento.',
-            action: () => navigate('/relatorios-barbearia'),
-        },
+        // {
+        //     title: 'Gerenciar Horários de Funcionamento',
+        //     description: 'Configure os horários de abertura e fechamento da barbearia para cada dia da semana.',
+        //     action: () => navigate('/horarios-funcionamento'),
+        // },
+        // {
+        //     title: 'Relatórios',
+        //     description: 'Acompanhe o desempenho da barbearia com relatórios de faturamento e atendimento.',
+        //     action: () => navigate('/relatorios-barbearia'),
+        // },
     ];
 
     return (

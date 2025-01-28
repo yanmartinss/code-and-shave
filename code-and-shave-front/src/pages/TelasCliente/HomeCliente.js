@@ -52,7 +52,7 @@ export const HomeCliente = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-screen-md mt-12 px-4">
+      {/* <div className="w-full max-w-screen-md mt-12 px-4">
         <h3 className="text-xl font-semibold text-[#111827] mb-6">Promoções e Novidades</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="p-4 bg-white shadow-md rounded-lg">
@@ -64,7 +64,7 @@ export const HomeCliente = () => {
             <p className="text-gray-600">Promoção especial por R$50</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
