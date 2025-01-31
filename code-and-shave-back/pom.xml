@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>br.com.code_and_shave</groupId>
-    <artifactId>projeto</artifactId>
+    <artifactId>code-and-shave-back</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>projeto</name>
     <description>Demo project for Spring Boot</description>
