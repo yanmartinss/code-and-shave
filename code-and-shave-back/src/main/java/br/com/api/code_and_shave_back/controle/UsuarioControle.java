@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.api.code_and_shave_back.modelo.RespostaModelo;
@@ -17,6 +18,7 @@ import br.com.api.code_and_shave_back.servico.UsuarioServico;
 
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("usuarios")
 public class UsuarioControle {
 
     @Autowired
