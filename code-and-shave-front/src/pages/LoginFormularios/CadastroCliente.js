@@ -71,7 +71,7 @@ export const CadastroCliente = () => {
             console.log('Enviando dados para o backend...');
 
             try {
-                const response = await axios.post("http://localhost:8080/usuarios/cadastrar", {
+                const response = await axios.post("http://localhost:8080/cadastrar", {
                     nome: nameInput,
                     email: emailInput,
                     telefone: formattedPhone,

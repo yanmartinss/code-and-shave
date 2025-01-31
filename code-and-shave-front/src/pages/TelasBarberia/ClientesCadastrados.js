@@ -8,7 +8,7 @@ export const ClientesCadastrados = () => {
     useEffect(() => {
         const fetchClientes = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/usuarios/listar');
+                const response = await axios.get('http://localhost:8080/listar');
                 setClientes(response.data);
             } catch (error) {
                 setError('Erro ao carregar os clientes. Tente novamente mais tarde.');
