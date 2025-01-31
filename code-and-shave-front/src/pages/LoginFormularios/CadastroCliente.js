@@ -71,7 +71,7 @@ export const CadastroCliente = () => {
             console.log('Enviando dados para o backend...');
 
             try {
-                const response = await axios.post("http://localhost:8080/usuarios", {
+                const response = await axios.post("http://localhost:8080/cadastrar", {
                     nome: nameInput,
                     email: emailInput,
                     telefone: formattedPhone,
@@ -79,9 +79,7 @@ export const CadastroCliente = () => {
                     tipo: tipo
                 });
 
-                console.log('Cadastro realizado com sucesso:', response.data);
-                alert('Usuário cadastrado com sucesso!');
-                navigate('/login'); // Redireciona para o login após cadastro
+                navigate('/');
             } catch (error) {
                 console.error('Erro no cadastro:', error);
                 setModalError('Erro ao cadastrar usuário. Tente novamente.');
