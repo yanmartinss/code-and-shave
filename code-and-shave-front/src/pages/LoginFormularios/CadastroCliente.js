@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Importando axios para requisições HTTP
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import photoImage from '../../assets/images/photo-login.jpg';
@@ -67,27 +68,25 @@ export const CadastroCliente = () => {
             formData.append('senha', passwordInput);
             formData.append('tipo', tipo);
 
-            console.log('Dados enviados para o backend:');
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}:`, value);
-            }
+            console.log('Enviando dados para o backend...');
 
-            // Código de envio de dados ao backend (descomente para uso)
-            // try {
-            //     const response = await fetch('https://sua-api.com/endpoint-de-cadastro', {
-            //         method: 'POST',
-            //         body: formData
-            //     });
-            //     if (!response.ok) {
-            //         throw new Error('Erro no cadastro. Tente novamente.');
-            //     }
-            //     const data = await response.json();
-            //     console.log('Cadastro realizado com sucesso:', data);
-            // } catch (error) {
-            //     console.error('Erro ao enviar os dados:', error);
-            //     setModalError('Erro no envio dos dados. Tente novamente.');
-            //     setModalOpen(true);
-            // }
+            try {
+                const response = await axios.post("http://localhost:8080/usuarios", {
+                    nome: nameInput,
+                    email: emailInput,
+                    telefone: formattedPhone,
+                    senha: passwordInput,
+                    tipo: tipo
+                });
+
+                console.log('Cadastro realizado com sucesso:', response.data);
+                alert('Usuário cadastrado com sucesso!');
+                navigate('/login'); // Redireciona para o login após cadastro
+            } catch (error) {
+                console.error('Erro no cadastro:', error);
+                setModalError('Erro ao cadastrar usuário. Tente novamente.');
+                setModalOpen(true);
+            }
         }
     }
 
@@ -108,104 +107,37 @@ export const CadastroCliente = () => {
                         <form className="mt-4 flex flex-col justify-center gap-3 md:w-[361px]" onSubmit={handleSubmit}>
                             <div className="flex flex-col">
                                 <label className="text-left text-gray-500 text-sm">Email</label>
-                                <input
-                                    type="text"
-                                    autoComplete="email"
-                                    value={emailInput}
-                                    onChange={(e) => setEmailInput(e.target.value)}
-                                    placeholder="Digite seu email"
-                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm"
-                                />
+                                <input type="text" autoComplete="email" value={emailInput} onChange={(e) => setEmailInput(e.target.value)}
+                                    placeholder="Digite seu email" className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" />
                             </div>
-
                             <div className="flex flex-col">
                                 <label className="text-left text-gray-500 text-sm">Nome e Sobrenome</label>
-                                <input
-                                    type="text"
-                                    placeholder="Digite seu nome e sobrenome"
-                                    value={nameInput}
-                                    onChange={(e) => setNameInput(e.target.value)}
-                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm"
-                                />
+                                <input type="text" placeholder="Digite seu nome e sobrenome" value={nameInput} onChange={(e) => setNameInput(e.target.value)}
+                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" />
                             </div>
-
                             <div className="flex flex-col">
                                 <label className="text-left text-gray-500 text-sm">Telefone</label>
-                                <input
-                                    type="text"
-                                    placeholder="Digite seu número"
-                                    value={phoneInput}
-                                    onChange={handlePhoneChange}
-                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm"
-                                />
+                                <input type="text" placeholder="Digite seu número" value={phoneInput} onChange={handlePhoneChange}
+                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" />
                             </div>
-
-                            <div className="flex flex-col">
-                                <label className="text-left text-gray-500 text-sm">Foto de Perfil (opcional)</label>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => setProfilePhoto(e.target.files[0])}
-                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm"
-                                />
-                            </div>
-
                             <div className="flex flex-col">
                                 <label className="text-left text-gray-500 text-sm rounded-md">Senha</label>
-                                <div className="shadow-lg p-2 w-full flex items-center">
-                                    <input
-                                        type={typePassword}
-                                        placeholder="Digite sua senha"
-                                        autoComplete="new-password"
-                                        value={passwordInput}
-                                        onChange={(e) => setPasswordInput(e.target.value)}
-                                        className="outline-none bg-transparent text-gray-500 flex-grow text-sm"
-                                    />
-                                    <button onClick={(e) => switchTypePassword(e, typePassword, setTypePassword)}>
-                                        {typePassword === 'password' ? (
-                                            <VisibilityIcon sx={{ color: '#6B7280' }} />
-                                        ) : (
-                                            <VisibilityOffIcon sx={{ color: '#6B7280' }} />
-                                        )}
-                                    </button>
-                                </div>
+                                <input type={typePassword} placeholder="Digite sua senha" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)}
+                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" />
                             </div>
-
                             <div className="flex flex-col">
                                 <label className="text-left text-gray-500 text-sm rounded-md">Confirmar Senha</label>
-                                <div className="shadow-lg p-2 w-full flex items-center">
-                                    <input
-                                        type={typeConfirmPassword}
-                                        placeholder="Confirme sua senha"
-                                        autoComplete="new-password"
-                                        value={confirmPasswordInput}
-                                        onChange={(e) => setConfirmPasswordInput(e.target.value)}
-                                        className="outline-none bg-transparent text-gray-500 flex-grow text-sm"
-                                    />
-                                    <button
-                                        onClick={(e) => switchTypePassword(e, typeConfirmPassword, setConfirmTypePassword)}
-                                    >
-                                        {typeConfirmPassword === 'password' ? (
-                                            <VisibilityIcon sx={{ color: '#6B7280' }} />
-                                        ) : (
-                                            <VisibilityOffIcon sx={{ color: '#6B7280' }} />
-                                        )}
-                                    </button>
-                                </div>
+                                <input type={typeConfirmPassword} placeholder="Confirme sua senha" value={confirmPasswordInput}
+                                    onChange={(e) => setConfirmPasswordInput(e.target.value)} className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" />
                             </div>
-
                             <ConfirmButton label="Cadastrar" />
                         </form>
-
-                        <div className="flex flex-col gap-1 mt-2">
-                            <p className="text-gray-500 underline cursor-pointer" onClick={() => navigate('/')}>
-                                Já tem Cadastro?
-                            </p>
-                        </div>
+                        <p className="text-gray-500 underline cursor-pointer mt-2" onClick={() => navigate('/')}>
+                            Já tem Cadastro?
+                        </p>
                     </div>
                 </div>
             </div>
-
             <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError} />
         </div>
     );
