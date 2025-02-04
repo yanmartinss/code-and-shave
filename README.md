@@ -18,3 +18,19 @@ O **Code & Shave** é uma aplicação web que permite o **cadastro de clientes e
 - **Agendamento de serviços**
 - **Sistema seguro com controle de permissões**
 - **Interface responsiva para dispositivos**
+
+## ⚙ **Instalação e Configuração**
+
+1. **Clone o repositório para sua máquina**
+```bash
+git clone https://github.com/yanmartinss/code-and-shave.git
+```
+
+1. **Siga as instruções que estão nas duas pastas que foram clonadas**
+```bash
+cd code-and-shave back
+cat README.md
+cd..
+cd code-and-shave-front
+cat README.MD
+```
