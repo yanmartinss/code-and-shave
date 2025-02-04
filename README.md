@@ -17,4 +17,4 @@ O **Code & Shave** é uma aplicação web que permite o **cadastro de clientes e
 - **Listagem de clientes cadastrados**
 - **Agendamento de serviços**
 - **Sistema seguro com controle de permissões**
-- **Interface responsiva para dispositivos
+- **Interface responsiva para dispositivos**
