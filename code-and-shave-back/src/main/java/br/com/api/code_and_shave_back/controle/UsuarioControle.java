@@ -50,6 +50,7 @@ public class UsuarioControle {
     public String rota() {
         return "API de usuários funcionando";
     }
+    
     //    @PostMapping("/login")
     // public ResponseEntity<?> login(@RequestParam String email, @RequestParam String senha){
     //     return us.login(email, senha);
