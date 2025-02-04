@@ -1,8 +1,8 @@
-# 💈 **CODE & SHAVE - FRONT-END**
+# 💈 **Code & Shave - Front-end**
 
 Este repositório contém o código-fonte do front-end do aplicativo **CODE & SHAVE**, desenvolvido em **REACT** para facilitar o agendamento de serviços em barbearias.
 
-## 🚀 **FUNCIONALIDADES**
+## 🚀 **Funcionalidades**
 
 - **Cadastro e login de clientes e barbearias**
 - **Listagem de clientes cadastrados**
@@ -11,7 +11,7 @@ Este repositório contém o código-fonte do front-end do aplicativo **CODE & SH
 
 ---
 
-## 📦 **TECNOLOGIAS UTILIZADAS**
+## 📦 **Tecnologias Utilizadas**
 
 - **REACT**
 - **AXIOS** (para requisições HTTP)
@@ -20,7 +20,7 @@ Este repositório contém o código-fonte do front-end do aplicativo **CODE & SH
 
 ---
 
-## ⚙️ **INSTALAÇÃO E CONFIGURAÇÃO**
+## ⚙️ **Instalação e Configuração**
 
 1. **Instale as dependências**
 ```bash
