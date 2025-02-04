@@ -26,7 +26,7 @@ O **Code & Shave** é uma aplicação web que permite o **cadastro de clientes e
 git clone https://github.com/yanmartinss/code-and-shave.git
 ```
 
-1. **Siga as instruções que estão nas duas pastas que foram clonadas**
+2. **Siga as instruções que estão nas duas pastas que foram clonadas**
 ```bash
 cd code-and-shave-back
 cat README.md
