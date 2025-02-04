@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.api.code_and_shave_back.modelo.RespostaModelo;
@@ -49,4 +50,8 @@ public class UsuarioControle {
     public String rota() {
         return "API de usuários funcionando";
     }
+    //    @PostMapping("/login")
+    // public ResponseEntity<?> login(@RequestParam String email, @RequestParam String senha){
+    //     return us.login(email, senha);
+    // }
 }
