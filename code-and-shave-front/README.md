@@ -26,7 +26,7 @@ Este repositório contém o código-fonte do front-end do aplicativo **CODE & SH
 ```bash
 npm install
 ```
-2. ** Inicie o projeto **
+2. **Inicie o projeto**
 ```bash
 npm start
 ```
