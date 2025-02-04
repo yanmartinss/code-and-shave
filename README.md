@@ -28,7 +28,7 @@ git clone https://github.com/yanmartinss/code-and-shave.git
 
 1. **Siga as instruções que estão nas duas pastas que foram clonadas**
 ```bash
-cd code-and-shave back
+cd code-and-shave-back
 cat README.md
 cd..
 cd code-and-shave-front
