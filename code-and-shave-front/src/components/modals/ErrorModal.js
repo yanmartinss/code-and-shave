@@ -1,7 +1,7 @@
 import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
-export const ErrorModal = ({ open, onClose, title, message }) => {
+export const ErrorModal = ({ open, onClose, title, message, children }) => {
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>{title || 'Erro'}</DialogTitle>
@@ -11,10 +11,8 @@ export const ErrorModal = ({ open, onClose, title, message }) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} sx={{ color: 'black' }}>
-                    Fechar
-                </Button>
+                {children} {/* Aqui renderizamos os botões passados */}
             </DialogActions>
         </Dialog>
     );
-}
+};

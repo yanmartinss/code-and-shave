@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeAndShaveBackApplication",
+            "request": "launch",
+            "mainClass": "br.com.api.code_and_shave_back.CodeAndShaveBackApplication",
+            "projectName": "code-and-shave-back"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-CodeAndShaveBackApplication<projeto>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

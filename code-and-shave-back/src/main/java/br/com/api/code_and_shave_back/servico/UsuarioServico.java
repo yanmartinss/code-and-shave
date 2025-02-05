@@ -3,12 +3,14 @@ package br.com.api.code_and_shave_back.servico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // Import do BCrypt
 import org.springframework.stereotype.Service;
 
 import br.com.api.code_and_shave_back.modelo.RespostaModelo;
 import br.com.api.code_and_shave_back.modelo.UsuarioModelo;
 import br.com.api.code_and_shave_back.repositorio.UsuarioRepositorio;
+
+import java.util.Optional;
 
 @Service
 public class UsuarioServico {
@@ -18,8 +20,7 @@ public class UsuarioServico {
     @Autowired
     private RespostaModelo rm;
 
-   // private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); // Inicialização do BCrypt
 
     // Método para listar todos os usuários
     public Iterable<UsuarioModelo> listar() {
@@ -29,57 +30,56 @@ public class UsuarioServico {
     // Método para cadastrar ou alterar usuários
     public ResponseEntity<?> cadastrarAlterar(UsuarioModelo um, String acao) {
 
-        // Pode ser adicionado novas verificações pra esses campos
-        if (um.getEMAIL().equals("")) {
+        if (um.getEMAIL().isEmpty()) {
             rm.setMensagem("O e-mail é obrigatório");
-            return new ResponseEntity<RespostaModelo>(rm, HttpStatus.BAD_REQUEST);
-        } else if (um.getNOME().equals("")) {
+            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
+        } else if (um.getNOME().isEmpty()) {
             rm.setMensagem("O nome de usuário é obrigatório");
-            return new ResponseEntity<RespostaModelo>(rm, HttpStatus.BAD_REQUEST);
-        } else if (um.getSENHA().equals("")) {
+            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
+        } else if (um.getSENHA().isEmpty()) {
             rm.setMensagem("A senha é obrigatória");
-            return new ResponseEntity<RespostaModelo>(rm, HttpStatus.BAD_REQUEST);
-        } else if (um.getTELEFONE().equals("")) {
+            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
+        } else if (um.getTELEFONE().isEmpty()) {
             rm.setMensagem("O número de telefone é obrigatório");
-            return new ResponseEntity<RespostaModelo>(rm, HttpStatus.BAD_REQUEST);
-        } else if (um.getTIPO().equals("")) {
+            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
+        } else if (um.getTIPO().isEmpty()) {
             rm.setMensagem("O tipo de usuário é obrigatório");
-            return new ResponseEntity<RespostaModelo>(rm, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
         } else {
+            // Criptografar a senha apenas no cadastro
             if (acao.equals("cadastrar")) {
-                return new ResponseEntity<UsuarioModelo>(ur.save(um), HttpStatus.CREATED);
+                um.setSENHA(encoder.encode(um.getSENHA())); // Criptografa a senha
+                return new ResponseEntity<>(ur.save(um), HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<UsuarioModelo>(ur.save(um), HttpStatus.OK);
+                return new ResponseEntity<>(ur.save(um), HttpStatus.OK);
             }
         }
-
     }
 
     // Método para excluir a conta de usuário
     public ResponseEntity<RespostaModelo> remover(long ID) {
         ur.deleteById(ID);
-
         rm.setMensagem("Conta de usuário excluída com sucesso");
-        return new ResponseEntity<RespostaModelo>(rm, HttpStatus.OK);
+        return new ResponseEntity<>(rm, HttpStatus.OK);
     }
 
     // Método para Login
-// public ResponseEntity<?> login(String email, String senha) {
-//     Optional<UsuarioModelo> usuarioOpt = ur.findByEMAIL(email);
+    public ResponseEntity<?> login(String email, String senha) {
+        Optional<UsuarioModelo> usuarioOpt = ur.findByEMAIL(email);
 
-//     if (usuarioOpt.isEmpty()) {
-//         rm.setMensagem("Usuário não encontrado");
-//         return new ResponseEntity<>(rm, HttpStatus.NOT_FOUND);
-//     }
+        if (usuarioOpt.isEmpty()) {
+            rm.setMensagem("Usuário não encontrado");
+            return new ResponseEntity<>(rm, HttpStatus.NOT_FOUND);
+        }
 
-//     UsuarioModelo usuario = usuarioOpt.get();
+        UsuarioModelo usuario = usuarioOpt.get();
 
-//     if (!encoder.matches(senha, usuario.getSENHA())) {
-//         rm.setMensagem("Senha incorreta");
-//         return new ResponseEntity<>(rm, HttpStatus.UNAUTHORIZED);
-//     }
+        // Verificação da senha usando BCrypt
+        if (!encoder.matches(senha, usuario.getSENHA())) {
+            rm.setMensagem("Senha incorreta");
+            return new ResponseEntity<>(rm, HttpStatus.UNAUTHORIZED);
+        }
 
-//     return ResponseEntity.ok(usuario);
-// }
-
+        return ResponseEntity.ok(usuario);
+    }
 }
