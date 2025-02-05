@@ -3,7 +3,7 @@ package br.com.api.code_and_shave_back.servico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // Import do BCrypt
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.api.code_and_shave_back.modelo.RespostaModelo;
@@ -20,16 +20,13 @@ public class UsuarioServico {
     @Autowired
     private RespostaModelo rm;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); // Inicialização do BCrypt
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    // Método para listar todos os usuários
     public Iterable<UsuarioModelo> listar() {
         return ur.findAll();
     }
 
-    // Método para cadastrar ou alterar usuários
     public ResponseEntity<?> cadastrarAlterar(UsuarioModelo um, String acao) {
-
         if (um.getEMAIL().isEmpty()) {
             rm.setMensagem("O e-mail é obrigatório");
             return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
@@ -45,25 +42,32 @@ public class UsuarioServico {
         } else if (um.getTIPO().isEmpty()) {
             rm.setMensagem("O tipo de usuário é obrigatório");
             return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
+        }
+
+        if (ur.existsByEMAIL(um.getEMAIL())) {
+            rm.setMensagem("E-mail já cadastrado");
+            return new ResponseEntity<>(rm, HttpStatus.CONFLICT);
+        }
+
+        if (ur.existsByTELEFONE(um.getTELEFONE())) {
+            rm.setMensagem("Telefone já cadastrado");
+            return new ResponseEntity<>(rm, HttpStatus.CONFLICT);
+        }
+
+        if (acao.equals("cadastrar")) {
+            um.setSENHA(encoder.encode(um.getSENHA()));
+            return new ResponseEntity<>(ur.save(um), HttpStatus.CREATED);
         } else {
-            // Criptografar a senha apenas no cadastro
-            if (acao.equals("cadastrar")) {
-                um.setSENHA(encoder.encode(um.getSENHA())); // Criptografa a senha
-                return new ResponseEntity<>(ur.save(um), HttpStatus.CREATED);
-            } else {
-                return new ResponseEntity<>(ur.save(um), HttpStatus.OK);
-            }
+            return new ResponseEntity<>(ur.save(um), HttpStatus.OK);
         }
     }
 
-    // Método para excluir a conta de usuário
     public ResponseEntity<RespostaModelo> remover(long ID) {
         ur.deleteById(ID);
         rm.setMensagem("Conta de usuário excluída com sucesso");
         return new ResponseEntity<>(rm, HttpStatus.OK);
     }
 
-    // Método para Login
     public ResponseEntity<?> login(String email, String senha) {
         Optional<UsuarioModelo> usuarioOpt = ur.findByEMAIL(email);
 
@@ -74,7 +78,6 @@ public class UsuarioServico {
 
         UsuarioModelo usuario = usuarioOpt.get();
 
-        // Verificação da senha usando BCrypt
         if (!encoder.matches(senha, usuario.getSENHA())) {
             rm.setMensagem("Senha incorreta");
             return new ResponseEntity<>(rm, HttpStatus.UNAUTHORIZED);
