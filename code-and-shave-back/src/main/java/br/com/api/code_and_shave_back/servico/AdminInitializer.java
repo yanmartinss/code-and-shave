@@ -16,7 +16,7 @@ public class AdminInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (usuarioRepositorio.findByTIPO("barbearia").isEmpty()) {
             UsuarioModelo admin = new UsuarioModelo();
-            admin.setNOME("Administrador");
+            admin.setNOME("Barbearia");
             admin.setEMAIL("admin@codeandshave.com");
             admin.setTELEFONE("0000000000");
             admin.setSENHA(PasswordUtil.hashPassword("admin123")); // Criptografia da senha

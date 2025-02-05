@@ -7,6 +7,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import photoImage from '../../assets/images/photo-login.jpg';
 import { useAuth } from '../../contexts/AuthContext';
+import { Button } from '@mui/material';
+import axios from 'axios';
 
 export const LoginFormulario = () => {
     const navigate = useNavigate();
@@ -31,52 +33,52 @@ export const LoginFormulario = () => {
 
     // REQUISIÇÃO REAL
 
-    // const handleLogin = async (e) => {
-    //     e.preventDefault();
+    const handleLogin = async (e) => {
+        e.preventDefault();
     
-    //     if (!validateEmail(emailInput)) {
-    //         setModalError("Por favor, insira um email válido.");
-    //         setModalOpen(true);
-    //         return;
-    //     }
+        if (!validateEmail(emailInput)) {
+            setModalError("Por favor, insira um email válido.");
+            setModalOpen(true);
+            return;
+        }
     
-    //     if (!emailInput || !passwordInput) {
-    //         setModalError("Por favor, preencha todos os campos.");
-    //         setModalOpen(true);
-    //         return;
-    //     }
+        if (!emailInput || !passwordInput) {
+            setModalError("Por favor, preencha todos os campos.");
+            setModalOpen(true);
+            return;
+        }
     
-    //     try {
-    //         const response = await axios.post("https://seu-backend.com/api/login", {
-    //             email: emailInput,
-    //             password: passwordInput,
-    //         });
+        try {
+            const response = await axios.post("http://localhost:8080/auth/login", {
+                email: emailInput,
+                senha: passwordInput, // Alterado para 'senha' conforme o backend
+            });
     
-    //         const data = response.data; 
+            const data = response.data; 
     
-    //         if (response.status === 200) {
-    //             setUsuarioLogado(data.usuario);
-    //             localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario));
+            if (response.status === 200) {
+                setUsuarioLogado(data);
+                localStorage.removeItem('nomeBarbearia');
     
-    //             if (data.usuario.tipo === "cliente") {
-    //                 navigate("/home-cliente");
-    //             } else if (data.usuario.tipo === "admin") {
-    //                 navigate("/home-barbearia");
-    //             } else if (data.usuario.tipo === "barbeiro") {
-    //                 navigate("/home-barbeiro");
-    //             }
-    //         }
-    //     } catch (error) {
-    //         if (error.response) {
-    //             setModalError(error.response.data.message || "Usuário ou senha inválidos.");
-    //         } else if (error.request) {
-    //             setModalError("Erro na conexão com o servidor. Tente novamente mais tarde.");
-    //         } else {
-    //             setModalError("Ocorreu um erro. Tente novamente.");
-    //         }
-    //         setModalOpen(true);
-    //     }
-    // }
+                if (data.tipo === "cliente") {
+                    navigate("/home-cliente");
+                } else if (data.tipo === "barbearia") {
+                    navigate("/home-barbearia");
+                }
+                localStorage.setItem('nome', data.nome); 
+            }
+        } catch (error) {
+            if (error.response) {
+                setModalError(error.response.data.mensagem || "Usuário ou senha inválidos.");
+            } else if (error.request) {
+                setModalError("Erro na conexão com o servidor. Tente novamente mais tarde.");
+            } else {
+                setModalError("Ocorreu um erro. Tente novamente.");
+            }
+            setModalOpen(true);
+        }
+    }
+    
 
     // MOCK PARA TIPO CLIENTE
 
@@ -127,56 +129,56 @@ export const LoginFormulario = () => {
 
     // MOCK PARA TIPO BARBEARIA
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+    // const handleLogin = async (e) => {
+    //     e.preventDefault();
     
-        if (!validateEmail(emailInput)) {
-            setModalError("Por favor, insira um email válido.");
-            setModalOpen(true);
-            return;
-        }
+    //     if (!validateEmail(emailInput)) {
+    //         setModalError("Por favor, insira um email válido.");
+    //         setModalOpen(true);
+    //         return;
+    //     }
     
-        if (!emailInput || !passwordInput) {
-            setModalError("Por favor, preencha todos os campos.");
-            setModalOpen(true);
-            return;
-        }
+    //     if (!emailInput || !passwordInput) {
+    //         setModalError("Por favor, preencha todos os campos.");
+    //         setModalOpen(true);
+    //         return;
+    //     }
     
-        try {
-            // Simulando uma resposta do backend (Mock)
-            const mockResponse = {
-                status: 200,
-                data: {
-                    usuario: {
-                        email: emailInput,
-                        tipo: "barbearia", // Tipo fixado como barbearia
-                        nome: "Barbearia Modelo", // Nome fictício para teste
-                    },
-                },
-            };
+    //     try {
+    //         // Simulando uma resposta do backend (Mock)
+    //         const mockResponse = {
+    //             status: 200,
+    //             data: {
+    //                 usuario: {
+    //                     email: emailInput,
+    //                     tipo: "barbearia", // Tipo fixado como barbearia
+    //                     nome: "Barbearia Modelo", // Nome fictício para teste
+    //                 },
+    //             },
+    //         };
     
-            const data = mockResponse.data;
+    //         const data = mockResponse.data;
     
-            if (mockResponse.status === 200) {
-                console.log("Login bem-sucedido:", data.usuario);
+    //         if (mockResponse.status === 200) {
+    //             console.log("Login bem-sucedido:", data.usuario);
     
-                setUsuarioLogado(data.usuario); // Salva o usuário no contexto
-                localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario)); // Armazena no localStorage
+    //             setUsuarioLogado(data.usuario); // Salva o usuário no contexto
+    //             localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario)); // Armazena no localStorage
     
-                if (data.usuario.tipo === "cliente") {
-                    navigate("/home-cliente");
-                } else if (data.usuario.tipo === "barbearia") {
-                    navigate("/home-barbearia"); // Redireciona para a página da barbearia
-                } else if (data.usuario.tipo === "barbeiro") {
-                    navigate("/home-barbeiro");
-                }
-            }
-        } catch (error) {
-            console.error("Erro durante o login simulado:", error);
-            setModalError("Ocorreu um erro durante o login. Tente novamente.");
-            setModalOpen(true);
-        }
-    } 
+    //             if (data.usuario.tipo === "cliente") {
+    //                 navigate("/home-cliente");
+    //             } else if (data.usuario.tipo === "barbearia") {
+    //                 navigate("/home-barbearia"); // Redireciona para a página da barbearia
+    //             } else if (data.usuario.tipo === "barbeiro") {
+    //                 navigate("/home-barbeiro");
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error("Erro durante o login simulado:", error);
+    //         setModalError("Ocorreu um erro durante o login. Tente novamente.");
+    //         setModalOpen(true);
+    //     }
+    // } 
 
     return (
         <div className="bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40">
@@ -248,7 +250,9 @@ export const LoginFormulario = () => {
                 </div>
             </div>
 
-            <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError} />
+            <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError}>
+                <Button onClick={closeModal} sx={{ color: 'black' }}>Fechar</Button>
+            </ErrorModal>
         </div>
     );
 }

@@ -9,12 +9,12 @@ import slide4 from '../../assets/images/slide4.jpg';
 import EventIcon from '@mui/icons-material/Event';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import GroupIcon from '@mui/icons-material/Group';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const HomeBarbearia = () => {
   const slides = [slide1, slide2, slide3, slide4];
-  const [barberShopName] = useState('Barbearia Modelo');
+  const barberShopName = localStorage.getItem('nome') || 'Barbearia';
   const [agendamentos, setAgendamentos] = useState([]);
-  const [promocoes, setPromocoes] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -28,19 +28,8 @@ export const HomeBarbearia = () => {
     }
   }
 
-  const fetchPromocoes = async () => {
-    try {
-      const response = await axios.get('/api/promocoes-ativas'); // Substituir pela URL real do backend
-      setPromocoes(response.data);
-    } catch (err) {
-      setError('Erro ao carregar promoções ativas.');
-      console.error(err);
-    }
-  }
-
   useEffect(() => {
     fetchAgendamentos();
-    fetchPromocoes();
   }, []);
 
   return (
@@ -67,13 +56,6 @@ export const HomeBarbearia = () => {
             <span className="font-bold">Gerenciar Horários</span>
           </button>
           <button
-            className="p-4 bg-green-500 text-white shadow-md rounded-lg flex flex-col items-center hover:bg-green-600 transition"
-            onClick={() => navigate('/gestao-barbearia')}
-          >
-            <LocalOfferIcon className="text-4xl mb-2" />
-            <span className="font-bold">Promoções</span>
-          </button>
-          <button
             className="p-4 bg-purple-500 text-white shadow-md rounded-lg flex flex-col items-center hover:bg-purple-600 transition"
             onClick={() => navigate('/clientes-cadastrados')}
           >
@@ -97,23 +79,6 @@ export const HomeBarbearia = () => {
             ))
           ) : (
             <p className="text-gray-600">Nenhum agendamento encontrado.</p>
-          )}
-        </div>
-      </div>
-
-      <div className="w-full max-w-screen-md mt-12 px-4">
-        <h3 className="text-xl font-semibold text-[#111827] mb-6">Promoções Ativas</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {promocoes.length > 0 ? (
-            promocoes.map((promocao) => (
-              <div key={promocao.id} className="p-4 bg-white shadow-md rounded-lg">
-                <h4 className="font-bold text-[#111827]">{promocao.titulo}</h4>
-                <p className="text-gray-600">{promocao.descricao}</p>
-                <p className="text-gray-600">Válido até: {promocao.validade}</p>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-600">Nenhuma promoção ativa no momento.</p>
           )}
         </div>
       </div>

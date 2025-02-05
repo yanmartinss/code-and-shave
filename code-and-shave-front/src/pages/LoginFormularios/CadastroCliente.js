@@ -7,6 +7,7 @@ import photoImage from '../../assets/images/photo-login.jpg';
 import { ConfirmButton } from '../../components/buttons/ConfirmButton';
 import { formatPhone, validateEmail, validatePassword } from '../../utils/functions';
 import { ErrorModal } from '../../components/modals/ErrorModal';
+import { Button } from '@mui/material';
 
 export const CadastroCliente = () => {
     const navigate = useNavigate();
@@ -136,7 +137,11 @@ export const CadastroCliente = () => {
                     </div>
                 </div>
             </div>
-            <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError} />
+            <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError}>
+                <Button onClick={closeModal} sx={{ color: 'black' }}>
+                    Fechar
+                </Button>
+            </ErrorModal>
         </div>
     );
 }
