@@ -25,9 +25,12 @@ export const CadastroCliente = () => {
     const [modalError, setModalError] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
 
-    const switchTypePassword = (e, item, set) => {
-        e.preventDefault();
-        set(item === 'password' ? 'text' : 'password');
+    const switchTypePassword = (field) => {
+        if (field === 'password') {
+            setTypePassword((prevType) => (prevType === 'password' ? 'text' : 'password'));
+        } else {
+            setConfirmTypePassword((prevType) => (prevType === 'password' ? 'text' : 'password'));
+        }
     }
 
     const closeModal = () => {
@@ -120,15 +123,41 @@ export const CadastroCliente = () => {
                                     className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" maxLength={15} />
                             </div>
                             <div className="flex flex-col">
-                                <label className="text-left text-gray-500 text-sm rounded-md">Senha</label>
+                            <label className="text-left text-gray-500 text-sm">Senha</label>
+                            <div className='shadow-lg p-2 w-full flex items-center'>
                                 <input type={typePassword} placeholder="Digite sua senha" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)}
+                                    className="outline-none rounded-md p-2 text-gray-500 w-full text-sm" />
+                                <button
+                                    onClick={() => switchTypePassword('password')}
+                                    type="button"
+                                    className="focus:outline-none"
+                                >
+                                    {typePassword === 'password' ? (
+                                        <VisibilityIcon sx={{ color: '#6B7280' }} />
+                                    ) : (
+                                        <VisibilityOffIcon sx={{ color: '#6B7280' }} />
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                        <div className="flex flex-col">
+                            <label className="text-left text-gray-500 text-sm">Confirmar Senha</label>
+                            <div className='shadow-lg p-2 w-full flex items-center'>
+                                <input type={typeConfirmPassword} placeholder="Confirme sua senha" value={confirmPasswordInput} onChange={(e) => setConfirmPasswordInput(e.target.value)}
                                     className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" />
+                                <button
+                                    onClick={() => switchTypePassword('confirmPassword')}
+                                    type="button"
+                                    className="focus:outline-none"
+                                >
+                                    {typeConfirmPassword === 'password' ? (
+                                        <VisibilityIcon sx={{ color: '#6B7280' }} />
+                                    ) : (
+                                        <VisibilityOffIcon sx={{ color: '#6B7280' }} />
+                                    )}
+                                </button>
                             </div>
-                            <div className="flex flex-col">
-                                <label className="text-left text-gray-500 text-sm rounded-md">Confirmar Senha</label>
-                                <input type={typeConfirmPassword} placeholder="Confirme sua senha" value={confirmPasswordInput}
-                                    onChange={(e) => setConfirmPasswordInput(e.target.value)} className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" />
-                            </div>
+                        </div>
                             <ConfirmButton label="Cadastrar" />
                         </form>
                         <p className="text-gray-500 underline cursor-pointer mt-2" onClick={() => navigate('/')}>

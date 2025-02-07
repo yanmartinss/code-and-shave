@@ -12,4 +12,6 @@ import br.com.api.code_and_shave_back.modelo.UsuarioModelo;
 public interface UsuarioRepositorio extends CrudRepository<UsuarioModelo, Long>{
     List<UsuarioModelo> findByTIPO(String tipo);
     Optional<UsuarioModelo> findByEMAIL(String email);
+    boolean existsByEMAIL(String email);
+    boolean existsByTELEFONE(String telefone);
 }   
