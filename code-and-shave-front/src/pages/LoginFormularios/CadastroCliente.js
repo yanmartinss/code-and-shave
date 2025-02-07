@@ -85,8 +85,7 @@ export const CadastroCliente = () => {
 
                 navigate('/');
             } catch (error) {
-                console.error('Erro no cadastro:', error);
-                setModalError('Erro ao cadastrar usuário. Tente novamente.');
+                setModalError(`Erro no cadastro: ${error.response.data.mensagem}`);
                 setModalOpen(true);
             }
         }
