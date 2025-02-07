@@ -10,8 +10,6 @@ import br.com.api.code_and_shave_back.modelo.RespostaModelo;
 import br.com.api.code_and_shave_back.modelo.UsuarioModelo;
 import br.com.api.code_and_shave_back.repositorio.UsuarioRepositorio;
 
-import java.util.Optional;
-
 @Service
 public class UsuarioServico {
     @Autowired

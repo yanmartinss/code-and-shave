@@ -17,7 +17,7 @@ export const LoginFormulario = () => {
     const [emailInput, setEmailInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
     const [modalError, setModalError] = useState('');
-    const [isModalOpen, setModalOpen] = useState(false);
+    const [isModalOpen, setModalOpen] = useState(false);    
 
     const { setUsuarioLogado } = useAuth();
 
@@ -36,14 +36,8 @@ export const LoginFormulario = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
     
-        if (!validateEmail(emailInput)) {
-            setModalError("Por favor, insira um email válido.");
-            setModalOpen(true);
-            return;
-        }
-    
-        if (!emailInput || !passwordInput) {
-            setModalError("Por favor, preencha todos os campos.");
+        if (!validateEmail(emailInput) || !emailInput || !passwordInput) {
+            setModalError("Preencha os campos corretamente.");
             setModalOpen(true);
             return;
         }
@@ -51,134 +45,36 @@ export const LoginFormulario = () => {
         try {
             const response = await axios.post("http://localhost:8080/auth/login", {
                 email: emailInput,
-                senha: passwordInput, // Alterado para 'senha' conforme o backend
+                senha: passwordInput,
             });
     
-            const data = response.data; 
-    
             if (response.status === 200) {
-                setUsuarioLogado(data);
-                localStorage.removeItem('nomeBarbearia');
+                const { usuario, token } = response.data; // 🚀 Correção aqui
     
-                if (data.tipo === "cliente") {
+                // Salva o token e usuário no localStorage
+                localStorage.setItem('token', token);
+                localStorage.setItem('usuario', JSON.stringify(usuario));
+    
+                setUsuarioLogado(usuario);
+    
+                console.log("Usuário recebido:", usuario);
+                console.log("Token recebido:", token);
+    
+                // 🚀 Correção aqui: Acessando corretamente usuario.tipo
+                if (usuario.tipo === "cliente") {
                     navigate("/home-cliente");
-                } else if (data.tipo === "barbearia") {
+                } else if (usuario.tipo === "barbearia") {
                     navigate("/home-barbearia");
                 }
-                localStorage.setItem('nome', data.nome); 
             }
         } catch (error) {
-            if (error.response) {
-                setModalError(error.response.data.mensagem || "Usuário ou senha inválidos.");
-            } else if (error.request) {
-                setModalError("Erro na conexão com o servidor. Tente novamente mais tarde.");
-            } else {
-                setModalError("Ocorreu um erro. Tente novamente.");
-            }
+            console.error("Erro ao fazer login:", error);
+            setModalError(error.response?.data?.mensagem || "Usuário ou senha inválidos.");
             setModalOpen(true);
         }
-    }
+    };
     
-
-    // MOCK PARA TIPO CLIENTE
-
-    // const handleLogin = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!validateEmail(emailInput)) {
-    //         setModalError("Por favor, insira um email válido.");
-    //         setModalOpen(true);
-    //         return;
-    //     }
-
-    //     if (!emailInput || !passwordInput) {
-    //         setModalError("Por favor, preencha todos os campos.");
-    //         setModalOpen(true);
-    //         return;
-    //     }
-
-    //     try {
-    //         // Simulando login
-    //         const mockResponse = {
-    //             status: 200,
-    //             data: {
-    //                 usuario: {
-    //                     email: emailInput,
-    //                     tipo: "cliente",
-    //                     nome: "Usuário Cliente",
-    //                 },
-    //             },
-    //         };
-
-    //         const data = mockResponse.data;
-
-    //         if (mockResponse.status === 200) {
-    //             setUsuarioLogado(data.usuario);
-    //             localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario));
-
-    //             if (data.usuario.tipo === "cliente") {
-    //                 navigate("/home-cliente");
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error("Erro durante o login:", error);
-    //         setModalError("Ocorreu um erro durante o login. Tente novamente.");
-    //         setModalOpen(true);
-    //     }
-    // }
-
-    // MOCK PARA TIPO BARBEARIA
-
-    // const handleLogin = async (e) => {
-    //     e.preventDefault();
     
-    //     if (!validateEmail(emailInput)) {
-    //         setModalError("Por favor, insira um email válido.");
-    //         setModalOpen(true);
-    //         return;
-    //     }
-    
-    //     if (!emailInput || !passwordInput) {
-    //         setModalError("Por favor, preencha todos os campos.");
-    //         setModalOpen(true);
-    //         return;
-    //     }
-    
-    //     try {
-    //         // Simulando uma resposta do backend (Mock)
-    //         const mockResponse = {
-    //             status: 200,
-    //             data: {
-    //                 usuario: {
-    //                     email: emailInput,
-    //                     tipo: "barbearia", // Tipo fixado como barbearia
-    //                     nome: "Barbearia Modelo", // Nome fictício para teste
-    //                 },
-    //             },
-    //         };
-    
-    //         const data = mockResponse.data;
-    
-    //         if (mockResponse.status === 200) {
-    //             console.log("Login bem-sucedido:", data.usuario);
-    
-    //             setUsuarioLogado(data.usuario); // Salva o usuário no contexto
-    //             localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario)); // Armazena no localStorage
-    
-    //             if (data.usuario.tipo === "cliente") {
-    //                 navigate("/home-cliente");
-    //             } else if (data.usuario.tipo === "barbearia") {
-    //                 navigate("/home-barbearia"); // Redireciona para a página da barbearia
-    //             } else if (data.usuario.tipo === "barbeiro") {
-    //                 navigate("/home-barbeiro");
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error("Erro durante o login simulado:", error);
-    //         setModalError("Ocorreu um erro durante o login. Tente novamente.");
-    //         setModalOpen(true);
-    //     }
-    // } 
 
     return (
         <div className="bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40">
