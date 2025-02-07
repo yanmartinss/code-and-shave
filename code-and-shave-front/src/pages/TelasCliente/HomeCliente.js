@@ -14,8 +14,8 @@ export const HomeCliente = () => {
       <Slideshow slides={slides} />
 
       <div className="w-full max-w-screen-md mt-8 px-4 text-center">
-        <h1 className="text-2xl font-bold text-[#111827]">Bem-vindo de volta, {username}!</h1>
-        <p className="text-gray-600 mt-2">Estamos felizes em te ver novamente. Explore suas opções e aproveite nossos serviços!</p>
+        <h1 className="text-2xl font-bold text-[#111827]">Bem-vindo, {username}!</h1>
+        <p className="text-gray-600 mt-2">Estamos felizes em te ver. Explore suas opções e aproveite nossos serviços!</p>
       </div>
 
       <div className="w-full max-w-screen-md mt-12 px-4">
