@@ -119,7 +119,7 @@ export const CadastroCliente = () => {
                             <div className="flex flex-col">
                                 <label className="text-left text-gray-500 text-sm">Telefone</label>
                                 <input type="text" placeholder="Digite seu número" value={phoneInput} onChange={handlePhoneChange}
-                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" />
+                                    className="outline-none shadow-lg rounded-md p-2 text-gray-500 w-full text-sm" maxLength={15} />
                             </div>
                             <div className="flex flex-col">
                             <label className="text-left text-gray-500 text-sm">Senha</label>
