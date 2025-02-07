@@ -2,25 +2,22 @@ package br.com.api.code_and_shave_back.controle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.api.code_and_shave_back.modelo.UsuarioModelo;
-import br.com.api.code_and_shave_back.servico.UsuarioServico;
+import br.com.api.code_and_shave_back.servico.LoginServico;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/auth") // Endpoint para autenticação
+@RequestMapping("/auth")
 public class LoginControle {
 
+    // antes era UsuarioServico!
     @Autowired
-    private UsuarioServico usuarioServico;
+    private LoginServico loginServico; // Alterado para LoginServico
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioModelo usuario) {
-        return usuarioServico.login(usuario.getEMAIL(), usuario.getSENHA());
+        return loginServico.login(usuario.getEMAIL(), usuario.getSENHA()); // Agora chamamos loginServico
     }
 }
