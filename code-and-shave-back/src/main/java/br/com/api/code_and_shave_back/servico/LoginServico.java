@@ -1,24 +1,24 @@
 package br.com.api.code_and_shave_back.servico;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import br.com.api.code_and_shave_back.modelo.RespostaModelo;
 import br.com.api.code_and_shave_back.modelo.UsuarioModelo;
 import br.com.api.code_and_shave_back.repositorio.UsuarioRepositorio;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class LoginServico {
+
     @Autowired
     private UsuarioRepositorio ur;
 
     @Autowired
-    private RespostaModelo rm;
+    private br.com.api.code_and_shave_back.utils.JwtUtil jwtUtil;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -26,17 +26,23 @@ public class LoginServico {
         Optional<UsuarioModelo> usuarioOpt = ur.findByEMAIL(email);
 
         if (usuarioOpt.isEmpty()) {
-            rm.setMensagem("Usuário não encontrado");
-            return new ResponseEntity<>(rm, HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(404).body("Usuário não encontrado");
         }
 
         UsuarioModelo usuario = usuarioOpt.get();
 
         if (!encoder.matches(senha, usuario.getSENHA())) {
-            rm.setMensagem("Senha incorreta");
-            return new ResponseEntity<>(rm, HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(401).body("Senha incorreta");
         }
 
-        return ResponseEntity.ok(usuario);
+        // Gera o token JWT
+        String token = jwtUtil.generateToken(usuario.getEMAIL());
+
+        // Retorna o token + dados do usuário
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("usuario", usuario);
+
+        return ResponseEntity.ok(response);
     }
 }
