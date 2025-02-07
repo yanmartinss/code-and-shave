@@ -62,24 +62,4 @@ public class UsuarioServico {
         rm.setMensagem("Conta de usuário excluída com sucesso");
         return new ResponseEntity<>(rm, HttpStatus.OK);
     }
-
-    // Método para Login
-    // public ResponseEntity<?> login(String email, String senha) {
-    //     Optional<UsuarioModelo> usuarioOpt = ur.findByEMAIL(email);
-
-    //     if (usuarioOpt.isEmpty()) {
-    //         rm.setMensagem("Usuário não encontrado");
-    //         return new ResponseEntity<>(rm, HttpStatus.NOT_FOUND);
-    //     }
-
-    //     UsuarioModelo usuario = usuarioOpt.get();
-
-    //     // Verificação da senha usando BCrypt
-    //     if (!encoder.matches(senha, usuario.getSENHA())) {
-    //         rm.setMensagem("Senha incorreta");
-    //         return new ResponseEntity<>(rm, HttpStatus.UNAUTHORIZED);
-    //     }
-
-    //     return ResponseEntity.ok(usuario);
-    // }
 }
