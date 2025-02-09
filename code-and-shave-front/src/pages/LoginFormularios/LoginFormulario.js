@@ -49,11 +49,14 @@ export const LoginFormulario = () => {
             });
     
             if (response.status === 200) {
-                const { usuario, token } = response.data; // 🚀 Correção aqui
+                const { usuario, token } = response.data;
+    
+                // Removendo aspas do nome do usuário antes de salvar
+                const nomeSemAspas = usuario.nome.replace(/["']/g, '');
     
                 // Salva o token e usuário no localStorage
                 localStorage.setItem('token', token);
-                localStorage.setItem('usuario', JSON.stringify(usuario));
+                localStorage.setItem('usuario', nomeSemAspas); // Agora sem aspas extras
     
                 setUsuarioLogado(usuario);
     
@@ -72,9 +75,7 @@ export const LoginFormulario = () => {
             setModalError(error.response?.data?.mensagem || "Usuário ou senha inválidos.");
             setModalOpen(true);
         }
-    };
-    
-    
+    }    
 
     return (
         <div className="bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40">

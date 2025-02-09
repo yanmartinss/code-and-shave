@@ -13,7 +13,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 export const HomeBarbearia = () => {
   const slides = [slide1, slide2, slide3, slide4];
-  const barberShopName = localStorage.getItem('nome') || 'Barbearia';
+  const barberShopName = localStorage.getItem('usuario') || 'Barbearia';
   const [agendamentos, setAgendamentos] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
