@@ -28,5 +28,7 @@ public class UsuarioModelo {
     private String SENHA;
     @Column(nullable = false)
     private String TIPO;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
+    private Boolean ativo = true;
 
 }
