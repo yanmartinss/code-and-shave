@@ -37,37 +37,31 @@ public class BarbeiroServico {
         if (barbeiro.getTelefone() == null || barbeiro.getTelefone().trim().isEmpty()) {
             return new ResponseEntity<>("O telefone do barbeiro é obrigatório!", HttpStatus.BAD_REQUEST);
         }
-        if (barbeiro.getEspecialidade() == null || barbeiro.getEspecialidade().trim().isEmpty()) {
-            return new ResponseEntity<>("A especialidade do barbeiro é obrigatória!", HttpStatus.BAD_REQUEST);
+        // 🔹 Agora usamos getEspecialidades() e verificamos se está vazio
+        if (barbeiro.getEspecialidades() == null || barbeiro.getEspecialidades().isEmpty()) {
+            return new ResponseEntity<>("O barbeiro deve ter pelo menos uma especialidade!", HttpStatus.BAD_REQUEST);
         }
-
+    
         // 🔹 Verificar se já existe um barbeiro com o mesmo e-mail
         List<BarbeiroModelo> barbeirosComMesmoEmail = barbeiroRepositorio.findByEmail(barbeiro.getEmail());
-        if (!barbeirosComMesmoEmail.isEmpty() && (barbeiro.getIdbarbeiro() == null || 
-            barbeirosComMesmoEmail.stream().anyMatch(b -> !b.getIdbarbeiro().equals(barbeiro.getIdbarbeiro())))) {
-            
-            System.out.println("Tentativa de cadastro com e-mail duplicado: " + barbeiro.getEmail());
+        if (!barbeirosComMesmoEmail.isEmpty() && (barbeiro.getId() == null ||
+            barbeirosComMesmoEmail.stream().anyMatch(b -> !b.getId().equals(barbeiro.getId())))) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\": \"O e-mail já está cadastrado!\"}");
         }
-
+    
         // 🔹 Verificar se já existe um barbeiro com o mesmo telefone
         List<BarbeiroModelo> barbeirosComMesmoTelefone = barbeiroRepositorio.findByTelefone(barbeiro.getTelefone());
-        if (!barbeirosComMesmoTelefone.isEmpty() && (barbeiro.getIdbarbeiro() == null || 
-            barbeirosComMesmoTelefone.stream().anyMatch(b -> !b.getIdbarbeiro().equals(barbeiro.getIdbarbeiro())))) {
-            
-            System.out.println("Tentativa de cadastro com telefone duplicado: " + barbeiro.getTelefone());
+        if (!barbeirosComMesmoTelefone.isEmpty() && (barbeiro.getId() == null ||
+            barbeirosComMesmoTelefone.stream().anyMatch(b -> !b.getId().equals(barbeiro.getId())))) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\": \"O telefone já está cadastrado!\"}");
         }
-
-        // 🔹 Normaliza a especialidade (removendo espaços extras)
-        barbeiro.setEspecialidade(barbeiro.getEspecialidade().trim());
-
-        // Verifica se é um novo cadastro ou uma atualização
-        boolean isNovo = (barbeiro.getIdbarbeiro() == null);
+    
+        boolean isNovo = (barbeiro.getId() == null);
         BarbeiroModelo barbeiroSalvo = barbeiroRepositorio.save(barbeiro);
-
+    
         return new ResponseEntity<>(barbeiroSalvo, isNovo ? HttpStatus.CREATED : HttpStatus.OK);
     }
+    
 
     // 🔹 Buscar barbeiros por especialidade com verificação
     public ResponseEntity<?> buscarPorEspecialidade(String especialidade) {
@@ -75,7 +69,7 @@ public class BarbeiroServico {
             return new ResponseEntity<>("A especialidade é obrigatória!", HttpStatus.BAD_REQUEST);
         }
 
-        List<BarbeiroModelo> barbeiros = (List<BarbeiroModelo>) barbeiroRepositorio.findByEspecialidade(especialidade.trim());
+        List<BarbeiroModelo> barbeiros = (List<BarbeiroModelo>) barbeiroRepositorio.findByEspecialidades_Nome(especialidade.trim());
 
         if (barbeiros.isEmpty()) {
             return new ResponseEntity<>("Nenhum barbeiro encontrado para essa especialidade.", HttpStatus.NOT_FOUND);

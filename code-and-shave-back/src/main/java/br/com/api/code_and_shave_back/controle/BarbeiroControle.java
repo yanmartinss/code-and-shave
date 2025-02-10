@@ -22,7 +22,7 @@ public class BarbeiroControle {
 
     // 🔹 Cadastrar um novo barbeiro ou atualizar um existente
     @PostMapping("/cadastrar")
-    public ResponseEntity<?> cadastrar(@RequestBody BarbeiroModelo barbeiro) {
+    public ResponseEntity<?> cadastrarOuAtualizar(@RequestBody BarbeiroModelo barbeiro) {
         return barbeiroServico.cadastrarOuAtualizar(barbeiro);
     }
 

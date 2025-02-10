@@ -1,33 +1,35 @@
 package br.com.api.code_and_shave_back.modelo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
 
 @Entity
 @Table(name = "barbeiros")
-@Setter
 @Getter
+@Setter
 public class BarbeiroModelo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID auto-gerado pelo banco de dados
-    private Long idbarbeiro;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idbarbeiro") // 🔹 Isso garante que a coluna no banco seja 'id'
+    private Long id;
 
-    @Column(name = "nome", length = 100, nullable = false)
+    @Column(nullable = false)
     private String nome;
 
-    @Column(name = "especialidade", length = 50)
-    private String especialidade;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @Column(name = "telefone", length = 15)
+    @Column(nullable = false, unique = true)
     private String telefone;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100)
-    private String email;
+    @ManyToMany
+    @JoinTable(
+        name = "barbeiro_servicos",
+        joinColumns = @JoinColumn(name = "barbeiro_id"),
+        inverseJoinColumns = @JoinColumn(name = "servico_id")
+    )
+    private List<ServicoModelo> especialidades;
 }

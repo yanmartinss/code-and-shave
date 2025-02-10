@@ -12,5 +12,5 @@ public interface BarbeiroRepositorio extends CrudRepository<BarbeiroModelo, Long
 
     List<BarbeiroModelo> findByTelefone(String telefone); // 🔹 Buscar lista de barbeiros com o mesmo telefone
 
-    Iterable<BarbeiroModelo> findByEspecialidade(String especialidade); // 🔹 Buscar barbeiros por especialidade
+    List<BarbeiroModelo> findByEspecialidades_Nome(String nome);
 }
