@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import br.com.api.code_and_shave_back.modelo.BarbeiroModelo;
 import br.com.api.code_and_shave_back.repositorio.BarbeiroRepositorio;
 import java.util.List;
@@ -81,5 +82,14 @@ public class BarbeiroServico {
         }
 
         return new ResponseEntity<>(barbeiros, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> removerBarbeiro(Long id) {
+        if (!barbeiroRepositorio.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Erro: Barbeiro não encontrado.\"}");
+        }
+    
+        barbeiroRepositorio.deleteById(id);
+        return ResponseEntity.ok("{\"message\": \"Barbeiro removido com sucesso!\"}");
     }
 }

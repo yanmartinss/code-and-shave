@@ -10,7 +10,7 @@ export const EditarBarbeiros = () => {
   });
 
   const [barbeirosList, setBarbeirosList] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(""); // 🔹 Estado para armazenar mensagem de erro
+  const [errorMessage, setErrorMessage] = useState("");
 
   // 🔹 Função para buscar barbeiros do backend
   const fetchBarbeiros = async () => {
@@ -20,7 +20,7 @@ export const EditarBarbeiros = () => {
     } catch (error) {
       console.error("Erro ao buscar barbeiros:", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchBarbeiros();
@@ -28,26 +28,25 @@ export const EditarBarbeiros = () => {
 
   const handleChange = (e) => {
     setBarbeiro({ ...barbeiro, [e.target.name]: e.target.value });
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // 🔹 Reseta a mensagem de erro ao tentar cadastrar
+    setErrorMessage("");
 
     try {
       await axios.post("http://localhost:8080/barbeiros/cadastrar", barbeiro);
       alert("Barbeiro cadastrado com sucesso!");
       setBarbeiro({ nome: "", email: "", telefone: "", especialidade: "" });
-      fetchBarbeiros(); // Atualiza a lista após salvar
+      fetchBarbeiros();
     } catch (error) {
-      // 🔹 Captura a mensagem do erro corretamente
       if (error.response) {
         if (error.response.status === 409) {
           const errorData = error.response.data;
           if (typeof errorData === "string") {
-            setErrorMessage(errorData); // Se for string, exibe diretamente
+            setErrorMessage(errorData);
           } else if (errorData.message) {
-            setErrorMessage(errorData.message); // Se for objeto, exibe a chave "message"
+            setErrorMessage(errorData.message);
           } else {
             setErrorMessage("Erro ao salvar barbeiro.");
           }
@@ -57,6 +56,29 @@ export const EditarBarbeiros = () => {
       } else {
         setErrorMessage("Erro ao conectar com o servidor.");
       }
+    }
+  };
+
+  // 🔹 Função para remover barbeiro (passando explicitamente o ID correto)
+  const handleDelete = async (id) => {
+    if (!id) {
+        console.error("Erro: ID do barbeiro não encontrado.");
+        setErrorMessage("Erro ao remover barbeiro: ID inválido.");
+        return;
+    }
+
+    console.log("Removendo barbeiro com ID:", id); // 🔹 Debug para ver qual ID está sendo passado
+
+    const confirmDelete = window.confirm("Tem certeza que deseja remover este barbeiro?");
+    if (!confirmDelete) return;
+
+    try {
+        await axios.delete(`http://localhost:8080/barbeiros/remover/${id}`);
+        alert("Barbeiro removido com sucesso!");
+        fetchBarbeiros();
+    } catch (error) {
+        console.error("Erro ao remover barbeiro:", error);
+        setErrorMessage("Erro ao remover barbeiro.");
     }
   }
 
@@ -131,11 +153,19 @@ export const EditarBarbeiros = () => {
         ) : (
           <ul className="space-y-4">
             {barbeirosList.map((barbeiro) => (
-              <li key={barbeiro.idbarbeiro} className="border-b pb-2">
-                <p className="font-semibold">{barbeiro.nome}</p>
-                <p className="text-gray-600">{barbeiro.email}</p>
-                <p className="text-gray-800 font-bold">{barbeiro.telefone}</p>
-                <p className="text-gray-500">Especialidade: {barbeiro.especialidade}</p>
+              <li key={barbeiro.idbarbeiro} className="border-b pb-2 flex justify-between items-center">
+                <div>
+                  <p className="font-semibold">{barbeiro.nome}</p>
+                  <p className="text-gray-600">{barbeiro.email}</p>
+                  <p className="text-gray-800 font-bold">{barbeiro.telefone}</p>
+                  <p className="text-gray-500">Especialidade: {barbeiro.especialidade}</p>
+                </div>
+                <button
+                  onClick={() => handleDelete(barbeiro.idbarbeiro)}
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
+                >
+                  Remover
+                </button>
               </li>
             ))}
           </ul>
@@ -143,4 +173,4 @@ export const EditarBarbeiros = () => {
       </div>
     </div>
   );
-}
+};

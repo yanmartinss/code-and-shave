@@ -11,8 +11,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "barbeiros")
-@Getter
 @Setter
+@Getter
 public class BarbeiroModelo {
 
     @Id

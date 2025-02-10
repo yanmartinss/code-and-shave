@@ -37,4 +37,9 @@ public class BarbeiroControle {
     public ResponseEntity<?> buscarPorEspecialidade(@PathVariable String especialidade) {
         return barbeiroServico.buscarPorEspecialidade(especialidade);
     }
+
+    @DeleteMapping("/remover/{id}")
+    public ResponseEntity<?> remover(@PathVariable Long id) {
+        return barbeiroServico.removerBarbeiro(id);
+    }
 }
