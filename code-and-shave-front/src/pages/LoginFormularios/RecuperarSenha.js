@@ -20,33 +20,42 @@ export const RecuperarSenha = () => {
 
     const sendEmail = async (e) => {
         e.preventDefault();
-
+    
         if (!validateEmail(emailInput)) {
             setModalError('Por favor, insira um email válido.');
             setModalOpen(true);
             return;
         }
-
+    
         setIsLoading(true);
-
+    
         try {
-            const response = await fetch('/api/recuperar-senha', {
+            const response = await fetch('http://localhost:8080/password/forgot', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: emailInput }),
             });
 
-            if (!response.ok) {
-                throw new Error('Erro ao enviar o email. Por favor, tente novamente.');
+            let message = 'Se este email estiver cadastrado, você receberá um link para redefinir sua senha.';
+
+            // Verifica se a resposta é JSON antes de tentar converter
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Erro ao enviar email.');
+                }
+            } else {
+                const text = await response.text();
+                if (!response.ok) {
+                    throw new Error(text || 'Erro ao enviar email.');
+                }
             }
 
-            const data = await response.json();
-            setModalError(data.message || 'Email de redefinição de senha enviado com sucesso!');
+            setModalError(message);
             setModalOpen(true);
         } catch (error) {
-            setModalError(error.message || 'Erro inesperado. Tente novamente mais tarde.');
+            setModalError(error.message || 'Erro ao enviar email. Tente novamente mais tarde.');
             setModalOpen(true);
         } finally {
             setIsLoading(false);
@@ -63,17 +72,14 @@ export const RecuperarSenha = () => {
                 <div className="p-3 flex flex-col justify-center items-center text-center md:w-[60%] lg:w-[55%]">
                     <h1 className="font-bold text-lg md:text-xl lg:text-2xl mt-2">Recuperar Senha</h1>
                     <div className="overflow-y-auto py-2">
-                        <form
-                            className="mt-4 flex flex-col justify-center gap-3 md:w-[361px]"
-                            onSubmit={sendEmail}
-                        >
+                        <form className="mt-4 flex flex-col justify-center gap-3 md:w-[361px]" onSubmit={sendEmail}>
                             <p className="text-gray-600 mb-1 text-sm md:text-base">
-                                Se existir esse email será enviado um link para ele para redefinir a sua senha
+                                Se este email estiver cadastrado, enviaremos um link para redefinir sua senha.
                             </p>
                             <div className="flex flex-col">
                                 <label className="text-left text-gray-500 text-sm">Email</label>
                                 <input
-                                    type="text"
+                                    type="email"
                                     autoComplete="email"
                                     value={emailInput}
                                     onChange={(e) => setEmailInput(e.target.value)}
@@ -82,15 +88,11 @@ export const RecuperarSenha = () => {
                                     disabled={isLoading}
                                 />
                             </div>
-
                             <ConfirmButton label={isLoading ? 'Enviando...' : 'Enviar'} disabled={isLoading} />
-
                             <div>
                                 <p
                                     className="text-gray-600 mb-1 text-sm md:text-base underline cursor-pointer"
-                                    onClick={() => {
-                                        navigate('/');
-                                    }}
+                                    onClick={() => navigate('/')}
                                 >
                                     Voltar
                                 </p>
@@ -99,8 +101,7 @@ export const RecuperarSenha = () => {
                     </div>
                 </div>
             </div>
-
-            <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError} />
+            <ErrorModal title={"Recuperação de senha"} open={isModalOpen} onClose={closeModal} message={modalError} />
         </div>
     );
 }

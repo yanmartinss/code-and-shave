@@ -20,6 +20,7 @@ import { GerenciarPerfil } from './pages/TelasBarberia/GerenciarPerfil';
 import { ServicosBarbearia } from './pages/TelasBarberia/ServicosBarbearia';
 import { EditarBarbeiros } from './pages/TelasBarberia/EditarBarbeiros';
 import { RelatorioBarbearia } from './pages/TelasBarberia/RelatorioBarbearia';
+import { RedefinirSenha } from './pages/LoginFormularios/RedefinirSenha';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route element={<Form />}>
               <Route path="/" element={<LoginFormulario />} />
               <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+              <Route path="/reset-password" element={<RedefinirSenha />} />
               <Route path="/cadastro-cliente" element={<CadastroCliente />} />
             </Route>
 

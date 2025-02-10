@@ -1,5 +1,7 @@
 package br.com.api.code_and_shave_back.servico;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,40 +27,44 @@ public class UsuarioServico {
     }
 
     public ResponseEntity<?> cadastrarAlterar(UsuarioModelo um, String acao) {
-        if (um.getEMAIL().isEmpty()) {
-            rm.setMensagem("O e-mail é obrigatório");
-            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
-        } else if (um.getNOME().isEmpty()) {
-            rm.setMensagem("O nome de usuário é obrigatório");
-            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
-        } else if (um.getSENHA().isEmpty()) {
-            rm.setMensagem("A senha é obrigatória");
-            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
-        } else if (um.getTELEFONE().isEmpty()) {
-            rm.setMensagem("O número de telefone é obrigatório");
-            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
-        } else if (um.getTIPO().isEmpty()) {
-            rm.setMensagem("O tipo de usuário é obrigatório");
-            return new ResponseEntity<>(rm, HttpStatus.BAD_REQUEST);
+        if (um.getAtivo() == null) {
+            um.setAtivo(true); // Define o valor padrão caso não seja informado
         }
 
-        if (ur.existsByEMAIL(um.getEMAIL())) {
-            rm.setMensagem("E-mail já cadastrado");
-            return new ResponseEntity<>(rm, HttpStatus.CONFLICT);
+        if (um.getEMAIL() == null || um.getEMAIL().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "O e-mail é obrigatório"));
         }
-
-        if (ur.existsByTELEFONE(um.getTELEFONE())) {
-            rm.setMensagem("Telefone já cadastrado");
-            return new ResponseEntity<>(rm, HttpStatus.CONFLICT);
+        if (um.getNOME() == null || um.getNOME().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "O nome é obrigatório"));
         }
-
-        if (acao.equals("cadastrar")) {
-            um.setSENHA(encoder.encode(um.getSENHA()));
-            return new ResponseEntity<>(ur.save(um), HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(ur.save(um), HttpStatus.OK);
+        if (um.getSENHA() == null || um.getSENHA().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "A senha é obrigatória"));
+        }
+        if (um.getTELEFONE() == null || um.getTELEFONE().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "O telefone é obrigatório"));
+        }
+        if (um.getTIPO() == null || um.getTIPO().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "O tipo de usuário é obrigatório"));
+        }
+    
+        try {
+            if (acao.equals("cadastrar")) {
+                if (ur.existsByEMAIL(um.getEMAIL())) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("erro", "E-mail já cadastrado"));
+                }
+                if (ur.existsByTELEFONE(um.getTELEFONE())) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("erro", "Telefone já cadastrado"));
+                }
+                um.setSENHA(encoder.encode(um.getSENHA()));
+                return ResponseEntity.status(HttpStatus.CREATED).body(ur.save(um));
+            } else {
+                return ResponseEntity.ok(ur.save(um));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("erro", "Erro no servidor: " + e.getMessage()));
         }
     }
+    
 
     public ResponseEntity<RespostaModelo> remover(long ID) {
         ur.deleteById(ID);
