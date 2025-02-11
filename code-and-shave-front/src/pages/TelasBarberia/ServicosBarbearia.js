@@ -8,10 +8,11 @@ export const ServicosBarbearia = () => {
     nome: "",
     descricao: "",
     preco: "",
-    duracao: "",
+    duracao: "", // 🔹 Agora a duração está corretamente incluída
   });
 
   const [servicesList, setServicesList] = useState([]);
+  const [editingService, setEditingService] = useState(null);
   const [error, setError] = useState(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("Erro");
@@ -20,14 +21,15 @@ export const ServicosBarbearia = () => {
   const fetchServices = async () => {
     try {
       const response = await api.get("/servicos/listar");
-      setServicesList(response.data);
+      setServicesList(Array.isArray(response.data) ? response.data : []); // 🔹 Garante que seja um array
     } catch (error) {
+      setServicesList([]); // 🔹 Se der erro, define como array vazio para evitar erro no .map()
       setModalTitle("Erro ao Buscar Serviços");
       setError("Não foi possível carregar os serviços.");
       setIsErrorModalOpen(true);
       console.error("Erro ao buscar serviços:", error);
     }
-  };
+  }  
 
   useEffect(() => {
     fetchServices();
@@ -36,27 +38,41 @@ export const ServicosBarbearia = () => {
   // 🔹 Atualiza os campos do formulário
   const handleChange = (e) => {
     let { name, value } = e.target;
-
     if (name === "preco") {
-      value = value.replace(/\D/g, ""); // Remove caracteres não numéricos
-      value = (parseFloat(value) / 100).toFixed(2); // Formata como decimal
-      value = value > 0 ? value : "0.00"; // Garante que não fique negativo
+      value = value.replace(/\D/g, "");
+      value = (parseFloat(value) / 100).toFixed(2);
+      value = value > 0 ? value : "0.00";
     }
-
     setService({ ...service, [name]: value });
   };
 
-  // 🔹 Enviar dados ao backend para salvar serviço
+  // 🔹 Preenche os campos do formulário ao clicar em "Editar"
+  const handleEdit = (servico) => {
+    setEditingService(servico);
+    setService({
+      nome: servico.nome,
+      descricao: servico.descricao,
+      preco: servico.preco,
+      duracao: servico.duracao, // 🔹 Mantém a duração ao editar
+    });
+  };
+
+  // 🔹 Enviar dados ao backend para salvar ou atualizar serviço
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const serviceData = {
+      id: editingService ? editingService.id : null,
+      ...service,
+    };
 
     try {
-      await api.post("/servicos/salvar", service);
+      await api.post("/servicos/salvar", serviceData);
       setModalTitle("Sucesso");
-      setError("Serviço salvo com sucesso!");
+      setError(editingService ? "Serviço atualizado com sucesso!" : "Serviço salvo com sucesso!");
       setIsErrorModalOpen(true);
       setService({ nome: "", descricao: "", preco: "", duracao: "" });
-      fetchServices(); // Atualiza a lista após salvar
+      setEditingService(null);
+      fetchServices();
     } catch (error) {
       setModalTitle("Erro ao Salvar Serviço");
       setError(error.response?.data?.message || "Erro ao salvar serviço.");
@@ -71,16 +87,20 @@ export const ServicosBarbearia = () => {
     if (!confirmDelete) return;
 
     try {
-      await api.delete(`/servicos/remover/${id}`);
+      const response = await api.delete(`/servicos/remover/${id}`);
+      console.log(`Serviço removido com sucesso. ID: ${id}`, response);
+
+      setServicesList((prevList) => prevList.filter(servico => servico.id !== id));
+
       setModalTitle("Sucesso");
       setError("Serviço removido com sucesso!");
       setIsErrorModalOpen(true);
-      fetchServices(); // Atualiza a lista após remoção
     } catch (error) {
+      console.error("Erro ao remover serviço:", error.response?.data || error);
+
       setModalTitle("Erro ao Remover Serviço");
-      setError("Erro ao remover o serviço.");
+      setError(error.response?.data?.message || "Erro ao remover o serviço.");
       setIsErrorModalOpen(true);
-      console.error("Erro ao remover serviço:", error);
     }
   };
 
@@ -99,53 +119,22 @@ export const ServicosBarbearia = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-semibold">Nome do Serviço</label>
-            <input
-              type="text"
-              name="nome"
-              value={service.nome}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
+            <input type="text" name="nome" value={service.nome} onChange={handleChange} required className="w-full p-2 border border-gray-300 rounded" />
           </div>
           <div>
             <label className="block font-semibold">Descrição</label>
-            <input
-              type="text"
-              name="descricao"
-              value={service.descricao}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
+            <input type="text" name="descricao" value={service.descricao} onChange={handleChange} required className="w-full p-2 border border-gray-300 rounded" />
           </div>
           <div>
             <label className="block font-semibold">Preço</label>
-            <input
-              type="text"
-              name="preco"
-              value={service.preco}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
+            <input type="text" name="preco" value={service.preco} onChange={handleChange} required className="w-full p-2 border border-gray-300 rounded" />
           </div>
           <div>
             <label className="block font-semibold">Duração (minutos)</label>
-            <input
-              type="number"
-              name="duracao"
-              value={service.duracao}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
+            <input type="number" name="duracao" value={service.duracao} onChange={handleChange} required className="w-full p-2 border border-gray-300 rounded" />
           </div>
-          <button
-            type="submit"
-            className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
-          >
-            Salvar Serviço
+          <button type="submit" className="w-full bg-black text-white py-2 rounded hover:bg-gray-800">
+            {editingService ? "Atualizar Serviço" : "Salvar Serviço"}
           </button>
         </form>
       </div>
@@ -153,6 +142,7 @@ export const ServicosBarbearia = () => {
       {/* 🔹 Exibir serviços cadastrados */}
       <div className="mt-10 w-[500px] p-6 bg-white shadow-lg rounded-xl">
         <h2 className="text-lg font-bold text-gray-800 mb-4">Serviços Cadastrados</h2>
+        
         {servicesList.length === 0 ? (
           <p className="text-gray-600 text-center">Nenhum serviço cadastrado.</p>
         ) : (
@@ -165,18 +155,25 @@ export const ServicosBarbearia = () => {
                   <p className="text-gray-800 font-bold">R$ {servico.preco}</p>
                   <p className="text-gray-500">Duração: {servico.duracao} min</p>
                 </div>
-                <button
-                  onClick={() => handleDelete(servico.id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
-                >
-                  Remover
-                </button>
+                <div>
+                  <button
+                    onClick={() => handleEdit(servico)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 mr-2"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(servico.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
+                  >
+                    Remover
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
         )}
       </div>
-
       {/* 🔹 Modal de Erro/Sucesso */}
       <ErrorModal open={isErrorModalOpen} onClose={handleCloseErrorModal} title={modalTitle} message={error} />
     </div>

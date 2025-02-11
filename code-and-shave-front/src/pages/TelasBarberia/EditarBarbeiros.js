@@ -11,11 +11,12 @@ export const EditarBarbeiros = () => {
     specialties: [],
   });
 
-  const [servicesList, setServicesList] = useState([]); // Lista de serviços disponíveis
   const [barbersList, setBarbersList] = useState([]); // Lista de barbeiros cadastrados
   const [error, setError] = useState(null); // Estado para armazenar mensagens de erro
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false); // Estado para controlar a exibição do modal
   const [modalTitle, setModalTitle] = useState("Erro"); // Estado para o título do modal
+  const [editingBarber, setEditingBarber] = useState(null); // Armazena o barbeiro em edição
+  const [servicesList, setServicesList] = useState([]); // 🔹 Agora inicia como um array vazio
 
   // 📌 Buscar serviços e barbeiros do backend
   useEffect(() => {
@@ -26,14 +27,25 @@ export const EditarBarbeiros = () => {
   const fetchServices = async () => {
     try {
       const response = await api.get("/servicos/listar");
-      setServicesList(response.data);
+      setServicesList(Array.isArray(response.data) ? response.data : []); // 🔹 Garante que sempre seja um array
     } catch (error) {
+      setServicesList([]); // 🔹 Se der erro, define como um array vazio
       setModalTitle("Erro ao Buscar Serviços");
       setError("Não foi possível carregar os serviços.");
       setIsErrorModalOpen(true);
       console.error("Erro ao buscar serviços:", error);
     }
-  };
+  }  
+
+  const handleEdit = (barbeiro) => {
+    setEditingBarber(barbeiro);
+    setBarber({
+      name: barbeiro.name,
+      email: barbeiro.email,
+      phone: barbeiro.phone,
+      specialties: barbeiro.specialties.map(s => s.id) // Mantém os serviços selecionados
+    });
+  }  
 
   const fetchBarbers = async () => {
     try {
@@ -56,39 +68,44 @@ export const EditarBarbeiros = () => {
   // Atualiza especialidades (serviços) do barbeiro
   const handleSpecialtyChange = (e) => {
     const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
-    setBarber({ ...barber, specialties: selectedOptions.map(Number) }); // Converte IDs para números
+    setBarber({ ...barber, specialties: selectedOptions.map(Number) });
   };
 
   // Enviar os dados do barbeiro ao backend
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 🔹 Convertendo os IDs dos serviços para objetos { id: numero }
-    const specialtiesFormatted = barber.specialties.map((id) => ({ id }));
-
+  
+    const specialtiesFormatted = barber.specialties.map(id => ({ id }));
+  
     const barberData = {
       ...barber,
-      specialties: specialtiesFormatted, // 🔹 Enviando array de objetos
+      specialties: specialtiesFormatted,
     };
-
+  
     try {
-      await api.post("/barbeiros/cadastrar", barberData);
-      setModalTitle("Sucesso");
-      setError("Barbeiro cadastrado com sucesso!");
-      setIsErrorModalOpen(true);
-      setBarber({ name: "", email: "", phone: "", specialties: [] });
-      fetchBarbers(); // Atualiza a lista de barbeiros
-    } catch (error) {
-      setModalTitle("Erro no Cadastro");
-      if (error.response && error.response.status === 409) {
-        setError(error.response.data.message); // Define a mensagem de erro específica do backend
+      let response;
+      if (editingBarber) {
+        // Atualizar barbeiro
+        response = await api.put(`/barbeiros/atualizar/${editingBarber.id}`, barberData);
+        setModalTitle("Sucesso");
+        setError("Barbeiro atualizado com sucesso!");
       } else {
-        setError("Erro ao cadastrar barbeiro.");
+        // Cadastrar novo barbeiro
+        response = await api.post("/barbeiros/cadastrar", barberData);
+        setModalTitle("Sucesso");
+        setError("Barbeiro cadastrado com sucesso!");
       }
+  
       setIsErrorModalOpen(true);
-      console.error("Erro ao salvar barbeiro:", error);
+      setEditingBarber(null); // Reseta edição
+      setBarber({ name: "", email: "", phone: "", specialties: [] });
+      fetchBarbers(); // Atualiza a lista
+    } catch (error) {
+      setModalTitle("Erro");
+      setError("Erro ao salvar barbeiro.");
+      setIsErrorModalOpen(true);
     }
-  };
+  }  
 
   // 🔹 Remover um barbeiro pelo ID
   const handleDelete = async (id) => {
@@ -153,9 +170,30 @@ export const EditarBarbeiros = () => {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
+          <div>
+            <label className="block font-semibold">Serviços realizados</label>
+            <select
+              name="specialties"
+              value={barber.specialties}
+              onChange={handleSpecialtyChange}
+              multiple
+              className="w-full p-2 border border-gray-300 rounded"
+            >
+              {Array.isArray(servicesList) && servicesList.length > 0 ? (
+                servicesList.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.nome} - R$ {service.preco} ({service.duracao} min)
+                  </option>
+                ))
+              ) : (
+                <option disabled>Nenhum serviço disponível</option> // 🔹 Caso não haja serviços
+              )}
+            </select>
+            <p className="text-gray-600 text-sm">Segure CTRL (Windows) ou CMD (Mac) para selecionar vários.</p>
+          </div>
           <button type="submit" className="w-full bg-black text-white py-2 rounded hover:bg-gray-800">
-            Salvar Barbeiro
-          </button>
+          {editingBarber ? "Atualizar Barbeiro" : "Salvar Barbeiro"}
+        </button>
         </form>
       </div>
 
@@ -166,35 +204,45 @@ export const EditarBarbeiros = () => {
           <p className="text-gray-600 text-center">Nenhum barbeiro cadastrado.</p>
         ) : (
           <ul className="space-y-4">
-            {barbersList.map((barbeiro) => (
-              <li key={barbeiro.id} className="border-b pb-2 flex justify-between items-center">
-                <div>
-                  <p className="font-semibold">{barbeiro.name}</p>
-                  <p className="text-gray-600">Email: {barbeiro.email}</p>
-                  <p className="text-gray-600">Telefone: {barbeiro.phone}</p>
-                  <p className="text-gray-800 font-bold">Serviços:</p>
-                  <ul className="list-disc ml-4">
-                    {barbeiro.specialties.length > 0 ? (
-                      barbeiro.specialties.map((servico) => (
-                        <li key={servico.id}>{servico.nome} - R$ {servico.preco} ({servico.duracao} min)</li>
-                      ))
-                    ) : (
-                      <li className="text-gray-500">Nenhum serviço atribuído</li>
-                    )}
-                  </ul>
-                </div>
-                <button
-                  onClick={() => handleDelete(barbeiro.id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
-                >
-                  Remover
-                </button>
-              </li>
-            ))}
-          </ul>
+  {barbersList.map((barbeiro) => (
+    <li key={barbeiro.id} className="border-b pb-2 flex justify-between items-center">
+      <div>
+        <p className="font-semibold">{barbeiro.name}</p>
+        <p className="text-gray-600">Email: {barbeiro.email}</p>
+        <p className="text-gray-600">Telefone: {barbeiro.phone}</p>
+        <p className="text-gray-800 font-bold mt-2">Serviços:</p>
+              <ul className="list-disc ml-4">
+                {barbeiro.specialties && barbeiro.specialties.length > 0 ? (
+                  barbeiro.specialties.map((servico) => (
+                    <li key={servico.id}>{servico.nome} - R$ {servico.preco} ({servico.duracao} min)</li>
+                  ))
+                ) : (
+                  <li className="text-gray-500">Nenhum serviço atribuído</li>
+                )}
+              </ul>
+            </div>
+            <div className="flex space-x-2">
+              {/* Botão Editar */}
+              <button
+                onClick={() => handleEdit(barbeiro)}
+                className="bg-blue-500 text-white px-3 py-1 text-sm rounded-lg shadow hover:bg-blue-700 transition duration-200"
+              >
+                Editar
+              </button>
+              
+              {/* Botão Remover */}
+              <button
+                onClick={() => handleDelete(barbeiro.id)}
+                className="bg-red-500 text-white px-3 py-1 text-sm rounded-lg shadow hover:bg-red-700 transition duration-200"
+              >
+                Remover
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
         )}
       </div>
-
       {/* 🔹 Modal de Erro/Sucesso */}
       <ErrorModal open={isErrorModalOpen} onClose={handleCloseErrorModal} title={modalTitle} message={error} />
     </div>
