@@ -1,21 +1,22 @@
-import { Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext"
+import { Navigate } from "react-router-dom";
+import { getUserFromToken, isTokenValid } from "../utils/auth";
 
-export const ClienteRoute = ({children}) => {
-    const { usuarioLogado } = useAuth();
+export const ClienteRoute = ({ children }) => {
+    const usuario = getUserFromToken();
+    console.log("Usuário no ClienteRoute:", usuario); // 🔹 Verifica se o usuário está sendo identificado
 
-    // Verifica se o usuário está logado e é do tipo 'cliente'
-    if (!usuarioLogado || usuarioLogado.tipo !== "cliente") {
+    if (!isTokenValid() || !usuario || usuario.tipo !== "cliente") {
         return <Navigate to="/" replace />;
     }
 
     return children;
-}
+};
 
-export const BarbeariaRoute = ({children}) => {
-    const { usuarioLogado } = useAuth();
+export const BarbeariaRoute = ({ children }) => {
+    const usuario = getUserFromToken();
+    console.log("Usuário no BarbeariaRoute:", usuario); // 🔹 Verifica se o usuário está sendo identificado
 
-    if (!usuarioLogado || usuarioLogado.tipo !== "barbearia") {
+    if (!isTokenValid() || !usuario || usuario.tipo !== "barbearia") {
         return <Navigate to="/" replace />;
     }
 

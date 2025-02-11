@@ -7,20 +7,30 @@ import slide2 from '../../assets/images/slide2.jpg';
 import slide3 from '../../assets/images/slide3.jpg';
 import slide4 from '../../assets/images/slide4.jpg';
 import EventIcon from '@mui/icons-material/Event';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import GroupIcon from '@mui/icons-material/Group';
 import { useAuth } from '../../contexts/AuthContext';
+import api from '../../services/axiosInstance';
 
 export const HomeBarbearia = () => {
   const slides = [slide1, slide2, slide3, slide4];
-  const barberShopName = localStorage.getItem('usuario') || 'Barbearia';
+
+  // 🔹 Recupera os dados do usuário do localStorage
+  const usuarioSalvo = localStorage.getItem('usuario');
+
+  // 🔹 Verifica se `usuarioSalvo` não é null ou um valor inválido antes de usar JSON.parse()
+  const usuario = usuarioSalvo && usuarioSalvo.startsWith("{") ? JSON.parse(usuarioSalvo) : null;
+
+  // 🔹 Garante que `barberShopName` pega o nome correto da barbearia
+  const barberShopName = usuario && usuario.nome ? usuario.nome : 'Barbearia';
+
+
   const [agendamentos, setAgendamentos] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const fetchAgendamentos = async () => {
     try {
-      const response = await axios.get('/api/agendamentos-proximos'); // Substituir pela URL real do backend
+      const response = await api.get('/api/agendamentos-proximos'); // Substituir pela URL real do backend
       setAgendamentos(response.data);
     } catch (err) {
       setError('Erro ao carregar os próximos agendamentos.');

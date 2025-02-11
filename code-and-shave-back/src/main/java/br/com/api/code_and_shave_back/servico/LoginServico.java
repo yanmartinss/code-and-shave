@@ -2,6 +2,7 @@ package br.com.api.code_and_shave_back.servico;
 
 import br.com.api.code_and_shave_back.modelo.UsuarioModelo;
 import br.com.api.code_and_shave_back.repositorio.UsuarioRepositorio;
+import br.com.api.code_and_shave_back.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class LoginServico {
     private UsuarioRepositorio ur;
 
     @Autowired
-    private br.com.api.code_and_shave_back.utils.JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -35,13 +36,22 @@ public class LoginServico {
             return ResponseEntity.status(401).body("Senha incorreta");
         }
 
-        // Gera o token JWT
-        String token = jwtUtil.generateToken(usuario.getEMAIL());
+        // 🔹 Gera o token contendo todos os dados do usuário (exceto senha)
+        String token = jwtUtil.generateToken(usuario);
 
-        // Retorna o token + dados do usuário
+        // 🔹 Retorna os dados do usuário, exceto a senha
+        Map<String, Object> usuarioData = new HashMap<>();
+        usuarioData.put("id", usuario.getID());
+        usuarioData.put("nome", usuario.getNOME());
+        usuarioData.put("email", usuario.getEMAIL());
+        usuarioData.put("telefone", usuario.getTELEFONE());
+        usuarioData.put("tipo", usuario.getTIPO());
+        usuarioData.put("ativo", usuario.getAtivo());
+
+        // 🔹 Retorna o token e os dados do usuário
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
-        response.put("usuario", usuario);
+        response.put("usuario", usuarioData);
 
         return ResponseEntity.ok(response);
     }

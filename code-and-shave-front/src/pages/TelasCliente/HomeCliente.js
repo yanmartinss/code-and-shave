@@ -7,7 +7,10 @@ import slide4 from '../../assets/images/slide4.jpg';
 
 export const HomeCliente = () => {
   const slides = [slide1, slide2, slide3, slide4];
-  const username = localStorage.getItem(`usuario`) || '';
+  const usuarioSalvo = localStorage.getItem('usuario');
+  const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+  const username = usuario ? usuario.nome : 'Cliente';
+
 
   return (
     <div className="flex flex-col items-center bg-[#f9fafb] min-h-screen">

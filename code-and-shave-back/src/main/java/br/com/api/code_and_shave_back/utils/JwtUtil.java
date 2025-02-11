@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import org.springframework.stereotype.Component;
+import br.com.api.code_and_shave_back.modelo.UsuarioModelo; // Importe a classe de usuário
 
 import java.util.Date;
 
@@ -17,12 +18,18 @@ public class JwtUtil {
 
     private final Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
 
-    public String generateToken(String email) {
+    // 🔹 Gera um token JWT contendo todas as informações do usuário (exceto senha)
+    public String generateToken(UsuarioModelo usuario) {
         return JWT.create()
-                .withSubject(email)
-                .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .sign(algorithm);
+                .withSubject(usuario.getEMAIL()) // Identificador principal (email)
+                .withClaim("id", usuario.getID()) // ID do usuário
+                .withClaim("nome", usuario.getNOME()) // Nome
+                .withClaim("telefone", usuario.getTELEFONE()) // Telefone
+                .withClaim("tipo", usuario.getTIPO()) // Tipo (cliente/barbearia)
+                .withClaim("ativo", usuario.getAtivo()) // Status ativo/inativo
+                .withIssuedAt(new Date()) // Data de criação
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Expiração
+                .sign(algorithm); // Assina o token
     }
 
     public String extractEmail(String token) {
@@ -37,5 +44,9 @@ public class JwtUtil {
         } catch (JWTVerificationException e) {
             return false; // Token inválido ou expirado
         }
+    }
+
+    public DecodedJWT decodeToken(String token) {
+        return JWT.decode(token);
     }
 }

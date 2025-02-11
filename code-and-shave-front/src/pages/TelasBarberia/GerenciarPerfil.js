@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ConfirmButton } from '../../components/buttons/ConfirmButton';
 import { ErrorModal } from '../../components/modals/ErrorModal';
 import { formatPhone, validateEmail } from '../../utils/functions';
+import api from '../../services/axiosInstance';
 
 export const GerenciarPerfil = () => {
     const [nomeBarbearia, setNomeBarbearia] = useState('');
@@ -91,7 +92,7 @@ export const GerenciarPerfil = () => {
                 }
             });
 
-            const response = await axios.post('/api/barbearia/perfil', formData, {
+            const response = await api.post('/api/barbearia/perfil', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

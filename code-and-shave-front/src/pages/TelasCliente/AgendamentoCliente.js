@@ -3,6 +3,7 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ConfirmButton } from '../../components/buttons/ConfirmButton';
+import api from '../../services/axiosInstance';
 
 export const AgendamentoCliente = () => {
     const [selectedDate, setSelectedDate] = useState(null); 
@@ -16,7 +17,7 @@ export const AgendamentoCliente = () => {
         if (!date) return;
 
         try {
-            const response = await axios.get(`/api/horarios-disponiveis`, {
+            const response = await api.get(`/api/horarios-disponiveis`, {
                 params: { date: date.toISOString().split('T')[0] }, // Passa a data como parâmetro
             });
 
@@ -46,7 +47,7 @@ export const AgendamentoCliente = () => {
         }
 
         try {
-            const response = await axios.post('/api/agendar', {
+            const response = await api.post('/api/agendar', {
                 date: selectedDate.toISOString().split('T')[0],
                 time: selectedTime,
             });

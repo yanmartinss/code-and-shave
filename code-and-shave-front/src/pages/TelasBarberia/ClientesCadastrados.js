@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ErrorModal } from '../../components/modals/ErrorModal';
 import { Button } from '@mui/material';
+import api from '../../services/axiosInstance';
 
 export const ClientesCadastrados = () => {
     const [clientes, setClientes] = useState([]);
@@ -12,7 +13,7 @@ export const ClientesCadastrados = () => {
     useEffect(() => {
         const fetchClientes = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/usuarios/listar');
+                const response = await api.get('http://localhost:8080/usuarios/listar');
                 setClientes(response.data);
             } catch (error) {
                 setError('Erro ao carregar os clientes. Tente novamente mais tarde.');
@@ -41,7 +42,7 @@ export const ClientesCadastrados = () => {
 
     const removeClient = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/usuarios/remover/${id}`);
+            await api.delete(`/usuarios/remover/${id}`);
             setClientes((prevClientes) => prevClientes.filter(cliente => cliente.id !== id));
         } catch (error) {
             setError('Erro ao excluir o cliente cadastrado. Tente novamente mais tarde.');

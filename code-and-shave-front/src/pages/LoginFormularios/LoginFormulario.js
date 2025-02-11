@@ -9,6 +9,8 @@ import photoImage from '../../assets/images/photo-login.jpg';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '@mui/material';
 import axios from 'axios';
+import api from '../../services/axiosInstance';
+import { getUserFromToken } from '../../utils/auth';
 
 export const LoginFormulario = () => {
     const navigate = useNavigate();
@@ -49,25 +51,29 @@ export const LoginFormulario = () => {
             });
     
             if (response.status === 200) {
-                const { usuario, token } = response.data;
+                const { token, usuario } = response.data;
     
-                // Removendo aspas do nome do usuário antes de salvar
-                const nomeSemAspas = usuario.nome.replace(/["']/g, '');
+                // 🔹 Salva o token no localStorage
+                localStorage.setItem("token", token);
     
-                // Salva o token e usuário no localStorage
-                localStorage.setItem('token', token);
-                localStorage.setItem('usuario', nomeSemAspas); // Agora sem aspas extras
+                // 🔹 Certifique-se de que o objeto `usuario` está sendo salvo corretamente como JSON
+                localStorage.setItem("usuario", JSON.stringify(usuario));
     
+                // 🔹 Atualiza o contexto de autenticação
                 setUsuarioLogado(usuario);
     
-                console.log("Usuário recebido:", usuario);
-                console.log("Token recebido:", token);
+                console.log("Token salvo:", localStorage.getItem("token")); 
+                console.log("Usuário salvo:", localStorage.getItem("usuario"));
     
-                // 🚀 Correção aqui: Acessando corretamente usuario.tipo
+                // 🚀 Redirecionamento baseado no tipo de usuário
                 if (usuario.tipo === "cliente") {
                     navigate("/home-cliente");
                 } else if (usuario.tipo === "barbearia") {
                     navigate("/home-barbearia");
+                } else {
+                    console.error("Tipo de usuário desconhecido:", usuario.tipo);
+                    setModalError("Erro ao identificar o usuário. Entre em contato com o suporte.");
+                    setModalOpen(true);
                 }
             }
         } catch (error) {

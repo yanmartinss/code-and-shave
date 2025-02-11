@@ -8,6 +8,7 @@ import { ConfirmButton } from '../../components/buttons/ConfirmButton';
 import { formatPhone, validateEmail, validatePassword } from '../../utils/functions';
 import { ErrorModal } from '../../components/modals/ErrorModal';
 import { Button } from '@mui/material';
+import api from '../../services/axiosInstance';
 
 export const CadastroCliente = () => {
     const navigate = useNavigate();
@@ -75,7 +76,7 @@ export const CadastroCliente = () => {
             console.log('Enviando dados para o backend...');
 
             try {
-                const response = await axios.post("http://localhost:8080/usuarios/cadastrar", {
+                const response = await api.post("/usuarios/cadastrar", {
                     nome: nameInput,
                     email: emailInput,
                     telefone: formattedPhone,

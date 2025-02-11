@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import api from '../../services/axiosInstance';
 
 export const Notificacoes = () => {
     const [recentNotifications, setRecentNotifications] = useState([]);
@@ -10,11 +11,11 @@ export const Notificacoes = () => {
     const fetchNotifications = async () => {
         try {
             // Requisição para notificações recentes
-            const recentResponse = await axios.get('/api/notificacoes-recentes');
+            const recentResponse = await api.get('/api/notificacoes-recentes');
             setRecentNotifications(recentResponse.data);
 
             // Requisição para histórico de notificações
-            const historicResponse = await axios.get('/api/notificacoes-historico');
+            const historicResponse = await api.get('/api/notificacoes-historico');
             setHistoricNotifications(historicResponse.data);
         } catch (error) {
             setErrorMessage('Erro ao carregar notificações. Tente novamente mais tarde.');

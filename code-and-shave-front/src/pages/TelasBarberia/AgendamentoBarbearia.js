@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
+import api from "../../services/axiosInstance";
 
 export const AgendamentoBarbearia = () => {
   const [agendamentos, setAgendamentos] = useState([]);
@@ -12,7 +13,7 @@ export const AgendamentoBarbearia = () => {
 
   const fetchAgendamentos = async () => {
     try {
-        const response = await axios.get("/api/agendamentos-barbearia"); // Substituir pela URL real
+        const response = await api.get("/api/agendamentos-barbearia"); // Substituir pela URL real
         setAgendamentos(response.data);
     } catch (err) {
         setError("Erro ao carregar agendamentos. Tente novamente mais tarde.");

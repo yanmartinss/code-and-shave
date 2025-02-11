@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ErrorModal } from "../../components/modals/ErrorModal";
+import api from "../../services/axiosInstance";
 
 export const ServicosBarbearia = () => {
   const [service, setService] = useState({
@@ -18,7 +19,7 @@ export const ServicosBarbearia = () => {
   // 🔹 Buscar serviços do backend
   const fetchServices = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/servicos/listar");
+      const response = await api.get("/servicos/listar");
       setServicesList(response.data);
     } catch (error) {
       setModalTitle("Erro ao Buscar Serviços");
@@ -50,7 +51,7 @@ export const ServicosBarbearia = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8080/servicos/salvar", service);
+      await api.post("/servicos/salvar", service);
       setModalTitle("Sucesso");
       setError("Serviço salvo com sucesso!");
       setIsErrorModalOpen(true);
@@ -70,7 +71,7 @@ export const ServicosBarbearia = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8080/servicos/remover/${id}`);
+      await api.delete(`/servicos/remover/${id}`);
       setModalTitle("Sucesso");
       setError("Serviço removido com sucesso!");
       setIsErrorModalOpen(true);

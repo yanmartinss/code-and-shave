@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ErrorModal } from "../../components/modals/ErrorModal";
+import api from "../../services/axiosInstance";
 
 export const EditarBarbeiros = () => {
   const [barber, setBarber] = useState({
@@ -24,7 +25,7 @@ export const EditarBarbeiros = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/servicos/listar");
+      const response = await api.get("/servicos/listar");
       setServicesList(response.data);
     } catch (error) {
       setModalTitle("Erro ao Buscar Serviços");
@@ -36,7 +37,7 @@ export const EditarBarbeiros = () => {
 
   const fetchBarbers = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/barbeiros/listar");
+      const response = await api.get("/barbeiros/listar");
       setBarbersList(response.data);
     } catch (error) {
       setModalTitle("Erro ao Buscar Barbeiros");
@@ -71,7 +72,7 @@ export const EditarBarbeiros = () => {
     };
 
     try {
-      await axios.post("http://localhost:8080/barbeiros/cadastrar", barberData);
+      await api.post("/barbeiros/cadastrar", barberData);
       setModalTitle("Sucesso");
       setError("Barbeiro cadastrado com sucesso!");
       setIsErrorModalOpen(true);
@@ -95,7 +96,7 @@ export const EditarBarbeiros = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8080/barbeiros/remover/${id}`);
+      await api.delete(`/barbeiros/remover/${id}`);
       setModalTitle("Sucesso");
       setError("Barbeiro removido com sucesso!");
       setIsErrorModalOpen(true);
