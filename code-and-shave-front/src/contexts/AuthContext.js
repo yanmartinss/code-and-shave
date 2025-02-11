@@ -9,14 +9,21 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const checkAuth = () => {
             const token = getToken();
-            console.log("Token no AuthContext:", token); // 🔹 Verifica se está carregando o token
+            console.log("📢 Token no AuthContext:", token);
 
-            if (isTokenValid()) {
+            if (token && isTokenValid()) {
                 const user = getUserFromToken();
-                console.log("Usuário autenticado:", user); // 🔹 Verifica o usuário extraído do token
-                setUsuarioLogado(user);
+                console.log("Usuário decodificado:", user); // Log para depuração
+                if (user) {
+                    console.log("✅ Usuário autenticado:", user);
+                    setUsuarioLogado(user);
+                } else {
+                    console.error("⚠ Erro ao extrair usuário do token!");
+                    logout();
+                }
             } else {
-                logout(); // 🔹 Se o token não for válido, faz logout
+                console.warn("❌ Token inválido ou expirado");
+                logout();
             }
         };
 
@@ -24,13 +31,13 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = (usuario, token) => {
-        console.log("Chamando login do AuthContext...");
+        console.log("🔑 Chamando login no AuthContext...");
         localStorage.setItem("token", token);
         setUsuarioLogado(usuario);
     };
 
     const logout = () => {
-        console.log("Fazendo logout...");
+        console.log("🚪 Fazendo logout...");
         localStorage.removeItem("token");
         setUsuarioLogado(null);
     };

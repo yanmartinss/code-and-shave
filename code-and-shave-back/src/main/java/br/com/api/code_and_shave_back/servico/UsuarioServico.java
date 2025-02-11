@@ -1,6 +1,7 @@
 package br.com.api.code_and_shave_back.servico;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,18 +28,17 @@ public class UsuarioServico {
     }
 
     public ResponseEntity<?> cadastrarAlterar(UsuarioModelo um, String acao) {
+        // Define o valor padrão para 'ativo' caso não seja informado
         if (um.getAtivo() == null) {
-            um.setAtivo(true); // Define o valor padrão caso não seja informado
+            um.setAtivo(true); 
         }
-
+    
+        // Verificações dos campos obrigatórios
         if (um.getEMAIL() == null || um.getEMAIL().trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "O e-mail é obrigatório"));
         }
         if (um.getNOME() == null || um.getNOME().trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "O nome é obrigatório"));
-        }
-        if (um.getSENHA() == null || um.getSENHA().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "A senha é obrigatória"));
         }
         if (um.getTELEFONE() == null || um.getTELEFONE().trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "O telefone é obrigatório"));
@@ -48,6 +48,21 @@ public class UsuarioServico {
         }
     
         try {
+            // Verificação de se a senha foi fornecida
+            if (um.getSENHA() == null || um.getSENHA().trim().isEmpty()) {
+                // Se não for fornecida, mantém a senha existente
+                UsuarioModelo usuarioExistente = ur.findByEMAIL(um.getEMAIL()).orElse(null);
+                if (usuarioExistente != null) {
+                    um.setSENHA(usuarioExistente.getSENHA()); // Mantém a senha existente
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", "Senha é obrigatória para cadastro"));
+                }
+            } else {
+                // Se a senha for fornecida, codifique a nova senha
+                um.setSENHA(encoder.encode(um.getSENHA()));
+            }
+    
+            // Caso seja uma tentativa de cadastro, verificamos se o e-mail já está registrado
             if (acao.equals("cadastrar")) {
                 if (ur.existsByEMAIL(um.getEMAIL())) {
                     return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("erro", "E-mail já cadastrado"));
@@ -55,16 +70,26 @@ public class UsuarioServico {
                 if (ur.existsByTELEFONE(um.getTELEFONE())) {
                     return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("erro", "Telefone já cadastrado"));
                 }
-                um.setSENHA(encoder.encode(um.getSENHA()));
+                // Cadastro do usuário
                 return ResponseEntity.status(HttpStatus.CREATED).body(ur.save(um));
+    
             } else {
+                // Se for uma alteração, buscamos o usuário existente e atualizamos os dados
+                Optional<UsuarioModelo> usuarioExistenteOptional = ur.findByEMAIL(um.getEMAIL());
+                if (usuarioExistenteOptional.isPresent()) {
+                    // Se o usuário existir, mantém a senha existente
+                    UsuarioModelo usuarioExistente = usuarioExistenteOptional.get();
+                    um.setID(usuarioExistente.getID());  // Mantém o mesmo ID
+                }
+                // Salva as alterações no banco de dados
                 return ResponseEntity.ok(ur.save(um));
             }
+    
         } catch (Exception e) {
+            // Se ocorrer algum erro no processo, retorna um erro genérico
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("erro", "Erro no servidor: " + e.getMessage()));
         }
-    }
-    
+    }    
 
     public ResponseEntity<RespostaModelo> remover(long ID) {
         ur.deleteById(ID);

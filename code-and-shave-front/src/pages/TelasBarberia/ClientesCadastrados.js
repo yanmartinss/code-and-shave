@@ -67,7 +67,7 @@ export const ClientesCadastrados = () => {
                                     key={cliente.id}
                                     className="p-4 bg-white shadow-md rounded-lg border border-gray-200"
                                 >
-                                    <h3>{cliente.tipo}</h3>
+                                    <h3>{cliente.nome}</h3>
                                     <p className="text-sm text-gray-600">Email: {cliente.email}</p>
                                     <p className="text-sm text-gray-600">Telefone: {cliente.telefone}</p>
 

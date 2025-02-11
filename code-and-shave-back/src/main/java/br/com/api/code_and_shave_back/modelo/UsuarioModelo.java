@@ -26,6 +26,10 @@ public class UsuarioModelo {
     private String TELEFONE;
     @Column(nullable = false)
     private String SENHA;
+    @Column(nullable = true)
+    private String DESCRICAO;
+    @Column(nullable = true)
+    private String ENDERECO;
     @Column(nullable = false)
     private String TIPO;
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
