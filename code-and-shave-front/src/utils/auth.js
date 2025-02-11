@@ -17,7 +17,7 @@ export const getUserFromToken = () => {
         console.error("Erro ao decodificar o token:", error);
         return null;
     }
-};
+}
 
 // 🔹 Verifica se o token é válido e não expirou
 export const isTokenValid = () => {

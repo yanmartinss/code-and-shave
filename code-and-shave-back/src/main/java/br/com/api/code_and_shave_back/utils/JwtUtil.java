@@ -27,6 +27,8 @@ public class JwtUtil {
                 .withClaim("telefone", usuario.getTELEFONE()) // Telefone
                 .withClaim("tipo", usuario.getTIPO()) // Tipo (cliente/barbearia)
                 .withClaim("ativo", usuario.getAtivo()) // Status ativo/inativo
+                .withClaim("descricao", usuario.getDESCRICAO()) // Status ativo/inativo
+                .withClaim("endereco", usuario.getENDERECO()) // Status ativo/inativo
                 .withIssuedAt(new Date()) // Data de criação
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Expiração
                 .sign(algorithm); // Assina o token
