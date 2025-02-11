@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { ErrorModal } from "../../components/modals/ErrorModal";
 
 export const ServicosBarbearia = () => {
   const [service, setService] = useState({
@@ -10,16 +11,20 @@ export const ServicosBarbearia = () => {
   });
 
   const [servicesList, setServicesList] = useState([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("Erro");
 
-  // 🔹 Função para buscar serviços do backend
+  // 🔹 Buscar serviços do backend
   const fetchServices = async () => {
     try {
       const response = await axios.get("http://localhost:8080/servicos/listar");
       setServicesList(response.data);
     } catch (error) {
+      setModalTitle("Erro ao Buscar Serviços");
+      setError("Não foi possível carregar os serviços.");
+      setIsErrorModalOpen(true);
       console.error("Erro ao buscar serviços:", error);
-      setError("Erro ao carregar os serviços.");
     }
   };
 
@@ -46,12 +51,16 @@ export const ServicosBarbearia = () => {
 
     try {
       await axios.post("http://localhost:8080/servicos/salvar", service);
-      alert("Serviço salvo com sucesso!");
+      setModalTitle("Sucesso");
+      setError("Serviço salvo com sucesso!");
+      setIsErrorModalOpen(true);
       setService({ nome: "", descricao: "", preco: "", duracao: "" });
       fetchServices(); // Atualiza a lista após salvar
     } catch (error) {
+      setModalTitle("Erro ao Salvar Serviço");
+      setError(error.response?.data?.message || "Erro ao salvar serviço.");
+      setIsErrorModalOpen(true);
       console.error("Erro ao salvar serviço:", error);
-      alert(error.response?.data?.message || "Erro ao salvar serviço.");
     }
   };
 
@@ -62,12 +71,22 @@ export const ServicosBarbearia = () => {
 
     try {
       await axios.delete(`http://localhost:8080/servicos/remover/${id}`);
-      alert("Serviço removido com sucesso!");
+      setModalTitle("Sucesso");
+      setError("Serviço removido com sucesso!");
+      setIsErrorModalOpen(true);
       fetchServices(); // Atualiza a lista após remoção
     } catch (error) {
+      setModalTitle("Erro ao Remover Serviço");
+      setError("Erro ao remover o serviço.");
+      setIsErrorModalOpen(true);
       console.error("Erro ao remover serviço:", error);
-      alert("Erro ao remover o serviço.");
     }
+  };
+
+  // 🔹 Fechar modal de erro
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+    setError(null);
   };
 
   return (
@@ -133,7 +152,6 @@ export const ServicosBarbearia = () => {
       {/* 🔹 Exibir serviços cadastrados */}
       <div className="mt-10 w-[500px] p-6 bg-white shadow-lg rounded-xl">
         <h2 className="text-lg font-bold text-gray-800 mb-4">Serviços Cadastrados</h2>
-        {error && <p className="text-red-500">{error}</p>}
         {servicesList.length === 0 ? (
           <p className="text-gray-600 text-center">Nenhum serviço cadastrado.</p>
         ) : (
@@ -157,6 +175,9 @@ export const ServicosBarbearia = () => {
           </ul>
         )}
       </div>
+
+      {/* 🔹 Modal de Erro/Sucesso */}
+      <ErrorModal open={isErrorModalOpen} onClose={handleCloseErrorModal} title={modalTitle} message={error} />
     </div>
   );
-};
+}

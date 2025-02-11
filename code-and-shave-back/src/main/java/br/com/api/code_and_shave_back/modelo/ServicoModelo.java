@@ -11,18 +11,18 @@ import lombok.Setter;
 public class ServicoModelo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID auto-gerado pelo banco de dados
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nome", length = 100, nullable = false)
+    @Column(nullable = false)
     private String nome;
 
-    @Column(name = "descricao", length = 255, nullable = false)
+    @Column(nullable = false)
     private String descricao;
 
-    @Column(name = "preco", nullable = false)
+    @Column(nullable = false)
     private Double preco;
-
+    
     @Column(name = "duracao", nullable = false)
     private Integer duracao; // Duração em minutos
 }
