@@ -11,7 +11,9 @@ export const getUserFromToken = () => {
     if (!token) return null;
 
     try {
-        return jwtDecode(token);
+        const decoded = jwtDecode(token);
+        console.log("Token decodificado:", decoded); // Log para depuração
+        return decoded;
     } catch (error) {
         console.error("Erro ao decodificar o token:", error);
         return null;
@@ -23,5 +25,5 @@ export const isTokenValid = () => {
     const user = getUserFromToken();
     if (!user || !user.exp) return false;
 
-    return user.exp > Date.now() / 1000; // Retorna `true` se o token ainda não expirou
-}
+    return user.exp > Date.now() / 1000; // Retorna true se o token ainda não expirou
+};
