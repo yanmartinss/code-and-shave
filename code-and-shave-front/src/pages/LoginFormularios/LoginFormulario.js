@@ -51,34 +51,37 @@ export const LoginFormulario = () => {
                 email: emailInput,
                 senha: passwordInput,
             });
-        
+    
             if (response.status === 200) {
                 const { token } = response.data;
-                console.log("Token recebido:", token); // 🔍 Log para verificar se o token está vindo correto
-                
+                console.log("Token recebido:", token);
+    
                 localStorage.setItem("token", token);
-        
+    
                 const usuarioDecodificado = jwtDecode(token);
-                console.log("Usuário decodificado:", usuarioDecodificado); // 🔍 Verifique o tipo
-        
+                console.log("Usuário decodificado:", usuarioDecodificado.tipo);
+    
+                // ✅ Atualiza o usuário antes de navegar
                 setUsuarioLogado(usuarioDecodificado);
-        
-                // 🔄 Redirecionamento correto baseado no tipo
-                if (usuarioDecodificado.tipo === "cliente") {
-                    navigate("/home-cliente");
-                } else if (usuarioDecodificado.tipo === "barbearia" || usuarioDecodificado.tipo === "admin") {
-                    navigate("/home-barbearia");
-                } else {
-                    console.error("Tipo de usuário desconhecido:", usuarioDecodificado.tipo);
-                    setModalError("Tipo de usuário inválido.");
-                    setModalOpen(true);
-                }
+    
+                // ✅ Usa um `setTimeout()` curto para garantir que o estado seja atualizado
+                setTimeout(() => {
+                    if (usuarioDecodificado.tipo === "cliente") {
+                        navigate("/home-cliente");
+                    } else if (usuarioDecodificado.tipo === "barbearia" || usuarioDecodificado.tipo === "admin") {
+                        navigate("/home-barbearia");
+                    } else {
+                        console.error("Tipo de usuário desconhecido:", usuarioDecodificado.tipo);
+                        setModalError("Tipo de usuário inválido.");
+                        setModalOpen(true);
+                    }
+                }, 100); // Pequeno atraso para garantir a atualização do estado
             }
         } catch (error) {
             console.error("Erro ao fazer login:", error);
             setModalError(error.response?.data?.mensagem || "Usuário ou senha inválidos.");
             setModalOpen(true);
-        }        
+        }
     }    
 
     return (
