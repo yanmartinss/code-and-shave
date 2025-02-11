@@ -79,4 +79,30 @@ public class BarbeiroServico {
         barbeiroRepositorio.deleteById(id);
         return ResponseEntity.ok("{\"message\": \"Barbeiro removido com sucesso!\"}");
     }
+
+    // 🔹 Atualizar barbeiro existente
+    @Transactional
+    public ResponseEntity<?> atualizarBarbeiro(Long id, BarbeiroModelo barbeiroAtualizado) {
+        Optional<BarbeiroModelo> optionalBarbeiro = barbeiroRepositorio.findById(id);
+
+        if (optionalBarbeiro.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Barbeiro não encontrado.\"}");
+        }
+
+        BarbeiroModelo barbeiroExistente = optionalBarbeiro.get();
+        barbeiroExistente.setName(barbeiroAtualizado.getName());
+        barbeiroExistente.setEmail(barbeiroAtualizado.getEmail());
+        barbeiroExistente.setPhone(barbeiroAtualizado.getPhone());
+
+        // Atualiza especialidades
+        if (barbeiroAtualizado.getSpecialties() != null && !barbeiroAtualizado.getSpecialties().isEmpty()) {
+            List<Long> serviceIds = barbeiroAtualizado.getSpecialties().stream().map(ServicoModelo::getId).toList();
+            List<ServicoModelo> services = (List<ServicoModelo>) servicoRepositorio.findAllById(serviceIds);
+            barbeiroExistente.setSpecialties(services);
+        }
+
+        BarbeiroModelo atualizado = barbeiroRepositorio.save(barbeiroExistente);
+        return ResponseEntity.ok(atualizado);
+    }
+
 }

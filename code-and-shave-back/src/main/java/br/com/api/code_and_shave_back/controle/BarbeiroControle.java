@@ -31,4 +31,11 @@ public class BarbeiroControle {
     public ResponseEntity<?> remover(@PathVariable Long id) {
         return barbeiroServico.removerBarbeiro(id);
     }
+
+    // 🔹 Atualizar barbeiro por ID
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody BarbeiroModelo barbeiro) {
+        return barbeiroServico.atualizarBarbeiro(id, barbeiro);
+    }
+
 }

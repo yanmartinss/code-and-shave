@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import br.com.api.code_and_shave_back.modelo.ServicoModelo;
 import br.com.api.code_and_shave_back.repositorio.ServicoRepositorio;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -54,12 +55,22 @@ public class ServicoServico {
     }
 
     // 🔹 Remover um serviço pelo ID
+    @Transactional
     public ResponseEntity<?> removerServico(Long id) {
         if (!servicoRepositorio.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Erro: Serviço não encontrado.\"}");
         }
 
-        servicoRepositorio.deleteById(id);
-        return ResponseEntity.ok("{\"message\": \"Serviço removido com sucesso!\"}");
-    }
+        try {
+            // 🔹 Removendo relações com barbeiros antes de excluir o serviço
+            servicoRepositorio.removerVinculosComBarbeiros(id);
+
+            // 🔹 Agora podemos excluir o serviço
+            servicoRepositorio.deleteById(id);
+            return ResponseEntity.ok("{\"message\": \"Serviço removido com sucesso!\"}");
+        } catch (Exception e) {
+            System.out.println("Erro ao remover serviço: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Erro ao remover serviço.\"}");
+        }
+}  
 }
