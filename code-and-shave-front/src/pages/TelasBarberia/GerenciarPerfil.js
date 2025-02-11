@@ -120,6 +120,28 @@ export const GerenciarPerfil = () => {
         setModalMessage('');
     }
 
+    const handleAlterarSenha = async () => {
+        const dadosSenha = {
+            email: user.email, // Email do usuário autenticado
+            senhaAtual: perfil.senhaAtual, // Senha atual (capturada do formulário)
+            novaSenha: perfil.novaSenha // Nova senha (capturada do formulário)
+        }
+    
+        try {
+            const response = await api.put('/usuarios/alterar-senha', dadosSenha);
+            if (response.status === 200) {
+                setModalTitle('Senha alterada');
+                setModalMessage('Sua senha foi alterada com sucesso.');
+                setModalOpen(true);
+            }
+        } catch (error) {
+            console.error('❌ Erro ao alterar senha:', error);
+            setModalTitle('Erro ao alterar senha');
+            setModalMessage(error.response?.data?.erro || 'Ocorreu um erro ao tentar alterar a senha.');
+            setModalOpen(true);
+        }
+    }
+
     return (
         <div className="flex flex-col items-center bg-[#f9fafb] min-h-screen p-4">
             <h1 className="text-2xl font-bold text-[#111827] mb-6">Gerenciar Perfil</h1>
@@ -142,9 +164,16 @@ export const GerenciarPerfil = () => {
                         <textarea name="descricao" value={perfil.descricao} onChange={handleChange} rows="3" className="outline-none shadow-md rounded-md p-2 w-full text-gray-700" />
                     </div>
                     <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Senha Atual</label>
+                        <input type="password" name="senhaAtual" value={perfil.senhaAtual} onChange={handleChange} className="outline-none shadow-md rounded-md p-2 w-full text-gray-700" />
+                    </div>
+                    <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Nova Senha</label>
                         <input type="password" name="novaSenha" value={perfil.novaSenha} onChange={handleChange} className="outline-none shadow-md rounded-md p-2 w-full text-gray-700" />
                     </div>
+                    <button type="button" onClick={handleAlterarSenha} className="bg-green-500 text-white p-2 rounded-md">
+                        Alterar Senha
+                    </button>
 
                     {/* Horários de funcionamento */}
                     <div>
