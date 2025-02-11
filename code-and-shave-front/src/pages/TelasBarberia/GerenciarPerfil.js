@@ -11,10 +11,11 @@ export const GerenciarPerfil = () => {
         telefone: '',
         endereco: '',
         descricao: '',
-        novaSenha: '',
-        tipo: '',  // 🔹 Adicionado
+        senhaAtual: '', // Adicionado
+        novaSenha: '',  // Adicionado
+        tipo: '',
         horariosFuncionamento: []
-    });    
+    }); 
 
     const [novoHorario, setNovoHorario] = useState({
         dia: 'segunda',
@@ -41,12 +42,13 @@ export const GerenciarPerfil = () => {
                 telefone: user.telefone || '',
                 endereco: user.endereco || '',
                 descricao: user.descricao || '',
-                tipo: user.tipo || '',  // 🔹 Adicionado
-                novaSenha: '',
+                senhaAtual: '', // Inicializado como vazio
+                novaSenha: '',  // Inicializado como vazio
+                tipo: user.tipo || '',
                 horariosFuncionamento: user.horarios_funcionamento || []
             });
         }
-    }, [user]);    
+    }, [user]);  
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -122,10 +124,10 @@ export const GerenciarPerfil = () => {
 
     const handleAlterarSenha = async () => {
         const dadosSenha = {
-            email: user.email, // Email do usuário autenticado
+            email: user.sub, // Email do usuário autenticado (extraído do token)
             senhaAtual: perfil.senhaAtual, // Senha atual (capturada do formulário)
             novaSenha: perfil.novaSenha // Nova senha (capturada do formulário)
-        }
+        };
     
         try {
             const response = await api.put('/usuarios/alterar-senha', dadosSenha);
@@ -133,6 +135,13 @@ export const GerenciarPerfil = () => {
                 setModalTitle('Senha alterada');
                 setModalMessage('Sua senha foi alterada com sucesso.');
                 setModalOpen(true);
+    
+                // Limpa os campos de senha após a alteração
+                setPerfil((prev) => ({
+                    ...prev,
+                    senhaAtual: '',
+                    novaSenha: ''
+                }));
             }
         } catch (error) {
             console.error('❌ Erro ao alterar senha:', error);
@@ -165,16 +174,31 @@ export const GerenciarPerfil = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Senha Atual</label>
-                        <input type="password" name="senhaAtual" value={perfil.senhaAtual} onChange={handleChange} className="outline-none shadow-md rounded-md p-2 w-full text-gray-700" />
+                        <input
+                            type="password"
+                            name="senhaAtual"
+                            value={perfil.senhaAtual}
+                            onChange={handleChange}
+                            className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
+                        />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Nova Senha</label>
-                        <input type="password" name="novaSenha" value={perfil.novaSenha} onChange={handleChange} className="outline-none shadow-md rounded-md p-2 w-full text-gray-700" />
+                        <input
+                            type="password"
+                            name="novaSenha"
+                            value={perfil.novaSenha}
+                            onChange={handleChange}
+                            className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
+                        />
                     </div>
-                    <button type="button" onClick={handleAlterarSenha} className="bg-green-500 text-white p-2 rounded-md">
+                    <button
+                        type="button"
+                        onClick={handleAlterarSenha}
+                        className="bg-green-500 text-white p-2 rounded-md"
+                    >
                         Alterar Senha
                     </button>
-
                     {/* Horários de funcionamento */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Horários de Funcionamento</label>
