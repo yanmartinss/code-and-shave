@@ -11,6 +11,7 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import api from '../../services/axiosInstance';
 import { getUserFromToken } from '../../utils/auth';
+import { jwtDecode } from "jwt-decode"; // Importando jwtDecode
 
 export const LoginFormulario = () => {
     const navigate = useNavigate();
@@ -51,27 +52,34 @@ export const LoginFormulario = () => {
             });
     
             if (response.status === 200) {
-                const { token, usuario } = response.data;
+                const { token } = response.data;
     
                 // 🔹 Salva o token no localStorage
                 localStorage.setItem("token", token);
     
-                // 🔹 Certifique-se de que o objeto `usuario` está sendo salvo corretamente como JSON
-                localStorage.setItem("usuario", JSON.stringify(usuario));
+                // 🔹 Decodifica o token JWT para obter o usuário
+                const usuarioDecodificado = jwtDecode(token);
+                console.log("Usuário decodificado:", usuarioDecodificado);
+    
+                if (!usuarioDecodificado.tipo) {
+                    setModalError("Erro ao identificar o tipo de usuário.");
+                    setModalOpen(true);
+                    return;
+                }
     
                 // 🔹 Atualiza o contexto de autenticação
-                setUsuarioLogado(usuario);
+                setUsuarioLogado(usuarioDecodificado);
     
-                console.log("Token salvo:", localStorage.getItem("token")); 
-                console.log("Usuário salvo:", localStorage.getItem("usuario"));
+                console.log("Token salvo:", localStorage.getItem("token"));
+                console.log("Usuário salvo:", usuarioDecodificado);
     
                 // 🚀 Redirecionamento baseado no tipo de usuário
-                if (usuario.tipo === "cliente") {
+                if (usuarioDecodificado.tipo === "cliente") {
                     navigate("/home-cliente");
-                } else if (usuario.tipo === "barbearia") {
+                } else if (usuarioDecodificado.tipo === "barbearia") {
                     navigate("/home-barbearia");
                 } else {
-                    console.error("Tipo de usuário desconhecido:", usuario.tipo);
+                    console.error("Tipo de usuário desconhecido:", usuarioDecodificado.tipo);
                     setModalError("Erro ao identificar o usuário. Entre em contato com o suporte.");
                     setModalOpen(true);
                 }
@@ -81,7 +89,7 @@ export const LoginFormulario = () => {
             setModalError(error.response?.data?.mensagem || "Usuário ou senha inválidos.");
             setModalOpen(true);
         }
-    }    
+    } 
 
     return (
         <div className="bg-[#24211c] min-h-screen w-screen flex justify-center items-center bg-gradient-to-b from-black/90 to-black/40">
