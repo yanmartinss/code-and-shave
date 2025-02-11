@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.api.code_and_shave_back.modelo.AlterarSenhaRequest;
 import br.com.api.code_and_shave_back.modelo.RespostaModelo;
 import br.com.api.code_and_shave_back.modelo.UsuarioModelo;
 import br.com.api.code_and_shave_back.repositorio.UsuarioRepositorio;
@@ -95,5 +96,32 @@ public class UsuarioServico {
         ur.deleteById(ID);
         rm.setMensagem("Conta de usuário excluída com sucesso");
         return new ResponseEntity<>(rm, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> alterarSenha(AlterarSenhaRequest request) {
+        try {
+            // Busca o usuário pelo email
+            Optional<UsuarioModelo> usuarioOptional = ur.findByEMAIL(request.getEmail());
+            if (!usuarioOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", "Usuário não encontrado"));
+            }
+
+            UsuarioModelo usuario = usuarioOptional.get();
+
+            // Verifica se a senha atual está correta
+            if (!encoder.matches(request.getSenhaAtual(), usuario.getSENHA())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("erro", "Senha atual incorreta"));
+            }
+
+            // Criptografa a nova senha
+            usuario.setSENHA(encoder.encode(request.getNovaSenha()));
+
+            // Salva o usuário com a nova senha
+            ur.save(usuario);
+
+            return ResponseEntity.ok(Map.of("mensagem", "Senha alterada com sucesso"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("erro", "Erro ao alterar senha: " + e.getMessage()));
+        }
     }
 }

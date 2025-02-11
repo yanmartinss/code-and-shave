@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 // import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.api.code_and_shave_back.modelo.AlterarSenhaRequest;
 import br.com.api.code_and_shave_back.modelo.RespostaModelo;
 import br.com.api.code_and_shave_back.modelo.UsuarioModelo;
 import br.com.api.code_and_shave_back.servico.UsuarioServico;
@@ -49,5 +50,10 @@ public class UsuarioControle {
     @GetMapping("/")
     public String rota() {
         return "API de usuários funcionando";
+    }
+
+    @PutMapping("/alterar-senha")
+    public ResponseEntity<?> alterarSenha(@RequestBody AlterarSenhaRequest request) {
+        return us.alterarSenha(request);
     }
 }
