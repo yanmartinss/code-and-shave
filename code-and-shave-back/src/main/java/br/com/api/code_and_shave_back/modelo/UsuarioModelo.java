@@ -26,9 +26,9 @@ public class UsuarioModelo {
     private String TELEFONE;
     @Column(nullable = false)
     private String SENHA;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String DESCRICAO;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String ENDERECO;
     @Column(nullable = false)
     private String TIPO;
