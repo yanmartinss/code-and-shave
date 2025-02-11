@@ -86,6 +86,12 @@ export const GerenciarPerfil = () => {
     
         const dadosAtualizados = { ...perfil };
     
+        // Verifica se a nova senha foi preenchida, se não, mantém a senha existente
+        if (!perfil.novaSenha.trim()) {
+            // Não envia a nova senha se ela estiver em branco
+            delete dadosAtualizados.novaSenha;
+        }
+    
         // Verifica se há horários adicionados antes de enviar
         if (perfil.horariosFuncionamento.length === 0) {
             delete dadosAtualizados.horariosFuncionamento; // Remove se estiver vazio
@@ -102,18 +108,17 @@ export const GerenciarPerfil = () => {
             }
         } catch (error) {
             console.error('❌ Erro ao atualizar perfil:', error);
-            console.error("📢 Resposta do backend:", error.response?.data); 
             setModalTitle('Erro ao salvar');
             setModalMessage(error.response?.data?.mensagem || 'Ocorreu um erro ao tentar salvar os dados.');
             setModalOpen(true);
         }
-    }         
+    }          
 
     const handleCloseModal = () => {
         setModalOpen(false);
         setModalTitle('');
         setModalMessage('');
-    };
+    }
 
     return (
         <div className="flex flex-col items-center bg-[#f9fafb] min-h-screen p-4">
@@ -154,8 +159,8 @@ export const GerenciarPerfil = () => {
                                 <option value="sabado">Sábado</option>
                                 <option value="domingo">Domingo</option>
                             </select>
-                            <input type="time" name="abertura" value={novoHorario.abertura} onChange={handleHorarioChange} className="outline-none shadow-md rounded-md p-2 text-gray-700" required />
-                            <input type="time" name="fechamento" value={novoHorario.fechamento} onChange={handleHorarioChange} className="outline-none shadow-md rounded-md p-2 text-gray-700" required />
+                            <input type="time" name="abertura" value={novoHorario.abertura} onChange={handleHorarioChange} className="outline-none shadow-md rounded-md p-2 text-gray-700" />
+                            <input type="time" name="fechamento" value={novoHorario.fechamento} onChange={handleHorarioChange} className="outline-none shadow-md rounded-md p-2 text-gray-700" />
                             <button type="button" onClick={handleAddHorario} className="bg-blue-500 text-white p-2 rounded-md">Adicionar</button>
                         </div>
                         <ul>
