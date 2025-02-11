@@ -3,6 +3,8 @@ import { ConfirmButton } from '../../components/buttons/ConfirmButton';
 import { ErrorModal } from '../../components/modals/ErrorModal';
 import api from '../../services/axiosInstance';
 import { getUserFromToken } from '../../utils/auth';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 export const GerenciarPerfil = () => {
     const [perfil, setPerfil] = useState({
@@ -27,6 +29,10 @@ export const GerenciarPerfil = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalMessage, setModalMessage] = useState('');
+
+    // Estados para controlar a visibilidade da senha
+    const [showSenhaAtual, setShowSenhaAtual] = useState(false);
+    const [showNovaSenha, setShowNovaSenha] = useState(false);
 
     const user = getUserFromToken();
     const isInitialRender = useRef(true);
@@ -151,6 +157,16 @@ export const GerenciarPerfil = () => {
         }
     }
 
+    // Função para alternar a visibilidade da senha atual
+    const toggleShowSenhaAtual = () => {
+        setShowSenhaAtual((prev) => !prev);
+    };
+
+    // Função para alternar a visibilidade da nova senha
+    const toggleShowNovaSenha = () => {
+        setShowNovaSenha((prev) => !prev);
+    };
+
     return (
         <div className="flex flex-col items-center bg-[#f9fafb] min-h-screen p-4">
             <h1 className="text-2xl font-bold text-[#111827] mb-6">Gerenciar Perfil</h1>
@@ -174,23 +190,49 @@ export const GerenciarPerfil = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Senha Atual</label>
-                        <input
-                            type="password"
-                            name="senhaAtual"
-                            value={perfil.senhaAtual}
-                            onChange={handleChange}
-                            className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showSenhaAtual ? 'text' : 'password'}
+                                name="senhaAtual"
+                                value={perfil.senhaAtual}
+                                onChange={handleChange}
+                                className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
+                            />
+                            <button
+                                onClick={toggleShowSenhaAtual}
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                            >
+                                {showSenhaAtual ? (
+                                    <VisibilityOffIcon sx={{ color: '#6B7280' }} />
+                                ) : (
+                                    <VisibilityIcon sx={{ color: '#6B7280' }} />
+                                )}
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Nova Senha</label>
-                        <input
-                            type="password"
-                            name="novaSenha"
-                            value={perfil.novaSenha}
-                            onChange={handleChange}
-                            className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showNovaSenha ? 'text' : 'password'}
+                                name="novaSenha"
+                                value={perfil.novaSenha}
+                                onChange={handleChange}
+                                className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
+                            />
+                            <button
+                                onClick={toggleShowNovaSenha}
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                            >
+                                {showNovaSenha ? (
+                                    <VisibilityOffIcon sx={{ color: '#6B7280' }} />
+                                ) : (
+                                    <VisibilityIcon sx={{ color: '#6B7280' }} />
+                                )}
+                            </button>
+                        </div>
                     </div>
                     <button
                         type="button"
