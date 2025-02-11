@@ -7,8 +7,8 @@ import br.com.api.code_and_shave_back.modelo.BarbeiroModelo;
 import br.com.api.code_and_shave_back.servico.BarbeiroServico;
 
 @RestController
-@RequestMapping("/barbeiros") // 🔹 Define o prefixo das rotas
-@CrossOrigin(origins = "*") // 🔹 Permite que o frontend acesse a API
+@RequestMapping("/barbeiros")
+@CrossOrigin(origins = "*") // 🔹 Permite requisições do frontend
 public class BarbeiroControle {
 
     @Autowired
@@ -20,24 +20,13 @@ public class BarbeiroControle {
         return barbeiroServico.listarTodos();
     }
 
-    // 🔹 Cadastrar um novo barbeiro ou atualizar um existente
+    // 🔹 Cadastrar ou atualizar barbeiro
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastrarOuAtualizar(@RequestBody BarbeiroModelo barbeiro) {
         return barbeiroServico.cadastrarOuAtualizar(barbeiro);
     }
 
-    // 🔹 Atualizar dados do barbeiro existente
-    @PutMapping("/atualizar")
-    public ResponseEntity<?> atualizar(@RequestBody BarbeiroModelo barbeiro) {
-        return barbeiroServico.cadastrarOuAtualizar(barbeiro);
-    }
-
-    // 🔹 Buscar barbeiros por especialidade
-    @GetMapping("/especialidade/{especialidade}")
-    public ResponseEntity<?> buscarPorEspecialidade(@PathVariable String especialidade) {
-        return barbeiroServico.buscarPorEspecialidade(especialidade);
-    }
-
+    // 🔹 Remover barbeiro por ID
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
         return barbeiroServico.removerBarbeiro(id);

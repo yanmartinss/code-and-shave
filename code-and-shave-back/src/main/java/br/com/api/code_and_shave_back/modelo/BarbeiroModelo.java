@@ -13,23 +13,23 @@ public class BarbeiroModelo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idbarbeiro") // 🔹 Isso garante que a coluna no banco seja 'id'
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
-    private String telefone;
+    @Column(nullable = false)
+    private String phone;
 
+    // Relação muitos-para-muitos com serviços (especialidades do barbeiro)
     @ManyToMany
     @JoinTable(
-        name = "barbeiro_servicos",
+        name = "barbeiro_servico",
         joinColumns = @JoinColumn(name = "barbeiro_id"),
         inverseJoinColumns = @JoinColumn(name = "servico_id")
     )
-    private List<ServicoModelo> especialidades;
+    private List<ServicoModelo> specialties;
 }
