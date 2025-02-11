@@ -10,19 +10,14 @@ import EventIcon from '@mui/icons-material/Event';
 import GroupIcon from '@mui/icons-material/Group';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../services/axiosInstance';
+import { getUserFromToken } from '../../utils/auth'; // A função para pegar os dados do token
 
 export const HomeBarbearia = () => {
   const slides = [slide1, slide2, slide3, slide4];
 
-  // 🔹 Recupera os dados do usuário do localStorage
-  const usuarioSalvo = localStorage.getItem('usuario');
-
-  // 🔹 Verifica se `usuarioSalvo` não é null ou um valor inválido antes de usar JSON.parse()
-  const usuario = usuarioSalvo && usuarioSalvo.startsWith("{") ? JSON.parse(usuarioSalvo) : null;
-
-  // 🔹 Garante que `barberShopName` pega o nome correto da barbearia
-  const barberShopName = usuario && usuario.nome ? usuario.nome : 'Barbearia';
-
+  // 🔹 Recupera o usuário do token
+  const user = getUserFromToken();
+  const barberShopName = user && user.nome ? user.nome : 'Barbearia';  // Usando o nome do token
 
   const [agendamentos, setAgendamentos] = useState([]);
   const [error, setError] = useState('');
