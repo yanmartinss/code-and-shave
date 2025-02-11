@@ -16,9 +16,16 @@ export const BarbeariaRoute = ({ children }) => {
     const usuario = getUserFromToken();
     console.log("Usuário no BarbeariaRoute:", usuario); // 🔹 Verifica se o usuário está sendo identificado
 
-    if (!isTokenValid() || !usuario || usuario.tipo !== "barbearia") {
+    const tokenValido = isTokenValid();
+
+    if (tokenValido === null) {
+        return <div>Carregando...</div>; // 🟢 Aguarda a verificação antes de redirecionar
+    }
+
+    if (!tokenValido || !usuario || usuario.tipo !== "barbearia") {
         return <Navigate to="/" replace />;
     }
+
 
     return children;
 }

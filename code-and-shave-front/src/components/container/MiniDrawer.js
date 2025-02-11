@@ -63,7 +63,7 @@ function ResponsiveDrawer(props) {
         logout();
         setLogoutModalOpen(false);
         navigate('/');
-    };
+    }
 
     const menuItems = () => {
         switch (usuarioLogado?.tipo) {

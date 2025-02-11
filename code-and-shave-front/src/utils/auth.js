@@ -22,8 +22,8 @@ export const getUserFromToken = () => {
 // 🔹 Verifica se o token é válido e não expirou
 export const isTokenValid = () => {
     const user = getUserFromToken();
-    if (!user || !user.exp) return false;
+    if (!user || !user.exp) return false; // 🔄 Retorna `false` se não houver token
 
     const currentTime = Date.now() / 1000;
-    return user.exp > currentTime; // Retorna `true` se o token ainda não expirou
+    return user.exp > currentTime; // ✅ Só retorna `true` se for válido
 }

@@ -37,7 +37,7 @@ function App() {
           <Route path="/cadastro-cliente" element={<CadastroCliente />} />
 
           {/* 🔹 Rotas Protegidas para Usuários Autenticados */}
-          {isTokenValid() ? (
+          {isTokenValid() !== false ? (  // 🟢 Só bloqueia se for explicitamente inválido
             <Route element={<MiniDrawer />}>
               {/* 🚀 Rotas para CLIENTES */}
               <Route path="/home-cliente" element={<ClienteRoute><HomeCliente /></ClienteRoute>} />
