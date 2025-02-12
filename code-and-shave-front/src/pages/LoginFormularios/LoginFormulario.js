@@ -59,12 +59,15 @@ export const LoginFormulario = () => {
                 localStorage.setItem("token", token);
     
                 const usuarioDecodificado = jwtDecode(token);
-                console.log("Usuário decodificado:", usuarioDecodificado.tipo);
+                console.log("Usuário decodificado:", usuarioDecodificado);
     
-                // ✅ Atualiza o usuário antes de navegar
+                // 🔹 Salva usuário no localStorage para garantir que ele seja lido globalmente
+                localStorage.setItem("usuario", JSON.stringify(usuarioDecodificado));
+    
+                // 🔹 Atualiza o estado para refletir o usuário logado
                 setUsuarioLogado(usuarioDecodificado);
     
-                // ✅ Usa um `setTimeout()` curto para garantir que o estado seja atualizado
+                // 🔹 Aguarda um curto tempo para garantir a atualização do estado
                 setTimeout(() => {
                     if (usuarioDecodificado.tipo === "cliente") {
                         navigate("/home-cliente");
@@ -74,8 +77,12 @@ export const LoginFormulario = () => {
                         console.error("Tipo de usuário desconhecido:", usuarioDecodificado.tipo);
                         setModalError("Tipo de usuário inválido.");
                         setModalOpen(true);
+                        return;
                     }
-                }, 100); // Pequeno atraso para garantir a atualização do estado
+    
+                    // 🔄 **Força recarregamento da página após o redirecionamento**
+                    window.location.reload();
+                }, 100);
             }
         } catch (error) {
             console.error("Erro ao fazer login:", error);
