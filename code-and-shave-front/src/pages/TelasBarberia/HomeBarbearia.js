@@ -17,11 +17,11 @@ export const HomeBarbearia = () => {
   const [agendamentos, setAgendamentos] = useState([]);
   const [error, setError] = useState("");
 
-  // 🔹 Obtém e decodifica o usuário a partir do token
+  
   const usuario = isTokenValid() ? getUserFromToken() : null;
-  console.log("Usuário decodificado:", usuario); // Exibe os dados do usuário no console
+  console.log("Usuário decodificado:", usuario); 
 
-  // 🔹 Define o nome da barbearia
+  
   const barberShopName = usuario?.nome || "Barbearia";
 
   const fetchAgendamentos = async () => {

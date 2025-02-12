@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import { getUserFromToken, isTokenValid } from './utils/auth'; // 🔹 Certifique-se de importar essas funções
+import { getUserFromToken, isTokenValid } from './utils/auth'; 
 
 import { CadastroCliente } from './pages/LoginFormularios/CadastroCliente';
 import { LoginFormulario } from './pages/LoginFormularios/LoginFormulario';

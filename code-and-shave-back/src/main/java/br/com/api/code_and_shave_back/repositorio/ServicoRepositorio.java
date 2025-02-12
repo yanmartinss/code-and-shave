@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ServicoRepositorio extends CrudRepository<ServicoModelo, Long> {
-    List<ServicoModelo> findByNome(String nome); // Buscar serviços pelo nome
+    List<ServicoModelo> findByNome(String nome); 
     
     @Modifying
     @Query(value = "DELETE FROM barbeiro_servico WHERE servico_id = :id", nativeQuery = true)

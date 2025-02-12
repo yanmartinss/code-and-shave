@@ -36,10 +36,10 @@ public class LoginServico {
             return ResponseEntity.status(401).body("Senha incorreta");
         }
 
-        // 🔹 Gera o token contendo todos os dados do usuário (exceto senha)
+        
         String token = jwtUtil.generateToken(usuario);
 
-        // 🔹 Retorna os dados do usuário, exceto a senha
+        //  Retorna os dados do usuário, exceto a senha
         Map<String, Object> usuarioData = new HashMap<>();
         usuarioData.put("id", usuario.getID());
         usuarioData.put("nome", usuario.getNOME());
@@ -48,7 +48,7 @@ public class LoginServico {
         usuarioData.put("tipo", usuario.getTIPO());
         usuarioData.put("ativo", usuario.getAtivo());
 
-        // 🔹 Retorna o token e os dados do usuário
+        //  Retorna o token e os dados do usuário
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("usuario", usuarioData);

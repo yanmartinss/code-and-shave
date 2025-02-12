@@ -16,7 +16,7 @@ public class ServicoServico {
     @Autowired
     private ServicoRepositorio servicoRepositorio;
 
-    // 🔹 Listar todos os serviços cadastrados
+    
     public ResponseEntity<?> listarTodos() {
         List<ServicoModelo> servicos = (List<ServicoModelo>) servicoRepositorio.findAll();
 
@@ -27,7 +27,7 @@ public class ServicoServico {
         return ResponseEntity.ok(servicos);
     }
 
-    // 🔹 Cadastrar ou atualizar serviço com validações
+    
     public ResponseEntity<?> cadastrarOuAtualizar(ServicoModelo servico) {
         if (servico.getNome() == null || servico.getNome().trim().isEmpty()) {
             return ResponseEntity.badRequest().body("{\"message\": \"O nome do serviço é obrigatório!\"}");
@@ -54,7 +54,7 @@ public class ServicoServico {
         return new ResponseEntity<>(servicoSalvo, servico.getId() == null ? HttpStatus.CREATED : HttpStatus.OK);
     }
 
-    // 🔹 Remover um serviço pelo ID
+   
     @Transactional
     public ResponseEntity<?> removerServico(Long id) {
         if (!servicoRepositorio.existsById(id)) {
@@ -62,10 +62,10 @@ public class ServicoServico {
         }
 
         try {
-            // 🔹 Removendo relações com barbeiros antes de excluir o serviço
+            
             servicoRepositorio.removerVinculosComBarbeiros(id);
 
-            // 🔹 Agora podemos excluir o serviço
+            
             servicoRepositorio.deleteById(id);
             return ResponseEntity.ok("{\"message\": \"Serviço removido com sucesso!\"}");
         } catch (Exception e) {

@@ -38,7 +38,7 @@ export const RecuperarSenha = () => {
 
             let message = 'Se este email estiver cadastrado, você receberá um link para redefinir sua senha.';
 
-            // Verifica se a resposta é JSON antes de tentar converter
+            
             const contentType = response.headers.get("content-type");
             if (contentType && contentType.includes("application/json")) {
                 const data = await response.json();

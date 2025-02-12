@@ -61,13 +61,13 @@ export const LoginFormulario = () => {
                 const usuarioDecodificado = jwtDecode(token);
                 console.log("Usuário decodificado:", usuarioDecodificado);
     
-                // 🔹 Salva usuário no localStorage para garantir que ele seja lido globalmente
+                //  Salva usuário no localStorage para garantir que ele seja lido globalmente
                 localStorage.setItem("usuario", JSON.stringify(usuarioDecodificado));
     
-                // 🔹 Atualiza o estado para refletir o usuário logado
+                //  Atualiza o estado para refletir o usuário logado
                 setUsuarioLogado(usuarioDecodificado);
     
-                // 🔹 Aguarda um curto tempo para garantir a atualização do estado
+                //  Aguarda um curto tempo para garantir a atualização do estado
                 setTimeout(() => {
                     if (usuarioDecodificado.tipo === "cliente") {
                         navigate("/home-cliente");
@@ -80,7 +80,7 @@ export const LoginFormulario = () => {
                         return;
                     }
     
-                    // 🔄 **Força recarregamento da página após o redirecionamento**
+                    //  **Força recarregamento da página após o redirecionamento**
                     window.location.reload();
                 }, 100);
             }

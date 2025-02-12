@@ -31,7 +31,7 @@ public class PasswordResetServico {
         UsuarioModelo usuario = usuarioRepositorio.findByEMAIL(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // 🔥 Verifica se já existe um token para este usuário
+        //  Verifica se já existe um token para este usuário
         PasswordResetToken existingToken = tokenRepositorio.findByUsuario(usuario);
         if (existingToken != null) {
             // Se já existe um token, apenas atualiza a expiração e reenvia o email
@@ -41,7 +41,7 @@ public class PasswordResetServico {
             return;
         }
 
-        // 🔥 Criar um novo token e salvar caso não exista um anterior
+        
         PasswordResetToken newToken = new PasswordResetToken(usuario);
         tokenRepositorio.save(newToken);
 
@@ -72,7 +72,7 @@ public class PasswordResetServico {
         usuario.setSENHA(new BCryptPasswordEncoder().encode(newPassword));
         usuarioRepositorio.save(usuario);
 
-        // 🔥 Deleta o token após redefinição de senha bem-sucedida
+        
         tokenRepositorio.delete(resetToken);
     }
 }
