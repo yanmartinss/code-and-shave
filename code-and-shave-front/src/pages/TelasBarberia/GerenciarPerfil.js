@@ -269,7 +269,7 @@ export const GerenciarPerfil = () => {
                         Alterar Senha
                     </button>
                     {/* Horários de funcionamento */}
-                    <div>
+                    {/* <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Horários de Funcionamento</label>
                         <div className="flex gap-2">
                             <select name="dia" value={novoHorario.dia} onChange={handleHorarioChange} className="outline-none shadow-md rounded-md p-2 text-gray-700">
@@ -293,7 +293,7 @@ export const GerenciarPerfil = () => {
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                    </div> */}
 
                     <ConfirmButton label="Salvar Alterações" />
                 </form>
