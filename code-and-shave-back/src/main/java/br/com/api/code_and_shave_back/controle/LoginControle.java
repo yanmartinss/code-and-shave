@@ -18,6 +18,6 @@ public class LoginControle {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioModelo usuario) {
-        return loginServico.login(usuario.getEMAIL(), usuario.getSENHA()); // Agora chamamos loginServico
+        return loginServico.login(usuario.getEMAIL(), usuario.getSENHA()); 
     }
 }

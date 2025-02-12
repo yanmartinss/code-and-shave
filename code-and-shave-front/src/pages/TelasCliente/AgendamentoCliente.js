@@ -11,33 +11,32 @@ export const AgendamentoCliente = () => {
     const [availableTimes, setAvailableTimes] = useState([]); 
     const [successMessage, setSuccessMessage] = useState(''); 
     const [errorMessage, setErrorMessage] = useState(''); 
-
-    // Busca os horários disponíveis no backend
+    
     const fetchAvailableTimes = async (date) => {
         if (!date) return;
 
         try {
             const response = await api.get(`/api/horarios-disponiveis`, {
-                params: { date: date.toISOString().split('T')[0] }, // Passa a data como parâmetro
+                params: { date: date.toISOString().split('T')[0] }, 
             });
 
-            setAvailableTimes(response.data); // Atualiza os horários disponíveis
+            setAvailableTimes(response.data); 
         } catch (error) {
             setErrorMessage('Não foi possível carregar os horários disponíveis. Tente novamente.');
             console.error('Erro ao buscar horários disponíveis:', error);
         }
     }
 
-    // Atualiza os horários disponíveis ao selecionar uma data
+    
     useEffect(() => {
         if (selectedDate) {
             fetchAvailableTimes(selectedDate);
         } else {
-            setAvailableTimes([]); // Limpa os horários se nenhuma data for selecionada
+            setAvailableTimes([]); 
         }
     }, [selectedDate]);
 
-    // Submete o agendamento ao backend
+    
     const handleSchedule = async (e) => {
         e.preventDefault();
 

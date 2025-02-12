@@ -4,26 +4,21 @@ import { getUserFromToken, isTokenValid, getToken } from "../utils/auth";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [usuarioLogado, setUsuarioLogado] = useState(null);
+    const [usuarioLogado, setUsuarioLogado] = useState(() => {
+        const token = getToken();
+        return token ? getUserFromToken() : null;
+    });
 
     useEffect(() => {
         const checkAuth = () => {
             const token = getToken();
-            console.log("📢 Token no AuthContext:", token);
-
             if (token && isTokenValid()) {
                 const user = getUserFromToken();
-                console.log("Usuário decodificado:", user); // Log para depuração
-                if (user) {
-                    console.log("✅ Usuário autenticado:", user);
-                    setUsuarioLogado(user);
-                } else {
-                    console.error("⚠ Erro ao extrair usuário do token!");
-                    logout();
-                }
+                setUsuarioLogado(user);
+                localStorage.setItem("usuario", JSON.stringify(user)); // 🔥 Garante que o localStorage seja atualizado
             } else {
-                console.warn("❌ Token inválido ou expirado");
-                logout();
+                setUsuarioLogado(null);
+                localStorage.removeItem("usuario"); // 🔥 Remove do localStorage caso esteja inválido
             }
         };
 

@@ -54,14 +54,35 @@ export const LoginFormulario = () => {
     
             if (response.status === 200) {
                 const { token } = response.data;
+                console.log("Token recebido:", token);
+    
                 localStorage.setItem("token", token);
+    
                 const usuarioDecodificado = jwtDecode(token);
+                console.log("Usuário decodificado:", usuarioDecodificado);
+    
+                //  Salva usuário no localStorage para garantir que ele seja lido globalmente
+                localStorage.setItem("usuario", JSON.stringify(usuarioDecodificado));
+    
+                //  Atualiza o estado para refletir o usuário logado
                 setUsuarioLogado(usuarioDecodificado);
-                if (usuarioDecodificado.tipo === "cliente") {
-                    navigate("/home-cliente");
-                } else if (usuarioDecodificado.tipo === "barbearia") {
-                    navigate("/home-barbearia");
-                }
+    
+                //  Aguarda um curto tempo para garantir a atualização do estado
+                setTimeout(() => {
+                    if (usuarioDecodificado.tipo === "cliente") {
+                        navigate("/home-cliente");
+                    } else if (usuarioDecodificado.tipo === "barbearia" || usuarioDecodificado.tipo === "admin") {
+                        navigate("/home-barbearia");
+                    } else {
+                        console.error("Tipo de usuário desconhecido:", usuarioDecodificado.tipo);
+                        setModalError("Tipo de usuário inválido.");
+                        setModalOpen(true);
+                        return;
+                    }
+    
+                    //  **Força recarregamento da página após o redirecionamento**
+                    window.location.reload();
+                }, 100);
             }
         } catch (error) {
             console.error("Erro ao fazer login:", error);

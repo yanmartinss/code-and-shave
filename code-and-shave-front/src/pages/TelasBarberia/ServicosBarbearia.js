@@ -8,7 +8,7 @@ export const ServicosBarbearia = () => {
     nome: "",
     descricao: "",
     preco: "",
-    duracao: "", // 🔹 Agora a duração está corretamente incluída
+    duracao: "", 
   });
 
   const [servicesList, setServicesList] = useState([]);
@@ -17,13 +17,13 @@ export const ServicosBarbearia = () => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("Erro");
 
-  // 🔹 Buscar serviços do backend
+  
   const fetchServices = async () => {
     try {
       const response = await api.get("/servicos/listar");
-      setServicesList(Array.isArray(response.data) ? response.data : []); // 🔹 Garante que seja um array
+      setServicesList(Array.isArray(response.data) ? response.data : []); 
     } catch (error) {
-      setServicesList([]); // 🔹 Se der erro, define como array vazio para evitar erro no .map()
+      setServicesList([]);
       setModalTitle("Erro ao Buscar Serviços");
       setError("Não foi possível carregar os serviços.");
       setIsErrorModalOpen(true);
@@ -35,7 +35,7 @@ export const ServicosBarbearia = () => {
     fetchServices();
   }, []);
 
-  // 🔹 Atualiza os campos do formulário
+  
   const handleChange = (e) => {
     let { name, value } = e.target;
     if (name === "preco") {
@@ -46,18 +46,18 @@ export const ServicosBarbearia = () => {
     setService({ ...service, [name]: value });
   };
 
-  // 🔹 Preenche os campos do formulário ao clicar em "Editar"
+  
   const handleEdit = (servico) => {
     setEditingService(servico);
     setService({
       nome: servico.nome,
       descricao: servico.descricao,
       preco: servico.preco,
-      duracao: servico.duracao, // 🔹 Mantém a duração ao editar
+      duracao: servico.duracao, 
     });
   };
 
-  // 🔹 Enviar dados ao backend para salvar ou atualizar serviço
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const serviceData = {
@@ -81,7 +81,7 @@ export const ServicosBarbearia = () => {
     }
   };
 
-  // 🔹 Remover um serviço pelo ID
+  
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Tem certeza que deseja remover este serviço?");
     if (!confirmDelete) return;
@@ -104,7 +104,7 @@ export const ServicosBarbearia = () => {
     }
   };
 
-  // 🔹 Fechar modal de erro
+  
   const handleCloseErrorModal = () => {
     setIsErrorModalOpen(false);
     setError(null);
@@ -139,7 +139,7 @@ export const ServicosBarbearia = () => {
         </form>
       </div>
 
-      {/* 🔹 Exibir serviços cadastrados */}
+      {/*  Exibir serviços cadastrados */}
       <div className="mt-10 w-[500px] p-6 bg-white shadow-lg rounded-xl">
         <h2 className="text-lg font-bold text-gray-800 mb-4">Serviços Cadastrados</h2>
         
@@ -174,7 +174,7 @@ export const ServicosBarbearia = () => {
           </ul>
         )}
       </div>
-      {/* 🔹 Modal de Erro/Sucesso */}
+      {/*  Modal de Erro/Sucesso */}
       <ErrorModal open={isErrorModalOpen} onClose={handleCloseErrorModal} title={modalTitle} message={error} />
     </div>
   );

@@ -24,7 +24,7 @@ public class BarbeiroModelo {
     @Column(nullable = false)
     private String phone;
 
-    // Relação muitos-para-muitos com serviços (especialidades do barbeiro)
+    
     @ManyToMany
     @JoinTable(
         name = "barbeiro_servico",

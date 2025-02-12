@@ -5,7 +5,7 @@ const api = axios.create({
     baseURL: "http://localhost:8080",
 });
 
-// Adiciona o token automaticamente em todas as requisições
+
 api.interceptors.request.use(
     (config) => {
         const token = getToken();

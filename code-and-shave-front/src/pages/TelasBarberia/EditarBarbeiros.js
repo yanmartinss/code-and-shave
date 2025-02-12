@@ -27,9 +27,9 @@ export const EditarBarbeiros = () => {
   const fetchServices = async () => {
     try {
       const response = await api.get("/servicos/listar");
-      setServicesList(Array.isArray(response.data) ? response.data : []); // 🔹 Garante que sempre seja um array
+      setServicesList(Array.isArray(response.data) ? response.data : []); 
     } catch (error) {
-      setServicesList([]); // 🔹 Se der erro, define como um array vazio
+      setServicesList([]); 
       setModalTitle("Erro ao Buscar Serviços");
       setError("Não foi possível carregar os serviços.");
       setIsErrorModalOpen(true);
@@ -43,7 +43,7 @@ export const EditarBarbeiros = () => {
       name: barbeiro.name,
       email: barbeiro.email,
       phone: barbeiro.phone,
-      specialties: barbeiro.specialties.map(s => s.id) // Mantém os serviços selecionados
+      specialties: barbeiro.specialties.map(s => s.id)
     });
   }  
 
@@ -59,19 +59,19 @@ export const EditarBarbeiros = () => {
     }
   };
 
-  // Atualiza os campos do barbeiro
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBarber({ ...barber, [name]: value });
   };
 
-  // Atualiza especialidades (serviços) do barbeiro
+ 
   const handleSpecialtyChange = (e) => {
     const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
     setBarber({ ...barber, specialties: selectedOptions.map(Number) });
   };
 
-  // Enviar os dados do barbeiro ao backend
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -85,21 +85,21 @@ export const EditarBarbeiros = () => {
     try {
       let response;
       if (editingBarber) {
-        // Atualizar barbeiro
+    
         response = await api.put(`/barbeiros/atualizar/${editingBarber.id}`, barberData);
         setModalTitle("Sucesso");
         setError("Barbeiro atualizado com sucesso!");
       } else {
-        // Cadastrar novo barbeiro
+      
         response = await api.post("/barbeiros/cadastrar", barberData);
         setModalTitle("Sucesso");
         setError("Barbeiro cadastrado com sucesso!");
       }
   
       setIsErrorModalOpen(true);
-      setEditingBarber(null); // Reseta edição
+      setEditingBarber(null); 
       setBarber({ name: "", email: "", phone: "", specialties: [] });
-      fetchBarbers(); // Atualiza a lista
+      fetchBarbers(); 
     } catch (error) {
       setModalTitle("Erro");
       setError("Erro ao salvar barbeiro.");
@@ -107,7 +107,7 @@ export const EditarBarbeiros = () => {
     }
   }  
 
-  // 🔹 Remover um barbeiro pelo ID
+ 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Tem certeza que deseja remover este barbeiro?");
     if (!confirmDelete) return;
@@ -117,7 +117,7 @@ export const EditarBarbeiros = () => {
       setModalTitle("Sucesso");
       setError("Barbeiro removido com sucesso!");
       setIsErrorModalOpen(true);
-      fetchBarbers(); // Atualiza a lista após remoção
+      fetchBarbers();
     } catch (error) {
       setModalTitle("Erro ao Remover");
       setError("Erro ao remover o barbeiro.");
@@ -126,7 +126,7 @@ export const EditarBarbeiros = () => {
     }
   };
 
-  // 🔹 Fechar modal de erro
+
   const handleCloseErrorModal = () => {
     setIsErrorModalOpen(false);
     setError(null);
@@ -186,7 +186,7 @@ export const EditarBarbeiros = () => {
                   </option>
                 ))
               ) : (
-                <option disabled>Nenhum serviço disponível</option> // 🔹 Caso não haja serviços
+                <option disabled>Nenhum serviço disponível</option> 
               )}
             </select>
             <p className="text-gray-600 text-sm">Segure CTRL (Windows) ou CMD (Mac) para selecionar vários.</p>
@@ -197,7 +197,7 @@ export const EditarBarbeiros = () => {
         </form>
       </div>
 
-      {/* 🔹 Listagem de Barbeiros Cadastrados */}
+      {}
       <div className="mt-10 w-[500px] p-6 bg-white shadow-lg rounded-xl">
         <h2 className="text-lg font-bold text-gray-800 mb-4">Barbeiros Cadastrados</h2>
         {barbersList.length === 0 ? (
@@ -243,7 +243,7 @@ export const EditarBarbeiros = () => {
       </ul>
         )}
       </div>
-      {/* 🔹 Modal de Erro/Sucesso */}
+      {/*  Modal de Erro/Sucesso */}
       <ErrorModal open={isErrorModalOpen} onClose={handleCloseErrorModal} title={modalTitle} message={error} />
     </div>
   );

@@ -8,25 +8,25 @@ import br.com.api.code_and_shave_back.servico.ServicoServico;
 
 @RestController
 @RequestMapping("/servicos")
-@CrossOrigin(origins = "http://localhost:3000") // 🔹 Permite requisições do frontend
+@CrossOrigin(origins = "http://localhost:3000") 
 public class ServicoControle {
 
     @Autowired
     private ServicoServico servicoServico;
 
-    // 🔹 Listar todos os serviços
+   
     @GetMapping("/listar")
     public ResponseEntity<?> listarTodos() {
         return servicoServico.listarTodos();
     }
 
-    // 🔹 Cadastrar ou atualizar serviço
+    //  Cadastrar ou atualizar serviço
     @PostMapping("/salvar")
     public ResponseEntity<?> cadastrarOuAtualizar(@RequestBody ServicoModelo servico) {
         return servicoServico.cadastrarOuAtualizar(servico);
     }
 
-    // 🔹 Remover serviço por ID
+    //  Remover serviço por ID
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
         return servicoServico.removerServico(id);

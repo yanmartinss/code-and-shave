@@ -22,7 +22,7 @@ public class BarbeiroServico {
     @Autowired
     private ServicoRepositorio servicoRepositorio;
 
-    // 🔹 Listar todos os barbeiros
+    //  Listar todos os barbeiros
     public ResponseEntity<?> listarTodos() {
         List<BarbeiroModelo> barbeiros = (List<BarbeiroModelo>) barbeiroRepositorio.findAll();
 
@@ -33,7 +33,7 @@ public class BarbeiroServico {
         return ResponseEntity.ok(barbeiros);
     }
 
-    // 🔹 Cadastrar ou atualizar barbeiro
+    //  Cadastrar ou atualizar barbeiro
     @Transactional
     public ResponseEntity<?> cadastrarOuAtualizar(BarbeiroModelo barbeiro) {
         if (barbeiro.getName() == null || barbeiro.getName().trim().isEmpty()) {
@@ -46,19 +46,19 @@ public class BarbeiroServico {
             return ResponseEntity.badRequest().body("{\"message\": \"O telefone do barbeiro é obrigatório!\"}");
         }
 
-        // 🔹 Verifica se o e-mail já está cadastrado
+        //  Verifica se o e-mail já está cadastrado
         Optional<BarbeiroModelo> existingByEmail = barbeiroRepositorio.findByEmail(barbeiro.getEmail());
         if (existingByEmail.isPresent() && (barbeiro.getId() == null || !existingByEmail.get().getId().equals(barbeiro.getId()))) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\": \"Este e-mail já está cadastrado!\"}");
         }
 
-        // 🔹 Verifica se o telefone já está cadastrado
+        // Verifica se o telefone já está cadastrado
         Optional<BarbeiroModelo> existingByPhone = barbeiroRepositorio.findByPhone(barbeiro.getPhone());
         if (existingByPhone.isPresent() && (barbeiro.getId() == null || !existingByPhone.get().getId().equals(barbeiro.getId()))) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\": \"Este telefone já está cadastrado!\"}");
         }
 
-        // 🔹 Verifica se os serviços existem antes de salvar
+        //  Verifica se os serviços existem antes de salvar
         if (barbeiro.getSpecialties() != null && !barbeiro.getSpecialties().isEmpty()) {
             List<Long> serviceIds = barbeiro.getSpecialties().stream().map(s -> s.getId()).toList();
             List<ServicoModelo> services = (List<ServicoModelo>) servicoRepositorio.findAllById(serviceIds);
@@ -69,7 +69,7 @@ public class BarbeiroServico {
         return new ResponseEntity<>(barbeiroSalvo, barbeiro.getId() == null ? HttpStatus.CREATED : HttpStatus.OK);
     }
 
-    // 🔹 Remover barbeiro pelo ID
+    //  Remover barbeiro pelo ID
     public ResponseEntity<?> removerBarbeiro(Long id) {
         Optional<BarbeiroModelo> barbeiro = barbeiroRepositorio.findById(id);
         if (barbeiro.isEmpty()) {
@@ -80,7 +80,7 @@ public class BarbeiroServico {
         return ResponseEntity.ok("{\"message\": \"Barbeiro removido com sucesso!\"}");
     }
 
-    // 🔹 Atualizar barbeiro existente
+    //  Atualizar barbeiro existente
     @Transactional
     public ResponseEntity<?> atualizarBarbeiro(Long id, BarbeiroModelo barbeiroAtualizado) {
         Optional<BarbeiroModelo> optionalBarbeiro = barbeiroRepositorio.findById(id);
@@ -94,7 +94,7 @@ public class BarbeiroServico {
         barbeiroExistente.setEmail(barbeiroAtualizado.getEmail());
         barbeiroExistente.setPhone(barbeiroAtualizado.getPhone());
 
-        // Atualiza especialidades
+        
         if (barbeiroAtualizado.getSpecialties() != null && !barbeiroAtualizado.getSpecialties().isEmpty()) {
             List<Long> serviceIds = barbeiroAtualizado.getSpecialties().stream().map(ServicoModelo::getId).toList();
             List<ServicoModelo> services = (List<ServicoModelo>) servicoRepositorio.findAllById(serviceIds);

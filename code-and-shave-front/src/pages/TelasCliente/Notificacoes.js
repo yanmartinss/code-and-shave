@@ -7,14 +7,14 @@ export const Notificacoes = () => {
     const [historicNotifications, setHistoricNotifications] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
-    // Busca notificações recentes e históricas do backend
+    
     const fetchNotifications = async () => {
         try {
-            // Requisição para notificações recentes
+            
             const recentResponse = await api.get('/api/notificacoes-recentes');
             setRecentNotifications(recentResponse.data);
 
-            // Requisição para histórico de notificações
+            
             const historicResponse = await api.get('/api/notificacoes-historico');
             setHistoricNotifications(historicResponse.data);
         } catch (error) {
@@ -23,7 +23,7 @@ export const Notificacoes = () => {
         }
     };
 
-    // Carrega notificações ao montar o componente
+    
     useEffect(() => {
         fetchNotifications();
     }, []);
