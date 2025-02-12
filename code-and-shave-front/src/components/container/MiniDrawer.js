@@ -118,7 +118,6 @@ function ResponsiveDrawer(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div" sx={{ fontSize: '24px', paddingRight: '10px', textTransform: 'uppercase', fontFamily: 'open sans' }}>
-                        {usuarioLogado?.nome || 'Usuário'}
                     </Typography>
                 </Toolbar>
             </AppBar>

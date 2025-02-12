@@ -5,6 +5,7 @@ import api from '../../services/axiosInstance';
 import { getUserFromToken } from '../../utils/auth';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const GerenciarPerfil = () => {
     const [perfil, setPerfil] = useState({
@@ -29,6 +30,7 @@ export const GerenciarPerfil = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalMessage, setModalMessage] = useState('');
+    const { usuarioLogado, setUsuarioLogado } = useAuth();
 
     // Estados para controlar a visibilidade da senha
     const [showSenhaAtual, setShowSenhaAtual] = useState(false);
@@ -94,15 +96,12 @@ export const GerenciarPerfil = () => {
     
         const dadosAtualizados = { ...perfil };
     
-        // Verifica se a nova senha foi preenchida, se não, mantém a senha existente
         if (!perfil.novaSenha.trim()) {
-            // Não envia a nova senha se ela estiver em branco
             delete dadosAtualizados.novaSenha;
         }
     
-        // Verifica se há horários adicionados antes de enviar
         if (perfil.horariosFuncionamento.length === 0) {
-            delete dadosAtualizados.horariosFuncionamento; // Remove se estiver vazio
+            delete dadosAtualizados.horariosFuncionamento;
         }
     
         console.log("📢 Enviando para o backend:", JSON.stringify(dadosAtualizados, null, 2));
@@ -113,6 +112,18 @@ export const GerenciarPerfil = () => {
                 setModalTitle('Perfil atualizado');
                 setModalMessage('Suas alterações foram salvas com sucesso.');
                 setModalOpen(true);
+
+                // ✅ Atualiza o estado global do usuário e salva no localStorage
+                const usuarioAtualizado = {
+                    ...usuarioLogado,
+                    nome: dadosAtualizados.nome,
+                    telefone: dadosAtualizados.telefone,
+                    endereco: dadosAtualizados.endereco,
+                    descricao: dadosAtualizados.descricao,
+                };
+
+                setUsuarioLogado(usuarioAtualizado);
+                localStorage.setItem("usuario", JSON.stringify(usuarioAtualizado)); // 🔥 Salva no localStorage
             }
         } catch (error) {
             console.error('❌ Erro ao atualizar perfil:', error);
@@ -120,7 +131,7 @@ export const GerenciarPerfil = () => {
             setModalMessage(error.response?.data?.mensagem || 'Ocorreu um erro ao tentar salvar os dados.');
             setModalOpen(true);
         }
-    }          
+    }
 
     const handleCloseModal = () => {
         setModalOpen(false);
@@ -160,12 +171,12 @@ export const GerenciarPerfil = () => {
     // Função para alternar a visibilidade da senha atual
     const toggleShowSenhaAtual = () => {
         setShowSenhaAtual((prev) => !prev);
-    };
+    }
 
     // Função para alternar a visibilidade da nova senha
     const toggleShowNovaSenha = () => {
         setShowNovaSenha((prev) => !prev);
-    };
+    }
 
     return (
         <div className="flex flex-col items-center bg-[#f9fafb] min-h-screen p-4">
