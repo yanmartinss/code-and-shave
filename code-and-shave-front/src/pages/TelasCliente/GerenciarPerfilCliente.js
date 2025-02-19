@@ -8,26 +8,18 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-export const GerenciarPerfil = () => {
+export const GerenciarPerfilCliente = () => {
     const [perfil, setPerfil] = useState({
         nome: '',
-        email: '',
+        email: '', // Email será preenchido automaticamente
         telefone: '',
         endereco: '',
         descricao: '',
         senhaAtual: '',
         novaSenha: '',
         tipo: '',
-        horariosFuncionamento: []
     });
 
-    const [novoHorario, setNovoHorario] = useState({
-        dia: 'segunda',
-        abertura: '',
-        fechamento: ''
-    });
-
-    const [isEditing, setIsEditing] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalMessage, setModalMessage] = useState('');
@@ -47,14 +39,11 @@ export const GerenciarPerfil = () => {
 
             setPerfil({
                 nome: user.nome || '',
-                email: user.sub || '',
+                email: user.sub || '', // Preenche o email do token
                 telefone: formatarTelefone(user.telefone || ''),
-                endereco: user.endereco || '',
-                descricao: user.descricao || '',
                 senhaAtual: '',
                 novaSenha: '',
                 tipo: user.tipo || '',
-                horariosFuncionamento: user.horarios_funcionamento || []
             });
         }
     }, [user]);
@@ -96,34 +85,6 @@ export const GerenciarPerfil = () => {
         }
     };
 
-    const handleHorarioChange = (e) => {
-        const { name, value } = e.target;
-        setNovoHorario((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handleAddHorario = () => {
-        if (!novoHorario.abertura || !novoHorario.fechamento) {
-            setModalTitle('Erro');
-            setModalMessage('Preencha os horários antes de adicionar.');
-            setModalOpen(true);
-            return;
-        }
-
-        setPerfil((prev) => ({
-            ...prev,
-            horariosFuncionamento: [...prev.horariosFuncionamento, novoHorario]
-        }));
-
-        setNovoHorario({ dia: 'segunda', abertura: '', fechamento: '' });
-    };
-
-    const handleDeleteHorario = (index) => {
-        setPerfil((prev) => ({
-            ...prev,
-            horariosFuncionamento: prev.horariosFuncionamento.filter((_, i) => i !== index)
-        }));
-    };
-
     const handleSave = async (e) => {
         e.preventDefault();
 
@@ -138,10 +99,10 @@ export const GerenciarPerfil = () => {
         const dadosAtualizados = {
             id: usuarioLogado.id,
             nome: perfil.nome,
-            email: perfil.email,
+            email: perfil.email, // Email já está preenchido
             telefone: limparTelefone(perfil.telefone), // Remove formatação antes de salvar
-            endereco: perfil.endereco,
-            descricao: perfil.descricao,
+            endereco: perfil.tipo === 'barbearia' ? perfil.endereco : '',
+            descricao: perfil.tipo === 'barbearia' ? perfil.descricao : '',
             tipo: perfil.tipo,
         };
     
@@ -158,7 +119,7 @@ export const GerenciarPerfil = () => {
         } catch (error) {
             console.error('❌ Erro ao atualizar perfil:', error);
             setModalTitle('Erro ao salvar');
-            setModalMessage('Ocorreu um erro ao tentar salvar os dados.');
+            setModalMessage(error.response?.data?.erro || 'Ocorreu um erro ao tentar salvar os dados.');
             setModalOpen(true);
         }
     };
@@ -171,7 +132,7 @@ export const GerenciarPerfil = () => {
 
     const handleAlterarSenha = async () => {
         const dadosSenha = {
-            email: user.sub,
+            email: user.sub, // Usa o email do token
             senhaAtual: perfil.senhaAtual,
             novaSenha: perfil.novaSenha
         };
@@ -196,25 +157,16 @@ export const GerenciarPerfil = () => {
         }
     };
 
-    const toggleShowSenhaAtual = () => {
-        setShowSenhaAtual((prev) => !prev);
-    };
-
-    const toggleShowNovaSenha = () => {
-        setShowNovaSenha((prev) => !prev);
-    };
-
     return (
         <div className="flex flex-col items-center bg-[#f9fafb] min-h-screen p-4">
             <h1 className="text-2xl font-bold text-[#111827] mb-6">Gerenciar Perfil</h1>
             <div className="w-full max-w-4xl bg-white p-6 shadow-md rounded-lg">
                 <form onSubmit={handleSave} className="flex flex-col gap-6">
-                    {/* Campos do formulário */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Nome</label>
                         <input type="text" name="nome" value={perfil.nome} onChange={handleChange} className="outline-none shadow-md rounded-md p-2 w-full text-gray-700" />
                     </div>
-                    <div>
+                    {/* <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input
                             type="email"
@@ -222,8 +174,9 @@ export const GerenciarPerfil = () => {
                             value={perfil.email}
                             onChange={handleChange}
                             className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
+                            readOnly // Impede que o usuário edite o email
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
                         <input
@@ -235,77 +188,38 @@ export const GerenciarPerfil = () => {
                             className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Endereço</label>
-                        <input type="text" name="endereco" value={perfil.endereco} onChange={handleChange} className="outline-none shadow-md rounded-md p-2 w-full text-gray-700" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
-                        <textarea name="descricao" value={perfil.descricao} onChange={handleChange} rows="3" className="outline-none shadow-md rounded-md p-2 w-full text-gray-700" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Senha Atual</label>
-                        <div className="relative">
-                            <input
-                                type={showSenhaAtual ? 'text' : 'password'}
-                                name="senhaAtual"
-                                value={perfil.senhaAtual}
-                                onChange={handleChange}
-                                className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
-                            />
-                            <button
-                                onClick={toggleShowSenhaAtual}
-                                type="button"
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-                            >
-                                {showSenhaAtual ? (
-                                    <VisibilityOffIcon sx={{ color: '#6B7280' }} />
-                                ) : (
-                                    <VisibilityIcon sx={{ color: '#6B7280' }} />
-                                )}
-                            </button>
+
+                    {/* <div className="flex flex-col md:flex-row gap-4">
+                        <div className="w-full">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Senha Atual</label>
+                            <div className="relative">
+                                <input
+                                    type={showSenhaAtual ? 'text' : 'password'}
+                                    name="senhaAtual"
+                                    value={perfil.senhaAtual}
+                                    onChange={handleChange}
+                                    className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
+                                />
+                                <button
+                                    onClick={() => setShowSenhaAtual(!showSenhaAtual)}
+                                    type="button"
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                                >
+                                    {showSenhaAtual ? <VisibilityOffIcon sx={{ color: '#6B7280' }} /> : <VisibilityIcon sx={{ color: '#6B7280' }} />}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Nova Senha</label>
-                        <div className="relative">
-                            <input
-                                type={showNovaSenha ? 'text' : 'password'}
-                                name="novaSenha"
-                                value={perfil.novaSenha}
-                                onChange={handleChange}
-                                className="outline-none shadow-md rounded-md p-2 w-full text-gray-700"
-                            />
-                            <button
-                                onClick={toggleShowNovaSenha}
-                                type="button"
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-                            >
-                                {showNovaSenha ? (
-                                    <VisibilityOffIcon sx={{ color: '#6B7280' }} />
-                                ) : (
-                                    <VisibilityIcon sx={{ color: '#6B7280' }} />
-                                )}
-                            </button>
-                        </div>
-                    </div>
+                    </div> */}
+
                     <div className="flex flex-col md:flex-row gap-4 w-full">
-                        <button type="button" onClick={handleAlterarSenha} className="w-full bg-green-500 text-white py-2 px-4 rounded-md text-center">
+                        {/* <button type="button" onClick={handleAlterarSenha} className="w-full bg-green-500 text-white py-2 px-4 rounded-md text-center">
                             Alterar Senha
-                        </button>
+                        </button> */}
                         <ConfirmButton label="Salvar Alterações" className="w-full" />
                     </div>
                 </form>
             </div>
-            {/* Modal de redirecionamento */}
-            <ErrorModal
-                open={redirectModalOpen}
-                onClose={() => setRedirectModalOpen(false)}
-                title="Redirecionando..."
-                message="Você será redirecionado para fazer login novamente em 3 segundos."
-            />
 
-            {/* Modal de erro/sucesso */}
             <ErrorModal open={isModalOpen} onClose={handleCloseModal} title={modalTitle} message={modalMessage} />
         </div>
     );

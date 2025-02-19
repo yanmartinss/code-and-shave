@@ -143,7 +143,7 @@ export const RedefinirSenha = () => {
                     </div>
                 </div>
             </div>
-            <ErrorModal open={isModalOpen} onClose={closeModal} message={modalError} />
+            <ErrorModal title={"Recuperação de senha"} open={isModalOpen} onClose={closeModal} message={modalError} />
         </div>
     );
 }

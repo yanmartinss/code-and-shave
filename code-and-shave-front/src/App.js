@@ -23,6 +23,7 @@ import { GestaoBarbearia } from './pages/TelasBarberia/GestaoBarbearia';
 import { GerenciarPerfil } from './pages/TelasBarberia/GerenciarPerfil';
 import { ServicosBarbearia } from './pages/TelasBarberia/ServicosBarbearia';
 import { EditarBarbeiros } from './pages/TelasBarberia/EditarBarbeiros';
+import { GerenciarPerfilCliente } from './pages/TelasCliente/GerenciarPerfilCliente';
 // import { RelatorioBarbearia } from './pages/TelasBarberia/RelatorioBarbearia';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
               {/* 🚀 Rotas para CLIENTES */}
               <Route path="/home-cliente" element={<ClienteRoute><HomeCliente /></ClienteRoute>} />
               <Route path="/agendamentos-cliente" element={<ClienteRoute><AgendamentoCliente /></ClienteRoute>} />
+              <Route path="/perfil-cliente" element={<ClienteRoute><GerenciarPerfilCliente /></ClienteRoute>} />
               <Route path="/favoritos" element={<ClienteRoute><Favoritos /></ClienteRoute>} />
               <Route path="/notificacoes-cliente" element={<ClienteRoute><Notificacoes /></ClienteRoute>} />
 

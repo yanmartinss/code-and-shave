@@ -4,17 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import br.com.api.code_and_shave_back.modelo.BarbeiroModelo;
 import br.com.api.code_and_shave_back.modelo.ServicoModelo;
+import br.com.api.code_and_shave_back.repositorio.BarbeiroRepositorio;
 import br.com.api.code_and_shave_back.repositorio.ServicoRepositorio;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServicoServico {
 
     @Autowired
     private ServicoRepositorio servicoRepositorio;
+
+    @Autowired
+    private BarbeiroRepositorio barbeiroRepositorio;
 
     
     public ResponseEntity<?> listarTodos() {
@@ -72,5 +79,15 @@ public class ServicoServico {
             System.out.println("Erro ao remover serviço: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Erro ao remover serviço.\"}");
         }
-}  
+    }  
+    public List<ServicoModelo> listarServicosPorBarbeiro(Long barbeiroId) {
+        Optional<BarbeiroModelo> barbeiro = barbeiroRepositorio.findById(barbeiroId);
+        
+        if (barbeiro.isEmpty()) {
+            throw new RuntimeException("Barbeiro não encontrado");
+        }
+
+        return barbeiro.get().getSpecialties(); // Retorna os serviços do barbeiro
+    }
+
 }

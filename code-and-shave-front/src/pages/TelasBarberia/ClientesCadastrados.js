@@ -71,13 +71,7 @@ export const ClientesCadastrados = () => {
                                     <p className="text-sm text-gray-600">Email: {cliente.email}</p>
                                     <p className="text-sm text-gray-600">Telefone: {cliente.telefone}</p>
 
-                                    <div className="flex justify-between mt-4">
-                                        <button
-                                            className="text-blue-500 hover:text-blue-700 text-sm"
-                                            onClick={() => console.log(`Editar cliente ${cliente.id}`)}
-                                        >
-                                            Editar
-                                        </button>
+                                    <div className="flex justify-end mt-4">
                                         <button
                                             className="text-red-500 hover:text-red-700 text-sm"
                                             onClick={() => confirmRemove(cliente.id)}

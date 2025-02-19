@@ -1,5 +1,7 @@
 package br.com.api.code_and_shave_back.controle;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,12 @@ public class ServicoControle {
     @GetMapping("/listar")
     public ResponseEntity<?> listarTodos() {
         return servicoServico.listarTodos();
+    }
+
+    @GetMapping("/listar/{barbeiroId}")
+    public ResponseEntity<List<ServicoModelo>> listarServicosPorBarbeiro(@PathVariable Long barbeiroId) {
+        List<ServicoModelo> servicos = servicoServico.listarServicosPorBarbeiro(barbeiroId);
+        return ResponseEntity.ok(servicos);
     }
 
     //  Cadastrar ou atualizar serviço

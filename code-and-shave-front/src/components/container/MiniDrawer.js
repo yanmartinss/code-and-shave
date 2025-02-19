@@ -30,6 +30,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { useAuth } from '../../contexts/AuthContext';
+import PersonIcon from '@mui/icons-material/Person';
 
 const drawerWidth = 240;
 
@@ -71,6 +72,7 @@ function ResponsiveDrawer(props) {
                 return [
                     { text: 'Início', icon: <HomeIcon sx={{ color: '#e0dfdf' }} />, path: '/home-cliente' },
                     { text: 'Agendamentos', icon: <BookIcon sx={{ color: '#e0dfdf' }} />, path: '/agendamentos-cliente' },
+                    { text: 'Gerenciar Perfil', icon: <PersonIcon sx={{ color: '#e0dfdf' }} />, path: '/perfil-cliente' },
                     { text: 'Notificações', icon: <NotificationsIcon sx={{ color: '#e0dfdf' }} />, path: '/notificacoes-cliente' },
                 ];
             case 'barbearia':
@@ -222,10 +224,10 @@ function ResponsiveDrawer(props) {
                     <Typography>Tem certeza que deseja sair?</Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={confirmLogout} color="secondary">
+                    <Button onClick={confirmLogout} sx={{color: '#AC2020'}}>
                         Sair
                     </Button>
-                    <Button onClick={() => setLogoutModalOpen(false)} color="primary">
+                    <Button onClick={() => setLogoutModalOpen(false)} sx={{color: "#24952E"}}>
                         Cancelar
                     </Button>
                 </DialogActions>
